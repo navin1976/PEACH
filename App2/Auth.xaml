@@ -14,7 +14,7 @@
             x:Name="button" 
             Content="Sign in" 
             HorizontalAlignment="Left" 
-            Margin="530,512,0,0" 
+            Margin="530,498,0,0" 
             VerticalAlignment="Top" 
             RenderTransformOrigin="0.5,0.5" 
             Height="49" 
@@ -26,17 +26,17 @@
             x:Name="username" 
             HorizontalAlignment="Left" 
             Margin="530,325,0,0" 
-            TextWrapping="Wrap" Text="Enter username//" 
+            TextWrapping="Wrap" Text="Username" 
             VerticalAlignment="Top" Height="60" 
             RenderTransformOrigin="0.5,0.5" 
             Width="335" TextChanged="username_TextChanged"
             />
-        
+
         <TextBox 
             x:Name="password" 
             HorizontalAlignment="Left" 
             Margin="530,396,0,0" 
-            TextWrapping="Wrap" Text="Enter password.." 
+            TextWrapping="Wrap" Text="Password" 
             VerticalAlignment="Top" Height="60" 
             RenderTransformOrigin="0.5,0.5" 
             Width="335"
@@ -45,13 +45,27 @@
         <TextBlock 
             x:Name="textBlock" 
             HorizontalAlignment="Left" 
-            Margin="530,194,0,0" 
+            Margin="530,245,0,0" 
             TextWrapping="Wrap" 
-            Text="User Authentication" 
+            Text="Login" 
             VerticalAlignment="Top" 
             Height="69" 
             Width="335" 
-            FontSize="36" Foreground="Black"
+            FontSize="36" Foreground="Black" TextAlignment="Center"
             />
+        <TextBlock 
+            x:Name="textBlock_Copy" 
+            HorizontalAlignment="Left" 
+            Margin="344,114,0,0" 
+            TextWrapping="Wrap" 
+            VerticalAlignment="Top" 
+            Height="69" 
+            Width="722" 
+            FontSize="36" Foreground="Black" TextAlignment="Center" SelectionChanged="textBlock_Copy_SelectionChanged"
+            >
+            <Run Text="PEACH - DATA VISUALIZATIN APPLICATION"/>
+            <LineBreak/>
+            <Run/>
+        </TextBlock>
     </Grid>
 </Page>

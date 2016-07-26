@@ -7,9 +7,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace App2
 {
-    /// <summary>
     /// Data to represent an item in the nav menu.
-    /// </summary>
     public class NavMenuItem
     {
         public string Label { get; set; }

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataVisualizationApp", "App2\DataVisualizationApp.csproj", "{603F6DE4-3EAB-45F8-9062-26061EFA221F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skeleton", "App2\Skeleton.csproj", "{603F6DE4-3EAB-45F8-9062-26061EFA221F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InkingEngine", "App1\InkingEngine.csproj", "{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,24 @@ Global
 		{603F6DE4-3EAB-45F8-9062-26061EFA221F}.Release|x86.ActiveCfg = Release|x86
 		{603F6DE4-3EAB-45F8-9062-26061EFA221F}.Release|x86.Build.0 = Release|x86
 		{603F6DE4-3EAB-45F8-9062-26061EFA221F}.Release|x86.Deploy.0 = Release|x86
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Debug|ARM.ActiveCfg = Debug|ARM
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Debug|ARM.Build.0 = Debug|ARM
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Debug|ARM.Deploy.0 = Debug|ARM
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Debug|x64.ActiveCfg = Debug|x64
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Debug|x64.Build.0 = Debug|x64
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Debug|x64.Deploy.0 = Debug|x64
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Debug|x86.ActiveCfg = Debug|x86
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Debug|x86.Build.0 = Debug|x86
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Debug|x86.Deploy.0 = Debug|x86
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Release|ARM.ActiveCfg = Release|ARM
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Release|ARM.Build.0 = Release|ARM
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Release|ARM.Deploy.0 = Release|ARM
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Release|x64.ActiveCfg = Release|x64
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Release|x64.Build.0 = Release|x64
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Release|x64.Deploy.0 = Release|x64
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Release|x86.ActiveCfg = Release|x86
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Release|x86.Build.0 = Release|x86
+		{F19ECBBD-F1AF-4FB4-ADD2-BEDCAD2B0907}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

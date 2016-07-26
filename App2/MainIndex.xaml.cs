@@ -20,10 +20,6 @@ using App2.Views;
 
 namespace App2
 {
-    /// <summary>
-    /// The "chrome" layer of the app that provides top-level navigation with
-    /// proper keyboarding navigation.
-    /// </summary>
     public sealed partial class MainIndex : Page
     {
         private bool isPaddingAdded = false;
@@ -34,30 +30,33 @@ namespace App2
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Contact,
-                    Label = "Basic Page",
+                    Label = "Patient Profile",
                     DestPage = typeof(BasicPage)
                 },
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Edit,
-                    Label = "CommandBar Page",
+                    Label = "Demographics",
                     DestPage = typeof(CommandBarPage)
                 },
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Favorite,
-                    Label = "Drill In Page",
+                    Label = "Medical Reports",
                     DestPage = typeof(DrillInPage)
+                },
+
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.Contact,
+                    Label = "Free notes section",
+                    DestPage = typeof(BasicPage)
                 },
             });
 
         public static MainIndex Current = null;
 
-        /// <summary>
-        /// Initializes a new instance of the MainIndex, sets the static 'Current' reference,
-        /// adds callbacks for Back requests and changes in the SplitView's DisplayMode, and
-        /// provide the nav menu list with the data to display.
-        /// </summary>
+
         public MainIndex()
         {
             this.InitializeComponent();
@@ -76,8 +75,6 @@ namespace App2
                 SplitView.DisplayModeProperty,
                 (s, a) =>
                 {
-                    // Ensure that we update the reported size of the TogglePaneButton when the SplitView's
-                    // DisplayMode changes.
                     this.CheckTogglePaneButtonSizeChanged();
                 });
 
@@ -90,12 +87,6 @@ namespace App2
 
         public Frame AppFrame { get { return this.frame; } }
 
-        /// <summary>
-        /// Invoked when window title bar visibility changes, such as after loading or in tablet mode
-        /// Ensures correct padding at window top, between title bar and app content
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
         private void TitleBar_IsVisibleChanged(Windows.ApplicationModel.Core.CoreApplicationViewTitleBar sender, object args)
         {
             if (!this.isPaddingAdded && sender.IsVisible)
@@ -110,55 +101,6 @@ namespace App2
                 frame.Margin = new Thickness(margin.Left, margin.Top + extraPadding, margin.Right, margin.Bottom);
                 margin = TogglePaneButton.Margin;
                 TogglePaneButton.Margin = new Thickness(margin.Left, margin.Top + extraPadding, margin.Right, margin.Bottom);
-            }
-        }
-
-        /// <summary>
-        /// Default keyboard focus movement for any unhandled keyboarding
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MainIndex_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            FocusNavigationDirection direction = FocusNavigationDirection.None;
-            switch (e.Key)
-            {
-                case Windows.System.VirtualKey.Left:
-                case Windows.System.VirtualKey.GamepadDPadLeft:
-                case Windows.System.VirtualKey.GamepadLeftThumbstickLeft:
-                case Windows.System.VirtualKey.NavigationLeft:
-                    direction = FocusNavigationDirection.Left;
-                    break;
-                case Windows.System.VirtualKey.Right:
-                case Windows.System.VirtualKey.GamepadDPadRight:
-                case Windows.System.VirtualKey.GamepadLeftThumbstickRight:
-                case Windows.System.VirtualKey.NavigationRight:
-                    direction = FocusNavigationDirection.Right;
-                    break;
-
-                case Windows.System.VirtualKey.Up:
-                case Windows.System.VirtualKey.GamepadDPadUp:
-                case Windows.System.VirtualKey.GamepadLeftThumbstickUp:
-                case Windows.System.VirtualKey.NavigationUp:
-                    direction = FocusNavigationDirection.Up;
-                    break;
-
-                case Windows.System.VirtualKey.Down:
-                case Windows.System.VirtualKey.GamepadDPadDown:
-                case Windows.System.VirtualKey.GamepadLeftThumbstickDown:
-                case Windows.System.VirtualKey.NavigationDown:
-                    direction = FocusNavigationDirection.Down;
-                    break;
-            }
-
-            if (direction != FocusNavigationDirection.None)
-            {
-                var control = FocusManager.FindNextFocusableElement(direction) as Control;
-                if (control != null)
-                {
-                    control.Focus(FocusState.Programmatic);
-                    e.Handled = true;
-                }
             }
         }
 
@@ -191,11 +133,7 @@ namespace App2
 
         #region Navigation
 
-        /// <summary>
-        /// Navigate to the Page for the selected <paramref name="listViewItem"/>.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="listViewItem"></param>
+        /// Navigate to the Page for the selected "listViewItem"
         private void NavMenuList_ItemInvoked(object sender, ListViewItem listViewItem)
         {
             var item = (NavMenuItem)((NavMenuListView)sender).ItemFromContainer(listViewItem);
@@ -210,13 +148,9 @@ namespace App2
             }
         }
 
-        /// <summary>
         /// Ensures the nav menu reflects reality when navigation is triggered outside of
         /// the nav menu buttons.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnNavigatingToPage(object sender, NavigatingCancelEventArgs e)
+         private void OnNavigatingToPage(object sender, NavigatingCancelEventArgs e)
         {
             if (e.NavigationMode == NavigationMode.Back)
             {
@@ -244,15 +178,6 @@ namespace App2
             }
         }
 
-        private void OnNavigatedToPage(object sender, NavigationEventArgs e)
-        {
-            // After a successful navigation set keyboard focus to the loaded page
-            if (e.Content is Page && e.Content != null)
-            {
-                var control = (Page)e.Content;
-                control.Loaded += Page_Loaded;
-            }
-        }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -268,59 +193,41 @@ namespace App2
             private set;
         }
 
-        /// <summary>
         /// An event to notify listeners when the hamburger button may occlude other content in the app.
         /// The custom "PageHeader" user control is using this.
-        /// </summary>
         public event TypedEventHandler<MainIndex, Rect> TogglePaneButtonRectChanged;
 
-        /// <summary>
         /// Public method to allow pages to open SplitView's pane.
         /// Used for custom app shortcuts like navigating left from page's left-most item
-        /// </summary>
         public void OpenNavePane()
         {
             TogglePaneButton.IsChecked = true;
             NavPaneDivider.Visibility = Visibility.Visible;
         }
 
-        /// <summary>
         /// Hides divider when nav pane is closed.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
         private void RootSplitView_PaneClosed(SplitView sender, object args)
         {
             NavPaneDivider.Visibility = Visibility.Collapsed;
         }
 
-        /// <summary>
         /// Callback when the SplitView's Pane is toggled closed.  When the Pane is not visible
         /// then the floating hamburger may be occluding other content in the app unless it is aware.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void TogglePaneButton_Unchecked(object sender, RoutedEventArgs e)
         {
             this.CheckTogglePaneButtonSizeChanged();
         }
 
-        /// <summary>
         /// Callback when the SplitView's Pane is toggled opened.
         /// Restores divider's visibility and ensures that margins around the floating hamburger are correctly set.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void TogglePaneButton_Checked(object sender, RoutedEventArgs e)
         {
             NavPaneDivider.Visibility = Visibility.Visible;
             this.CheckTogglePaneButtonSizeChanged();
         }
 
-        /// <summary>
         /// Check for the conditions where the navigation pane does not occupy the space under the floating
         /// hamburger button and trigger the event.
-        /// </summary>
         private void CheckTogglePaneButtonSizeChanged()
         {
             if (this.RootSplitView.DisplayMode == SplitViewDisplayMode.Inline ||
@@ -343,12 +250,8 @@ namespace App2
             }
         }
 
-        /// <summary>
         /// Enable accessibility on each nav menu item by setting the AutomationProperties.Name on each container
         /// using the associated Label of each item.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
         private void NavMenuItemContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             if (!args.InRecycleQueue && args.Item != null && args.Item is NavMenuItem)

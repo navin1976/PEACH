@@ -15,69 +15,24 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-
-
-namespace App2
+namespace App1
 {
-    using Views;
-    using Windows.UI;
-    using Windows.UI.ViewManagement;
-
     sealed partial class App : Application
     {
-
         public App()
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            #if DEBUG
+#if DEBUG
             if (System.Diagnostics.Debugger.IsAttached)
             {
-                //this.DebugSettings.EnableFrameRateCounter = true;
+                this.DebugSettings.EnableFrameRateCounter = true;
             }
-            #endif
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(320, 200));
-
-            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-
-
-
-            if (titleBar != null)
-            {
-                Color titleBarColor = (Color)App.Current.Resources["SystemChromeMediumColor"];
-                titleBar.BackgroundColor = titleBarColor;
-                titleBar.ButtonBackgroundColor = titleBarColor;
-            }
-
-            /*
-            MainIndex shell = Window.Current.Content as MainIndex;
-
-            if (shell == null)
-            {
-                shell = new MainIndex();
-                shell.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
-                shell.AppFrame.NavigationFailed += OnNavigationFailed;
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: Load state from previously suspended application
-                }
-            }
-            Window.Current.Content = shell;
-
-            if (shell.AppFrame.Content == null)
-            {
-                //shell.AppFrame.Navigate(typeof(LandingPage), e.Arguments, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
-            }
-
-            Window.Current.Activate();
-            */
-
+#endif
             Frame rootFrame = Window.Current.Content as Frame;
 
             if (rootFrame == null)
@@ -88,6 +43,8 @@ namespace App2
                 {
                     //TODO: Load state from previously suspended application
                 }
+
+                // Place the frame in the current Window
                 Window.Current.Content = rootFrame;
             }
 
@@ -95,14 +52,11 @@ namespace App2
             {
                 if (rootFrame.Content == null)
                 {
-                    rootFrame.Navigate(typeof(Auth), e.Arguments);
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
-                // Ensure the current window is active
                 Window.Current.Activate();
             }
-            
         }
-
 
         void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
@@ -112,6 +66,7 @@ namespace App2
         private void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
+            //TODO: Save application state and stop any background activity
             deferral.Complete();
         }
     }

@@ -7,15 +7,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-      KeyDown="AppShell_KeyDown"
       TabNavigation="Cycle"
       mc:Ignorable="d">
 
-    <!-- Using a Page as the root for the app provides a design time experience as well as ensures that
-         when it runs on Mobile the app content won't appear under the system's StatusBar which is visible
-         by default with a transparent background.  It will also take into account the presence of software
-         navigation buttons if they appear on a device.  An app can opt-out by switching to UseCoreWindow.
-    -->
 
     <Page.Resources>
         <DataTemplate x:Key="NavMenuItemTemplate" x:DataType="local:NavMenuItem">
@@ -24,10 +18,6 @@
                     <ColumnDefinition Width="48" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <!-- Showing a ToolTip and the Label is redundant.  We put the ToolTip on the icon.
-                     It appears when the user hovers over the icon, but not the label which provides
-                     value when the SplitView is 'Compact' while reducing the likelihood of showing
-                     redundant information when the label is shown.-->
                 <FontIcon x:Name="Glyph" FontSize="16" Glyph="{x:Bind SymbolAsChar}" VerticalAlignment="Center" HorizontalAlignment="Center" ToolTipService.ToolTip="{x:Bind Label}"/>
                 <TextBlock x:Name="Text" Grid.Column="1" Text="{x:Bind Label}" Style="{StaticResource BodyTextBlockStyle}" TextWrapping="NoWrap"/>
             </Grid>
@@ -122,13 +112,9 @@
                             ToolTipService.ToolTip="Settings"/>
                 </Grid>
             </SplitView.Pane>
-
-            <!-- OnNavigatingToPage we synchronize the selected item in the nav menu with the current page.
-                 OnNavigatedToPage we move keyboard focus to the first item on the page after it's loaded and update the Back button. -->
             <Frame x:Name="frame"
                    Margin="0,4,0,0"
-                   Navigating="OnNavigatingToPage"
-                   Navigated="OnNavigatedToPage">
+                   Navigating="OnNavigatingToPage">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
                         <NavigationThemeTransition>
@@ -147,9 +133,11 @@
                       Margin="0,4,0,0"
                       Style="{StaticResource SplitViewTogglePaneButtonStyle}"
                       IsChecked="{Binding IsPaneOpen, ElementName=RootSplitView, Mode=TwoWay}"
-                      Unchecked="TogglePaneButton_Unchecked"
-                      Checked="TogglePaneButton_Checked"
+
                       AutomationProperties.Name="Menu"
                       ToolTipService.ToolTip="Menu" />
     </Grid>
 </Page>
+
+<!--Unchecked="TogglePaneButton_Unchecked"
+                      Checked="TogglePaneButton_Checked"-->
