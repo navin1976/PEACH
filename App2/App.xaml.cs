@@ -45,6 +45,8 @@ namespace App2
 
             ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
+            ApplicationView.GetForCurrentView().Title = "PEACH - Data Visuzlization";
+            
 
 
             if (titleBar != null)

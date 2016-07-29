@@ -34,20 +34,38 @@ namespace App2
             this.InitializeComponent();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        //private void button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.Frame.Navigate(typeof(MainIndex));
+        //}
+
+        //private void textBlock_SelectionChanged(object sender, RoutedEventArgs e)
+        //{
+        //}
+
+        //private void username_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //}
+
+        //private void textBlock_Copy_SelectionChanged(object sender, RoutedEventArgs e)
+        //{
+
+        //}
+
+
+
+
+        public void Login_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MainIndex));
         }
 
-        private void textBlock_SelectionChanged(object sender, RoutedEventArgs e)
+        public void SignUp_Click(object sender, RoutedEventArgs e)
         {
+            //NavigationService.Navigate(new Uri("/Views/SignUpPage.xaml", UriKind.Relative
         }
 
-        private void username_TextChanged(object sender, TextChangedEventArgs e)
-        {
-        }
-
-        private void textBlock_Copy_SelectionChanged(object sender, RoutedEventArgs e)
+        private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
         {
 
         }

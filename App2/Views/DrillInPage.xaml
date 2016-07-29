@@ -54,8 +54,8 @@
                     <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="12,4" Text="{Binding}"/>
                 </DataTemplate>
             </ListView.HeaderTemplate>
-            <ListViewItem>Item 1</ListViewItem>
-            <ListViewItem>Item 2</ListViewItem>
+            <ListViewItem>Item 123</ListViewItem>
+            <ListViewItem>Item 321</ListViewItem>
             <ListViewItem>Item 3</ListViewItem>
             <ListViewItem>Item 4</ListViewItem>
             <ListViewItem>Item 5</ListViewItem>

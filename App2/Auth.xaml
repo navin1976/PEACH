@@ -7,65 +7,29 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" 
-          Margin="10,10,10,0">
 
-        <Button 
-            x:Name="button" 
-            Content="Sign in" 
-            HorizontalAlignment="Left" 
-            Margin="530,498,0,0" 
-            VerticalAlignment="Top" 
-            RenderTransformOrigin="0.5,0.5" 
-            Height="49" 
-            Width="335" 
-            Click="button_Click"
-            />
-
-        <TextBox 
-            x:Name="username" 
-            HorizontalAlignment="Left" 
-            Margin="530,325,0,0" 
-            TextWrapping="Wrap" Text="Username" 
-            VerticalAlignment="Top" Height="60" 
-            RenderTransformOrigin="0.5,0.5" 
-            Width="335" TextChanged="username_TextChanged"
-            />
-
-        <TextBox 
-            x:Name="password" 
-            HorizontalAlignment="Left" 
-            Margin="530,396,0,0" 
-            TextWrapping="Wrap" Text="Password" 
-            VerticalAlignment="Top" Height="60" 
-            RenderTransformOrigin="0.5,0.5" 
-            Width="335"
-            />
-
-        <TextBlock 
-            x:Name="textBlock" 
-            HorizontalAlignment="Left" 
-            Margin="530,245,0,0" 
-            TextWrapping="Wrap" 
-            Text="Login" 
-            VerticalAlignment="Top" 
-            Height="69" 
-            Width="335" 
-            FontSize="36" Foreground="Black" TextAlignment="Center"
-            />
-        <TextBlock 
-            x:Name="textBlock_Copy" 
-            HorizontalAlignment="Left" 
-            Margin="344,114,0,0" 
-            TextWrapping="Wrap" 
-            VerticalAlignment="Top" 
-            Height="69" 
-            Width="722" 
-            FontSize="36" Foreground="Black" TextAlignment="Center" SelectionChanged="textBlock_Copy_SelectionChanged"
-            >
-            <Run Text="PEACH - DATA VISUALIZATIN APPLICATION"/>
-            <LineBreak/>
-            <Run/>
-        </TextBlock>
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" Margin="12,17,0,34.667" >
+            <!--Title-->
+            <TextBlock Text="Login Page" Foreground="Black" FontSize="40" SelectionChanged="TextBlock_SelectionChanged"/>
+            <!--UserName-->
+            <TextBlock Text="UserID" Foreground="Black" FontSize="20"/>
+            <TextBox  BorderBrush="LightGray" Name="UserName" />
+            <!--Password-->
+            <TextBlock  Foreground="Black" Text="Password" FontSize="20"/>
+            <PasswordBox BorderBrush="LightGray" Name="PassWord"  />
+            <!--Login Button-->
+            <Button Content="Login" Background="#FF30DABB" Name="Login" Click="Login_Click" Width="100" />
+            
+            <!--  Registration Button-->
+            <Button Content="Registration" Background="#FF30DABB" Name="SignUp" Click="SignUp_Click" Width="100"/>
+        </StackPanel>
     </Grid>
 </Page>

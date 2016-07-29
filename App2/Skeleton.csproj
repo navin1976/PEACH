@@ -95,7 +95,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="NavMenuItem.cs" />
+    <Compile Include="Inking\RecognizerHelper.cs" />
+    <Compile Include="Controls\NavMenuItem.cs" />
     <Compile Include="Controls\NavMenuListView.cs" />
     <Compile Include="Controls\PageHeader.xaml.cs" />
     <Compile Include="MainIndex.xaml.cs">
@@ -105,11 +106,24 @@
       <DependentUpon>Auth.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\BasicPage.xaml.cs" />
-    <Compile Include="Views\BasicSubPage.xaml.cs" />
-    <Compile Include="Views\CommandBarPage.xaml.cs" />
-    <Compile Include="Views\DrillInPage.xaml.cs" />
-    <Compile Include="Views\LandingPage.xaml.cs" />
+    <Compile Include="Views\BasicPage.xaml.cs">
+      <DependentUpon>BasicPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BasicSubPage.xaml.cs">
+      <DependentUpon>BasicSubPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Scenario2.xaml.cs">
+      <DependentUpon>Scenario2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LandingPage.xaml.cs">
+      <DependentUpon>LandingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CommandBarPage.xaml.cs">
+      <DependentUpon>CommandBarPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DrillInPage.xaml.cs">
+      <DependentUpon>DrillInPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -148,28 +162,34 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\LandingPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\DrillInPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\CommandBarPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\BasicSubPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\BasicPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\BasicSubPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Scenario2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LandingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CommandBarPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DrillInPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="archive\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

@@ -49,7 +49,7 @@ namespace App2
                 {
                     Symbol = Symbol.Edit,
                     Label = "Free Notes",
-                    DestPage = typeof(Scenario2)
+                    DestPage = typeof(BasicPage)
                 },
 
                 new NavMenuItem()
@@ -76,11 +76,12 @@ namespace App2
             });
 
         public static MainIndex Current = null;
+
+
         public MainIndex()
         {
             this.InitializeComponent();
 
-            //Current = this;
             this.Loaded += (sender, args) =>
             {
                 Current = this;
@@ -283,23 +284,5 @@ namespace App2
                 args.ItemContainer.ClearValue(AutomationProperties.NameProperty);
             }
         }
-
-
-
     }
-
-
-    //public class ScenarioBindingConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, string language)
-    //    {
-    //        Scenario s = value as Scenario;
-    //        return (MainPage.Current.Scenarios.IndexOf(s) + 1) + ") " + s.Title;
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, string language)
-    //    {
-    //        return true;
-    //    }
-    //}
 }
