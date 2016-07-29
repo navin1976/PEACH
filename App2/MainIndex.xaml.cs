@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Navigation;
 using App2.Controls;
 using App2.Views;
 
+// ustawienia temporalne testuje tuanu
+
 namespace App2
 {
     public sealed partial class MainIndex : Page
