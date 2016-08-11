@@ -7,7 +7,7 @@ namespace App1
 {
     public partial class MainPage : Page
     {
-        public const string FEATURE_NAME = "SimpleInk ASDASDASD";
+        public const string FEATURE_NAME = "Tuan testing";
 
         List<Scenario> scenarios = new List<Scenario>
         {

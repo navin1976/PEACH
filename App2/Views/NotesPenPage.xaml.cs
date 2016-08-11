@@ -12,7 +12,7 @@ namespace App2.Views
 {
 
     /// This page shows the code to do ink recognition
-    public sealed partial class Scenario2 : Page
+    public sealed partial class NotesPenPage : Page
     {
         const string InstallRecoText = "You can install handwriting recognition engines for other languages by this: go to Settings -> Time & language -> Region & language, choose a language, and click Options, then click Download under Handwriting";
 
@@ -23,7 +23,7 @@ namespace App2.Views
         private CoreTextServicesManager textServiceManager = null;
         private ToolTip recoTooltip;
 
-        public Scenario2()
+        public NotesPenPage()
         {
             this.InitializeComponent();
 
@@ -67,8 +67,8 @@ namespace App2.Views
             inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
             inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse | Windows.UI.Core.CoreInputDeviceTypes.Pen | Windows.UI.Core.CoreInputDeviceTypes.Touch;
 
-            this.Unloaded += Scenario2_Unloaded;
-            this.SizeChanged += Scenario2_SizeChanged;
+            this.Unloaded += NotesPenPage_Unloaded;
+            this.SizeChanged += NotesPenPage_SizeChanged;
 
 
 
@@ -110,7 +110,7 @@ namespace App2.Views
         }
 
 
-        private void Scenario2_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void NotesPenPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             SetCanvasSize();
         }
@@ -121,7 +121,7 @@ namespace App2.Views
             SetCanvasSize();
         }
 
-        private void Scenario2_Unloaded(object sender, RoutedEventArgs e)
+        private void NotesPenPage_Unloaded(object sender, RoutedEventArgs e)
         {
             recoTooltip.IsOpen = false;
         }

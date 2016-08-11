@@ -4,34 +4,58 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+>
 
     <Grid x:Name="LayoutRoot"
           Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           EntranceNavigationTransitionInfo.IsTargetElement="True"
           Padding="24,0">
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource MediumWindowSnapPoint}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="LayoutRoot.Margin" Value="24,0"/>
-                    </VisualState.Setters>
-                </VisualState>
-                <VisualState>
-                    <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="{StaticResource MinWindowSnapPoint}" />
-                    </VisualState.StateTriggers>
-                    <VisualState.Setters>
-                        <Setter Target="LayoutRoot.Margin" Value="12,0"/>
-                    </VisualState.Setters>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
 
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Your App Content"/>
-
+        <Pivot Title="Patient Profile">
+            <PivotItem Header="UCLH Data">
+                <Grid x:Name="PatientProfile">
+                    <TextBlock Text="Hospital records" />
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Demographics Data">
+                <Grid x:Name="Demographics" Background="White" HorizontalAlignment="Left" Margin="10,10,10,10"> 
+                    <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Name" Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="Duy Tuan" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="Surname" Grid.Row ="1" Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="Dao" Grid.Row ="1" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="Age" Grid.Row ="2"  Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="18" Grid.Row ="2" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="Sex" Grid.Row ="3"  Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="Male" Grid.Row ="3" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="D.O.B." Grid.Row ="4"  Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="31/03/1989" Grid.Row ="4" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="Address" Grid.Row ="5"  Width="150" Margin="0,0,10,10"/>
+                    <TextBox Text="22 Seraph Court, 5 Moreland St, EC1V 8BE, London" 
+                                     TextWrapping="Wrap" 
+                                     Grid.Row ="5" 
+                                     Grid.Column="1" 
+                                     Margin="0,0,10,10"/>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Medical Data">
+                <TextBlock Text="Medical info go here." />
+            </PivotItem>
+            <PivotItem Header="Change Patient">
+                <TextBlock Text="Other stuff go here." />
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>

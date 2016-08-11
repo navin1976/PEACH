@@ -12,24 +12,21 @@
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="300" />
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0" Margin="12,17,0,34.667" >
-            <!--Title-->
-            <TextBlock Text="Login Page" Foreground="Black" FontSize="40" SelectionChanged="TextBlock_SelectionChanged"/>
-            <!--UserName-->
-            <TextBlock Text="UserID" Foreground="Black" FontSize="20"/>
-            <TextBox  BorderBrush="LightGray" Name="UserName" />
-            <!--Password-->
-            <TextBlock  Foreground="Black" Text="Password" FontSize="20"/>
-            <PasswordBox BorderBrush="LightGray" Name="PassWord"  />
-            <!--Login Button-->
-            <Button Content="Login" Background="#FF30DABB" Name="Login" Click="Login_Click" Width="100" />
-            
-            <!--  Registration Button-->
-            <Button Content="Registration" Background="#FF30DABB" Name="SignUp" Click="SignUp_Click" Width="100"/>
-        </StackPanel>
+
+            <StackPanel Grid.Row="0" Margin="25" HorizontalAlignment="Center" >
+
+                <Image Width="200" Source="/Assets/Logo.png" />
+            <TextBlock Text="SIGN IN" Foreground="Black" FontSize="18" HorizontalAlignment="Center" SelectionChanged="TextBlock_SelectionChanged" Margin="0,40,0,0" VerticalAlignment="Bottom" />
+            <TextBlock Text="UserID" Foreground="Black" FontSize="14"  Margin="5" />
+                <TextBox  BorderBrush="LightGray" Name="UserName"  Margin="5" />
+                <TextBlock  Foreground="Black" Text="Password" FontSize="14" Margin="5" />
+                <PasswordBox BorderBrush="LightGray" Name="PassWord"  Margin="5"  />
+                <Button Content="Login" Background="#FF04385D" Foreground="White" Name="Login" Click="Login_Click" Width="200"  Margin="5" />
+                <Button Content="Registration" Background="#FF04385D" Foreground="White" Name="SignUp" Click="SignUp_Click" Width="200" Margin="5" />
+            </StackPanel>
     </Grid>
 </Page>

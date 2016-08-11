@@ -1,0 +1,173 @@
+﻿<Page
+    x:Class="App2.Views.CanvasTestPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:App2.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid x:Name="RootGrid" Margin="12,20,12,0">
+            <Grid.Resources>
+                <Style x:Key="ColorButtonStyle"  TargetType="Button">
+                    <Setter Property="MinWidth" Value="28"/>
+                    <Setter Property="MinHeight" Value="28"/>
+                    <Setter Property="Width" Value="28"/>
+                    <Setter Property="Height" Value="28"/>
+                    <Setter Property="Margin" Value="0,0,0,0"/>
+                    <Setter Property="FontSize" Value="0"/>
+                    <Setter Property="Padding" Value="0,0,0,0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="Button">
+                                <Grid Background="Transparent">
+                                    <Grid Background="Transparent">
+                                        <Border x:Name="ColorButtonOuterBorder"
+                                        BorderThickness="1"
+                                        BorderBrush="Orange"
+                                        Background="Transparent">
+                                            <Border
+                                            BorderBrush="LightGray"
+                                            BorderThickness="1"
+                                            Background="{TemplateBinding Background}"/>
+                                        </Border>
+                                    </Grid>
+
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal"/>
+                                            <VisualState x:Name="PointerOver">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ColorButtonOuterBorder" Storyboard.TargetProperty="BorderThickness">
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="Pressed"/>
+                                            <VisualState x:Name="Disabled"/>
+                                        </VisualStateGroup>
+                                        <VisualStateGroup x:Name="FocusStates">
+                                            <VisualState x:Name="Focused">
+                                                <Storyboard>
+                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ColorButtonOuterBorder" Storyboard.TargetProperty="BorderThickness">
+                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="2"/>
+                                                    </ObjectAnimationUsingKeyFrames>
+                                                </Storyboard>
+                                            </VisualState>
+                                            <VisualState x:Name="Unfocused"/>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <StackPanel Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Text="Pen Type:"
+                        Grid.Row="0" Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Margin="0,10"/>
+                    <ComboBox
+                        x:Name="PenType"
+                        Grid.Row="0" Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Width="132" Height="Auto"
+                        SelectedIndex="0"
+                        SelectionChanged="OnPenTypeChanged">
+                        <ComboBoxItem Content="Ballpoint"/>
+                        <ComboBoxItem Content="Highlighter"/>
+                        <ComboBoxItem Content="Calligraphy"/>
+                    </ComboBox>
+
+                    <TextBlock
+                        Text="Pen Thickness:"
+                        Grid.Row="1" Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Margin="0,10"/>
+                    <ComboBox
+                        x:Name="PenThickness"
+                        Grid.Row="1" Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Width="132" Height="Auto"
+                        SelectedIndex="1"
+                        SelectionChanged="OnPenThicknessChanged">
+                        <ComboBoxItem Content="Smallest"/>
+                        <ComboBoxItem Content="Small"/>
+                        <ComboBoxItem Content="Medium"/>
+                        <ComboBoxItem Content="Large"/>
+                        <ComboBoxItem Content="Largest"/>
+                    </ComboBox>
+
+                    <TextBlock
+                        Text="Color:"
+                        Grid.Row="2" Grid.Column="0"
+                        HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Margin="0,5"/>
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                        <Button Background="Red"    Foreground="Red"    Click="OnPenColorChanged" Style="{StaticResource ColorButtonStyle}" Margin="0,0,3,0"/>
+                        <Button Background="Green"  Foreground="Green"  Click="OnPenColorChanged" Style="{StaticResource ColorButtonStyle}" Margin="0,0,3,0"/>
+                        <Button Background="Blue"   Foreground="Blue"   Click="OnPenColorChanged" Style="{StaticResource ColorButtonStyle}" Margin="0,0,3,0"/>
+                        <Button Background="Yellow" Foreground="Yellow" Click="OnPenColorChanged" Style="{StaticResource ColorButtonStyle}" Margin="0,0,3,0"/>
+                    </StackPanel>
+                </Grid>
+                <!-- Button panel -->
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <Button Content="Clear" Width="65" Margin="0,0,3,0" Click="OnClear"/>
+                    <Button Content="Load"  Width="65" Margin="0,0,3,0" Click="OnLoadAsync"/>
+                    <Button Content="Save"  Width="65" Margin="0,0,3,0" Click="OnSaveAsync"/>
+                    <CheckBox Content="Enable Touch Inking" Margin="10,0,3,0" Checked="TouchInkingCheckBox_Checked" Unchecked="TouchInkingCheckBox_Unchecked"/>
+                    <CheckBox Content="Enable Erasing Mode" Margin="10,0,3,0" Checked="ErasingModeCheckBox_Checked" Unchecked="ErasingModeCheckBox_Unchecked"/>
+                </StackPanel>
+                <Grid x:Name="outputGrid" Height="Auto" Width="Auto" Background="{ThemeResource SystemControlBackgroundChromeWhiteBrush}">
+                    <!-- Inking area -->
+                    <Canvas x:Name="base_black2_1" Canvas.Left="0" Canvas.Top="0"
+                                                               PointerMoved="inkCanvas_PointerMoved"
+                                                               PointerPressed="inkCanvas_PointerReleased">
+
+                        <Path Name="basePathOne" IsHitTestVisible="True"  Width="123.684" Height="46.1239" Canvas.Left="127.997" Canvas.Top="0.376069" Stroke="AliceBlue" Stretch="Fill" Fill="#FF000000" Data="F1 M 251.631,0.966003C 251.699,1.03131 251.699,11.2993 251.631,23.7654L 251.433,46.5L 244.433,42.1667C 235.899,36.8987 218.365,28.2993 209.766,25.0987C 202.566,22.4321 188.964,18.966 182.099,17.966C 175.165,17.0313 161.365,17.1667 155.032,18.2993C 145.699,19.8987 136.766,23.4321 129.766,28.1667C 127.032,30.0313 127.233,29.698 132.032,24.5654C 134.899,21.5 137.766,18.698 138.365,18.3647C 138.964,18.0313 140.631,16.6326 142.099,15.2993C 145.099,12.4321 148.498,11.232 163.099,8.03131C 188.964,2.29932 214.365,-0.234619 239.433,0.5C 246.032,0.632629 251.498,0.898682 251.631,0.966003 Z "/>
+                        <Path Width="109.407"  Height="42.5438" Canvas.Left="254.581" Canvas.Top="-0.00740077" Stroke="AliceBlue" Stretch="Fill" Fill="#FF000000" Data="F1 M 276.988,1.86981C 311.72,4.33588 345.322,8.20313 347.588,10.0705C 348.054,10.4692 348.853,10.8698 349.254,10.8698C 351.921,11.0705 359.655,16.5364 359.655,18.2685C 359.655,18.8025 360.655,20.1358 361.853,21.2685L 363.988,23.2685L 360.588,21.6018C 351.588,17.2031 341.988,15.1358 330.322,15.1358C 308.788,15.0705 286.588,22.4692 262.455,37.7371C 258.322,40.4038 254.853,42.5364 254.72,42.5364C 254.588,42.5364 254.52,35.1358 254.655,26.0025C 254.788,16.9351 254.921,7.33588 254.921,4.60181C 254.988,-0.130188 255.054,-0.262878 256.52,0.135803C 257.322,0.335876 266.52,1.1358 276.988,1.86981 Z "/>
+                        <Path Width="136.867" Height="167.935" Canvas.Left="356.921" Canvas.Top="11.3216" Stroke="AliceBlue" Stretch="Fill" Fill="#FF000000" Data="F1 M 373.988,15.9883C 391.72,21.2563 413.921,32.7222 427.655,43.7222C 433.054,48.0556 443.853,58.8555 448.52,64.5222C 468.72,89.1236 482.921,123.389 491.254,167.59C 492.186,172.322 493.122,176.923 493.387,177.722L 493.788,179.256L 450.054,179.256C 425.988,179.256 406.322,179.124 406.322,178.923C 406.322,178.722 406.921,176.856 407.588,174.722C 410.322,166.457 411.254,158.389 411.254,142.923C 411.186,134.389 410.921,127.124 410.455,125.59C 410.054,124.124 408.988,118.056 408.054,112.124C 404.655,90.2562 400.455,75.4568 393.72,61.6548C 387.122,48.1235 374.054,29.655 361.72,16.457L 356.921,11.3216L 363.122,12.9883C 366.52,13.9229 371.455,15.2563 373.988,15.9883 Z ">
+                        </Path>
+                        <Path Width="134.574" Height="164.789" Canvas.Left="0.846271" Canvas.Top="15.0976" Stretch="Fill" Stroke="AliceBlue" Fill="#FF000000" Data="F1 M 131.581,20.5001C 115.513,39.0994 103.782,58.8333 96.9816,78.8333C 92.7136,91.2347 88.3149,108.701 87.9816,114.367C 87.9143,116.766 87.4483,122.701 86.9816,127.633C 85.9143,139.034 86.4483,159.433 87.9816,166.367C 88.5809,169.099 89.7816,173.167 90.6483,175.3C 91.5129,177.5 92.1149,179.433 91.9816,179.633C 91.9143,179.833 71.3149,179.967 46.3149,179.833L 0.846271,179.701L 1.24761,178.167C 1.44827,177.367 2.38027,172.433 3.31494,167.235C 13.7816,107.367 44.1149,62.5681 93.6483,33.8333C 104.846,27.3 131.448,15.3674 135.18,15.0994C 135.982,15.034 134.782,16.7661 131.581,20.5001 Z "/>
+                        <Path Width="155.467" Height="212.497" Canvas.Left="253.822" Canvas.Top="17.2038" Stretch="Fill" Stroke="AliceBlue" Fill="#FF000000" Data="F1 M 345.822,19.0339C 360.554,22.7659 373.421,31.9666 383.554,46.0339C 398.353,66.7659 409.288,107.099 409.288,141.367C 409.288,160.433 406.822,173.099 400.488,186.034C 397.421,192.433 396.822,193.099 387.02,202.701C 376.088,213.5 371.622,216.833 365.02,219.3C 359.686,221.3 335.754,227.367 329.155,228.433C 325.887,228.967 311.955,229.3 289.02,229.5L 253.822,229.701L 253.822,138.167C 253.822,51.7659 253.887,46.4999 255.02,45.4999C 257.622,43.1666 273.887,33.4999 281.421,29.7659C 293.955,23.5679 309.02,18.9013 321.155,17.4326C 326.622,16.7659 340.288,17.6333 345.822,19.0339 Z "/>
+                        <Path Width="163.925" Height="212.998" Canvas.Left="88.2302" Canvas.Top="18.3178" Stretch="Fill" Stroke="AliceBlue" Fill="#FF000000" Data="F1 M 188.421,20.3672C 206.554,24.0339 227.488,32.9666 246.822,45.4326L 252.155,48.8333L 252.155,139.433C 252.155,217.167 252.02,230.034 251.22,230.034C 250.686,230.034 250.155,229.701 250.02,229.3C 249.822,228.701 249.155,228.701 247.488,229.235C 246.22,229.701 244.088,229.967 242.822,229.967C 241.554,229.901 234.22,230.235 226.488,230.701C 186.754,233.099 155.353,228.5 131.22,216.701C 106.822,204.701 93.2883,185.633 89.0876,157.235C 87.6216,147.235 88.0876,125.5 90.0876,113.367C 99.4883,55.0339 122.554,23.7659 159.822,18.7659C 166.887,17.7659 179.22,18.5 188.421,20.3672 Z "/>
+                        <Path Width="131.823" Height="181.534" Canvas.Left="-0.000771232" Canvas.Top="180.701" Stretch="Fill" Stroke="AliceBlue" Fill="#FF000000" Data="F1 M 92.4885,181.5C 92.8871,181.967 95.8871,186.433 99.0878,191.433C 106.155,202.235 111.822,207.766 123.754,215.701L 131.754,221.034L 131.822,291.633L 131.822,362.235L 124.686,361.766C 71.6218,358.432 35.2885,337.568 16.2885,299.568C 8.08782,283.167 2.48848,261.034 0.42115,236.833C -0.313519,227.5 -0.0448519,190.167 0.88715,183.5L 1.28848,180.701L 46.5538,180.701C 81.8871,180.701 91.9552,180.901 92.4885,181.5 Z "/>
+                        <Path Width="123.624" Height="177.912" Canvas.Left="372.655" Canvas.Top="180.789" Stretch="Fill" Stroke="AliceBlue" Fill="#FF000000" Data="F1 M 494.122,191.367C 499.588,241.3 494.72,277.568 478.921,304.568C 463.52,330.766 437.186,347.3 398.655,354.967C 391.387,356.432 376.054,358.701 373.52,358.701C 372.788,358.701 372.655,345.5 372.655,288.833L 372.655,218.967L 374.52,217.034C 375.588,215.901 378.122,213.701 380.254,212.099C 384.186,209.034 393.054,200.034 396.122,196.034C 398.52,192.833 403.988,182.901 403.988,181.701C 403.988,180.833 409.387,180.701 448.455,180.833L 492.988,181.034"/>
+                        <Path Width="117.955" Height="139.454" Canvas.Left="253.822" Canvas.Top="219.475" Stretch="Fill" Stroke="AliceBlue" Fill="#FF000000" Data="F1 M 371.754,290.333C 371.822,357.068 371.822,357.867 370.488,357.867C 369.754,357.867 361.754,358.201 352.686,358.599C 335.955,359.266 320.554,359 274.02,357.068L 253.822,356.266L 253.822,230.867L 282.955,231.068C 310.686,231.333 326.421,230.735 333.822,229.201C 335.488,228.867 339.22,228.266 342.155,227.867C 345.088,227.401 347.822,226.8 348.22,226.467C 348.554,226.201 350.22,225.735 351.887,225.534C 355.488,225.068 363.155,222.599 363.155,221.867C 363.155,221.333 365.622,220.534 368.421,220.133C 369.288,220.068 370.155,219.735 370.421,219.534C 370.622,219.266 371.02,219.933 371.22,221C 371.488,222 371.686,253.266 371.754,290.333 Z "/>
+                        <Path Width="118" Height="140.867" Canvas.Left="133.155" Canvas.Top="221.034" Stretch="Fill" Stroke="AliceBlue" Fill="#FF000000" Data="F1 M 135.155,221.633C 135.155,221.967 135.955,222.433 136.887,222.633C 137.887,222.901 139.02,223.5 139.554,223.967C 140.02,224.5 142.288,225.3 144.622,225.901C 148.754,226.901 152.288,227.766 157.488,229.099C 158.955,229.5 162.421,230.099 165.155,230.433C 167.887,230.766 171.955,231.3 174.155,231.701C 179.822,232.568 206.088,233.833 210.822,233.433C 213.02,233.235 220.155,232.901 226.622,232.701C 237.686,232.433 242.554,232.099 248.686,231.3L 251.155,231.034L 251.155,356.701L 241.02,356.5C 235.421,356.367 224.554,356.766 216.822,357.367C 181.288,360.034 164.955,361.034 149.686,361.433L 133.155,361.901L 133.155,291.5C 133.155,229.3 133.288,221.034 134.155,221.034C 134.686,221.034 135.155,221.3 135.155,221.633 Z "/>
+                        <InkCanvas x:Name="inkCanvas" 
+                                   Canvas.Left="0" 
+                                   Canvas.Top="0"
+                                   >
+                        </InkCanvas>
+                    </Canvas>
+
+                </Grid>
+
+
+            </StackPanel>
+
+
+
+        </Grid>
+    </Grid>
+</Page>

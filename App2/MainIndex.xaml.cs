@@ -44,37 +44,58 @@ namespace App2
                 {
                     Symbol = Symbol.Paste,
                     Label = "Medical Reports",
-                    DestPage = typeof(DrillInPage)
+                    DestPage = typeof(MedicalReportsPage)
+                },
+
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.Paste,
+                    Label = "Prosectomy Planning",
+                    DestPage = typeof(ProsectomyPage)
                 },
 
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Edit,
                     Label = "Free Notes",
-                    DestPage = typeof(Scenario2)
+                    DestPage = typeof(NotesPenPage)
+                },
+
+
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.Edit,
+                    Label = "Dictate",
+                    DestPage = typeof(NotesSpeechPage)
                 },
 
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Save,
                     Label = "Save",
-                    DestPage = typeof(DrillInPage)
+                    DestPage = typeof(MedicalReportsPage)
                 },
 
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Setting,
                     Label = "Settings",
-                    DestPage = typeof(DrillInPage)
+                    DestPage = typeof(MedicalReportsPage)
                 },
 
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Permissions,
                     Label = "Log out",
-                    DestPage = typeof(DrillInPage)
+                    DestPage = typeof(MedicalReportsPage)
                 },
 
+                new NavMenuItem()
+                {
+                    Symbol = Symbol.Permissions,
+                    Label = "Log out",
+                    DestPage = typeof(CanvasTestPage)
+                },
             });
 
         public static MainIndex Current = null;
