@@ -44,7 +44,9 @@ namespace App2.Views
             basePathOne.PointerEntered += new PointerEventHandler(target_PointerEntered);
             basePathOne.PointerExited += new PointerEventHandler(target_PointerExited);
 
-
+            //inkCanvas.AddHandler(InkCanvas.PointerPressedEvent, new PointerEventHandler(inkCanvas_PointerPressed), true);
+            //inkCanvas.AddHandler(InkCanvas.PointerReleasedEvent, new PointerEventHandler(inkCanvas_PointerReleased), true);
+            //inkCanvas.AddHandler(InkCanvas.PointerMovedEvent, new PointerEventHandler(inkCanvas_PointerMoved), true);
 
             // intercepting pointer when it hits the canvas
             CoreInkIndependentInputSource core = CoreInkIndependentInputSource.Create(inkCanvas.InkPresenter);
@@ -73,15 +75,19 @@ namespace App2.Views
         //{
         //    Debug.Write("kurwa");
         //}
-        void inkCanvas_PointerMoved(object sender, PointerRoutedEventArgs e)
-        {
-     
-        }
+        //void inkCanvas_PointerMoved(object sender, PointerRoutedEventArgs e)
+        //{
+        //    basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
+        //}
+        //void inkCanvas_PointerPressed(object sender, PointerRoutedEventArgs e)
+        //{
+        //    basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
+        //}
 
-        void inkCanvas_PointerReleased(object sender, PointerRoutedEventArgs e)
-        {
-            basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
-        }
+        //void inkCanvas_PointerReleased(object sender, PointerRoutedEventArgs e)
+        //{
+        //    basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue); 
+        //}
 
         void target_PointerEntered(object sender, PointerRoutedEventArgs e)
         {
