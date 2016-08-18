@@ -72,16 +72,15 @@ namespace App2.Views
             int i = 0;
             foreach (var hitTestStroke in args.Strokes)
             {
-                InkStroke s = hitTestStroke;
                 PolyLineSegment myPolyLineSegment = new PolyLineSegment();
                 PointCollection myPointCollection = new PointCollection();
 
-                foreach (var myPoint in s.GetInkPoints())
-                { 
-                    //GeneralTransform gt = basePathOne.TransformToVisual(
-                    myPointCollection.Add(myPoint.Position);
-                    myPolyLineSegment.Points = myPointCollection;
-                }
+                //foreach (var myPoint in hitTestStroke.GetInkPoints())
+                //{ 
+                //    //GeneralTransform gt = basePathOne.TransformToVisual(
+                //    myPointCollection.Add(myPoint.Position);
+                //    myPolyLineSegment.Points = myPointCollection;
+                //}
 
                 //https://social.msdn.microsoft.com/Forums/office/en-US/ed11a15e-b38e-4a26-88ac-5cc53d8ccec1/uwpxaml-how-to-convert-ink-strokes-to-points-inkingmanager?forum=wpdevelop
                 PathGeometry pathGeometry = new PathGeometry();
@@ -92,7 +91,6 @@ namespace App2.Views
                 // Create a path and define its attributes.
                 // Windows.UI.Xaml.Shapes.Path path = new Windows.UI.Xaml.Shapes.Path();
                 Path path = new Path();
-                
 
                 // Get the stroke segments.
                 IReadOnlyList<InkStrokeRenderingSegment> segments;
@@ -155,13 +153,13 @@ namespace App2.Views
                 //Canvas.SetZIndex(path, (int)1);
                 Point TopLeft;
 
-                Debug.WriteLine(strokeBounds.X + " : " + strokeBounds.Y);
+                Debug.WriteLine("before: "+ strokeBounds.X + ":" + strokeBounds.Y);
 
-                TopLeft = GetPosition(new Point(strokeBounds.X, strokeBounds.Y), path);
+                TopLeft = GetPosition(new Point(strokeBounds.X, strokeBounds.Y), stroke);
                 strokeBounds.X = TopLeft.X;
                 strokeBounds.Y = TopLeft.Y;
 
-                Debug.WriteLine(strokeBounds.X + " : " + strokeBounds.Y);
+                Debug.WriteLine("after: " + strokeBounds.X + ":" + strokeBounds.Y);
 
                 IEnumerable<UIElement> elementStack = VisualTreeHelper.FindElementsInHostCoordinates(strokeBounds, base_black2_1, true);
                 int k = 0;
@@ -189,9 +187,9 @@ namespace App2.Views
             //rectPosition = new Point(Math.Abs(rectPosition.X), Math.Abs(rectPosition.Y));
             //return rectPosition;
 
-            GeneralTransform gt = base_black2_1.TransformToVisual(p);
+            GeneralTransform gt = p.TransformToVisual(null);
             Point screenPoint;
-            screenPoint = gt.TransformPoint(new Point(0, 0));//ptrPt.X, ptrPt.Y));
+            screenPoint = gt.TransformPoint(new Point(0, 0));
             return screenPoint;
         }
 
