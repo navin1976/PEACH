@@ -77,7 +77,7 @@ namespace App2.Views
                 PointCollection myPointCollection = new PointCollection();
 
                 foreach (var myPoint in s.GetInkPoints())
-                { 
+                {
                     //GeneralTransform gt = basePathOne.TransformToVisual(
                     myPointCollection.Add(myPoint.Position);
                     myPolyLineSegment.Points = myPointCollection;
@@ -92,7 +92,7 @@ namespace App2.Views
                 // Create a path and define its attributes.
                 // Windows.UI.Xaml.Shapes.Path path = new Windows.UI.Xaml.Shapes.Path();
                 Path path = new Path();
-                
+
 
                 // Get the stroke segments.
                 IReadOnlyList<InkStrokeRenderingSegment> segments;
@@ -131,22 +131,32 @@ namespace App2.Views
 
                 // Assign the path geometry object as the path data.
                 path.Data = pathGeometry;
-              
+
+
                 //Debug.WriteLine("path data: " + path.Data);
                 path.Stroke = new SolidColorBrush(Colors.Orange);
                 path.StrokeThickness = 4;
 
+                // Render the path by adding it as a child of the Canvas object.
+                //Canvas.SetZIndex(path, (int)1);
+                //base_black2_1.Children.Add(path);
+
+
                 var lowerLayerElements = VisualTreeHelper.GetChildrenCount(base_black2_1);
                 i = lowerLayerElements;
-                
+
+                //-----------------
+
+
                 List<Point> pointsInside = new List<Point>();
 
-                //Geometry sketchGeo = stroke.GetGeometry
+                //Geometry sketchGeo = stroke.GetGeometry();
+
                 Rect strokeBounds = pathGeometry.Bounds;
                 Rectangle stroke = new Rectangle();
                 stroke.Width = strokeBounds.Width;
                 stroke.Height = strokeBounds.Height;
-                stroke.Stroke = new SolidColorBrush(Colors.Blue); 
+                stroke.Stroke = new SolidColorBrush(Colors.Blue);
                 stroke.StrokeThickness = 4;
                 Canvas.SetLeft(stroke, strokeBounds.X);
                 Canvas.SetTop(stroke, strokeBounds.Y);
@@ -157,11 +167,12 @@ namespace App2.Views
 
                 Debug.WriteLine(strokeBounds.X + " : " + strokeBounds.Y);
 
-                TopLeft = GetPosition(new Point(strokeBounds.X, strokeBounds.Y), path);
+                TopLeft = GetPosition(new Point(strokeBounds.X, strokeBounds.Y));
                 strokeBounds.X = TopLeft.X;
                 strokeBounds.Y = TopLeft.Y;
 
                 Debug.WriteLine(strokeBounds.X + " : " + strokeBounds.Y);
+
 
                 IEnumerable<UIElement> elementStack = VisualTreeHelper.FindElementsInHostCoordinates(strokeBounds, base_black2_1, true);
                 int k = 0;
@@ -171,8 +182,67 @@ namespace App2.Views
                     Path feItem = element as Path;
                     //cast to FrameworkElement, need the Name property
                     if (feItem != null)
-                    Debug.WriteLine(k + "found element :" + feItem.Name);
+                        Debug.WriteLine(k + "found element :" + feItem.Name);
                 }
+
+
+
+
+
+                //for (int x = (int)strokeBounds.X; x < ((int)strokeBounds.X + (int)strokeBounds.Top) + 1; x++)
+                //    for (int y = (int)strokeBounds.Y; y < ((int)strokeBounds.Y + (int)strokeBounds.Left) + 1; y++)
+                //    {
+                //        Point p = new Point(x, y);
+                //        IEnumerable<UIElement> elementStack = VisualTreeHelper.FindElementsInHostCoordinates(p, base_black2_1);
+                //        int k = 0;
+                //        foreach (UIElement element in elementStack)
+                //        {
+                //            k++;
+                //            Debug.WriteLine("found element " + k);
+                //            pointsInside.Add(p);
+                //        }
+                //    }
+
+                //----------------
+
+                /////-------------------
+
+                // base_black2_1.Children.Add(hitTestTest2);
+                // GeometryHitTestParameters w = new GeometryHitTestParameters()
+
+                //Debug.WriteLine("bottom layer" + VisualTreeHelper.GetChildrenCount(hitTestTest));
+                //Debug.WriteLine("top layer" + VisualTreeHelper.GetChildrenCount(hitTestTest));
+                //Debug.WriteLine("canvas" + VisualTreeHelper.GetChildrenCount(base_black2_1));
+                //Debug.WriteLine("inkcanvas" + VisualTreeHelper.GetChildrenCount(path));
+
+
+                // Respond to the mouse button down event by setting up a hit test results callback.
+                //private void OnMouseDown(object sender, MouseButtonEventArgs e)
+                //{
+                //    // Retrieve the coordinate of the mouse position.
+                //    Point pt = e.GetPosition((UIElement)sender);
+
+                //    // Expand the hit test area by creating a geometry centered on the hit test point.
+                //    EllipseGeometry expandedHitTestArea = new EllipseGeometry(pt, 10.0, 10.0);
+
+                //    // Clear the contents of the list used for hit test results.
+                //    hitResultsList.Clear();
+
+                //    // Set up a callback to receive the hit test result enumeration.
+                //    VisualTreeHelper.HitTest(myControl, null,
+                //        new HitTestResultCallback(MyHitTestResultCallback),
+                //        new GeometryHitTestParameters(expandedHitTestArea));
+
+                //    // Perform actions on the hit test results list.
+                //    if (hitResultsList.Count > 0)
+                //    {
+                //        ProcessHitTestResultsList();
+                //    }
+                //}
+
+                //int childrenCount = VisualTreeHelper.GetChildrenCount(PolyLineSegment(s.GetInkPoints, true));
+                //Debug.WriteLine("Number of children -" + childrenCount);
+                //var hitElements = VisualTreeHelper.FindElementsInHostCoordinates() as List<UIElement>;
             }
             Debug.WriteLine("number of elements: " + i);
 
@@ -180,20 +250,76 @@ namespace App2.Views
 
 
 
-        public Point GetPosition(Point ptrPt, UIElement p)
+        //public static bool PointCollectionsOverlap_Fast(PointCollection area1, PointCollection area2)
+        //{
+        //    for (int i = 0; i < area1.Count; i++)
+        //    {
+        //        for (int j = 0; j < area2.Count; j++)
+        //        {
+        //            if (lineSegmentsIntersect(area1[i], area1[(i + 1) % area1.Count], area2[j], area2[(j + 1) % area2.Count]))
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+
+        //    if (PointCollectionContainsPoint(area1, area2[0]) ||
+        //        PointCollectionContainsPoint(area2, area1[0]))
+        //    {
+        //        return true;
+        //    }
+        //    return false;
+        //}
+
+        //public static bool PointCollectionContainsPoint(PointCollection area, Point point)
+        //{
+        //    Point start = new Point(-100, -100);
+        //    int intersections = 0;
+
+        //    for (int i = 0; i < area.Count; i++)
+        //    {
+        //        if (lineSegmentsIntersect(area[i], area[(i + 1) % area.Count], start, point))
+        //        {
+        //            intersections++;
+        //        }
+        //    }
+
+        //    return (intersections % 2) == 1;
+        //}
+
+        //private static double determinant(Point vector1, Point vector2)
+        //{
+        //    return vector1.X * vector2.Y - vector1.Y * vector2.X;
+        //}
+
+        //private static bool lineSegmentsIntersect(Point _segment1_Start, Point _segment1_End, Point _segment2_Start, Point _segment2_End)
+        //{
+        //    double det = determinant(_segment1_End - _segment1_Start, _segment2_Start - _segment2_End);
+        //    double t = determinant(_segment2_Start - _segment1_Start, _segment2_Start - _segment2_End) / det;
+        //    double u = determinant(_segment1_End - _segment1_Start, _segment2_Start - _segment1_Start) / det;
+        //    return (t >= 0) && (u >= 0) && (t <= 1) && (u <= 1);
+        //}
+
+
+        //http://stackoverflow.com/questions/24772775/transformtovisual-returns-different-values-for-uielements-with-different-scales
+        public Point GetPosition(Point ptrPt)
         {
-            //http://stackoverflow.com/questions/24772775/transformtovisual-returns-different-values-for-uielements-with-different-scales
             //Set the GeneralTransform to get the position of rect on canvas 
             //GeneralTransform = TransformToVisual(Rect);
             //var rectPosition = GeneralTransform.Transform(new Point(0, 0));
             //rectPosition = new Point(Math.Abs(rectPosition.X), Math.Abs(rectPosition.Y));
             //return rectPosition;
 
-            GeneralTransform gt = base_black2_1.TransformToVisual(p);
+            GeneralTransform gt = RootGrid.TransformToVisual(base_black2_1);
             Point screenPoint;
+
             screenPoint = gt.TransformPoint(new Point(0, 0));//ptrPt.X, ptrPt.Y));
             return screenPoint;
         }
+
+
+
+
 
         internal static void FindChildren<T>(List<T> results, DependencyObject startNode) where T : DependencyObject
         {
@@ -209,6 +335,8 @@ namespace App2.Views
                 FindChildren<T>(results, current);
             }
         }
+
+
 
         private bool DoesPointContainElement(Point testPoint, string elementName, UIElement referenceFrame)
         {
@@ -242,12 +370,39 @@ namespace App2.Views
             //Debug.WriteLine(DoesPointContainElement(ptr, "basePathOne", inkCanvas));
         }
 
+
+        //void My_pointerpressed(object sender, PointerRoutedEventArgs e)
+        //{
+        //    basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
+        //    IEnumerable<UIElement> elementStack =
+        //    VisualTreeHelper.FindElementsInHostCoordinates(testPoint, referenceFrame);
+        //    foreach (UIElement item in elementStack)
+        //    {
+        //        FrameworkElement feItem = item as FrameworkElement;
+        //        //cast to FrameworkElement, need the Name property
+        //        if (feItem != null)
+        //        {
+        //            if (feItem.Name.Equals(elementName))
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //}
+
+
+
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             //rootPage = MainPage.Current;
             inkCanvas.Width = Window.Current.Bounds.Width;
             inkCanvas.Height = Window.Current.Bounds.Height;
         }
+
+
+
+
 
         void OnPenColorChanged(object sender, RoutedEventArgs e)
         {
