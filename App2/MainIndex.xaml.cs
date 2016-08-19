@@ -51,7 +51,7 @@ namespace App2
                 {
                     Symbol = Symbol.Paste,
                     Label = "Prosectomy Planning",
-                    DestPage = typeof(ProsectomyPage)
+                    DestPage = typeof(CanvasTestPage)
                 },
 
                 new NavMenuItem()
@@ -90,12 +90,7 @@ namespace App2
                     DestPage = typeof(MedicalReportsPage)
                 },
 
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Permissions,
-                    Label = "Log out",
-                    DestPage = typeof(CanvasTestPage)
-                },
+
             });
 
         public static MainIndex Current = null;

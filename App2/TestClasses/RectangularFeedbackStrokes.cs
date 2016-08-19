@@ -1,4 +1,13 @@
-﻿using System;
+﻿/* This class contains methods that use segments and polygons to analyze whether there is a way to perform the 
+ * 
+ * 
+ * 
+ */
+
+
+
+
+using System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
@@ -18,7 +27,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using Windows.UI.Xaml.Shapes;
 using System.Numerics;
-using System.Linq;
 
 // sources used:
 //https://social.msdn.microsoft.com/Forums/en-US/0b302b80-93ab-41ac-a1d8-8ef7ddbb3e71/uwp-inkcanvas-how-to-consume-pointerpressed-pointerreleased-and-pointermoved-events?forum=wpdevelop
@@ -56,96 +64,101 @@ namespace App2.Views
 
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs args)
         {
+            int i = 0;
             foreach (var hitTestStroke in args.Strokes)
             {
-                this.txtCount.Text = string.Empty;
+                IReadOnlyList<InkStrokeRenderingSegment> segments;
+                PathGeometry pathGeometry = new PathGeometry();
+                PathFigureCollection pathFigureCollection = new PathFigureCollection();
+                PathFigure pathFigure = new PathFigure();
+                PathSegmentCollection pathSegments = new PathSegmentCollection();
+                Path path = new Path();
                 Point TransFormedPoint;
-                List<Path> allElementStack = new List<Path>();
-                foreach (var myPoint in hitTestStroke.GetInkPoints().Reverse())
-                {
-                    TransFormedPoint = GetPosition(myPoint.Position, inkCanvas);
-                    IEnumerable<UIElement> elementStack = 
-                        VisualTreeHelper.FindElementsInHostCoordinates(TransFormedPoint, base_black2_1, true);
+                Rectangle renderRect = new Rectangle();
+                segments = hitTestStroke.GetRenderingSegments();
 
-                    foreach (UIElement element in elementStack)
+                // Process each renderRect segment.
+                bool first = true;
+                foreach (InkStrokeRenderingSegment segment in segments)
+                {
+                    // The first segment is the starting point for the path.
+                    if (first)
                     {
-                        Path feItem = new Path();
-                        feItem = element as Path;
-                        if (feItem != null)
-                        { 
-                            allElementStack.Add(feItem);
-                        }
+                        pathFigure.StartPoint = segment.BezierControlPoint1;
+                        first = false;
                     }
+
+                    // Copy each ink segment into a bezier segment.
+                    BezierSegment bezSegment = new BezierSegment();
+                    bezSegment.Point1 = segment.BezierControlPoint1;
+                    bezSegment.Point2 = segment.BezierControlPoint2;
+                    bezSegment.Point3 = segment.Position;
+                    pathSegments.Add(bezSegment);
                 }
-                triggerScore(allElementStack.Distinct() as IEnumerable<Path>, hitTestStroke.DrawingAttributes.Color);
-            }
-        }
+
+                // Build the path geometerty object.
+                pathFigure.Segments = pathSegments;
+                pathFigureCollection.Add(pathFigure);
+                pathGeometry.Figures = pathFigureCollection;
 
 
-        private void triggerScore(IEnumerable<Path> IEnumerableElementStack, Windows.UI.Color Color)
-        {
-            // since dark gray carries no color, run scoring only if color is red, amber or green.
-            if (Color.ToString()!="#FFA9A9A9"){
+                // Get boundingrectangle              
+                Rect boundingRect = pathGeometry.Bounds;
+                renderRect.Width = boundingRect.Width;
+                renderRect.Height = boundingRect.Height;
+                renderRect.Stroke = new SolidColorBrush(Colors.Blue);
+                renderRect.StrokeThickness = 4;
+                Canvas.SetLeft(renderRect, boundingRect.X);
+                Canvas.SetTop(renderRect, boundingRect.Y);
+                Canvas.SetZIndex(renderRect, 99);
+                base_black2_1.Children.Add(renderRect);
 
+                Debug.WriteLine("XY_before: " + boundingRect.X + ":" + boundingRect.Y);
 
-                // first, determine score
-                int score = 0;
-                switch (Color.ToString())
+                //transform to main page values
+                TransFormedPoint = GetPosition(new Point(boundingRect.X, boundingRect.Y), renderRect);
+                boundingRect.X = TransFormedPoint.X;
+                boundingRect.Y = TransFormedPoint.Y;
+
+                Debug.WriteLine("XY_after: " + boundingRect.X + ":" + boundingRect.Y);
+
+                IEnumerable<UIElement> elementStack = VisualTreeHelper.FindElementsInHostCoordinates(boundingRect, base_black2_1, true);
+                int k = 0;
+                foreach (UIElement element in elementStack)
                 {
-                    case "#FFFF0000": // red
-                        score = 5;
-                        break;
-                    case "#FFFFA500": //amber
-                        score = 4;
-                        break;
-                    case "#FF008000": //green
-                        score = 3;
-                        break;
+                    k++;
+                    Path feItem = element as Path;
+                    //cast to FrameworkElement, need the Name property
+                    if (feItem != null)
+                        Debug.WriteLine(k + ". UIElement: " + feItem.Name);
                 }
-
-                foreach (Path element in IEnumerableElementStack)
-                {
-                    Debug.WriteLine("UIElement: " + element.Name);
-                    Debug.WriteLine("Color: " + Color.ToString());
-                    txtCount.Text = $"UIElement: " + element.Name;//$"Hit {this.hitElements.Count} shapes";
-
-                    TextBlock destTextBlock = lookUpFeedbackBox(element.Name);
-                    int txtScore = Convert.ToInt32(destTextBlock.Text);
-
-                    if (txtScore < score) { 
-                        destTextBlock.Text = score.ToString();
-                    }
-                }
-
             }
         }
 
 
-        private TextBlock lookUpFeedbackBox(String uiName)
-        {
-            TextBlock returnBox = null;
-            switch (uiName)
-            {
-                case "Path":
-                    returnBox = this.Txt_27;
-                    break;
-                case "Path_20":
-                    returnBox = this.Txt_48;
-                    break;
-            }
 
-            return returnBox; 
-        }
-
-
-        private Point GetPosition(Point ptrPt, UIElement p)
+        public Point GetPosition(Point ptrPt, UIElement p)
         {
             GeneralTransform gt = p.TransformToVisual(null);
             Point screenPoint;
-            screenPoint = gt.TransformPoint(ptrPt);
+            screenPoint = gt.TransformPoint(new Point(0, 0));
             return screenPoint;
         }
 
+        internal static void FindChildren<T>(List<T> results, DependencyObject startNode) where T : DependencyObject
+        {
+            int count = VisualTreeHelper.GetChildrenCount(startNode);
+            for (int i = 0; i < count; i++)
+            {
+                DependencyObject current = VisualTreeHelper.GetChild(startNode, i);
+                if ((current.GetType()).Equals(typeof(T)) || (current.GetType().GetTypeInfo().IsSubclassOf(typeof(T))))
+                {
+                    T asType = (T)current;
+                    results.Add(asType);
+                }
+                FindChildren<T>(results, current);
+            }
+        }
 
         private bool DoesPointContainElement(Point testPoint, string elementName, UIElement referenceFrame)
         {
@@ -169,7 +182,7 @@ namespace App2.Views
 
         private void UnprocessedInput_PointerPressed(InkUnprocessedInput sender, Windows.UI.Core.PointerEventArgs args)
         {
-            //basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
+            basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
