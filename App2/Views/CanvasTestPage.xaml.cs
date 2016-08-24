@@ -109,12 +109,12 @@ namespace App2.Views
                     Debug.WriteLine("Color: " + Color.ToString());
                     txtCount.Text = $"UIElement: " + element.Name;//$"Hit {this.hitElements.Count} shapes";
 
-                    TextBlock destTextBlock = lookUpFeedbackBox(element.Name);
-                    int txtScore = Convert.ToInt32(destTextBlock.Text);
+                    //TextBlock destTextBlock = lookUpFeedbackBox(element.Name);
+                    //int txtScore = Convert.ToInt32(destTextBlock.Text);
 
-                    if (txtScore < score) { 
-                        destTextBlock.Text = score.ToString();
-                    }
+                    //if (txtScore < score) { 
+                    //    destTextBlock.Text = score.ToString();
+                    //}
                 }
 
             }
