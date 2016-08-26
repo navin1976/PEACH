@@ -76,7 +76,44 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-    <StackPanel Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <StackPanel Grid.Row="0"  Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,0">
+            <InkToolbar TargetInkCanvas="{x:Bind inkCanvas}" InitialControls="None" Margin="0,0,0,0">
+                <InkToolbar.Resources>
+                    <BrushCollection x:Key="CalligraphicPenPalette">
+                        <SolidColorBrush Color="#FFFF0000"/>
+                        <SolidColorBrush Color="#FFFFA500"/>
+                        <SolidColorBrush Color="#FF008000"/>
+                        <SolidColorBrush Color="#FFA9A9A9"/>
+                    </BrushCollection>
+                </InkToolbar.Resources>
+               
+                <InkToolbarCustomToggleButton x:Name="toggleButton" Click="Toggle_Custom" ToolTipService.ToolTip="Touch Writing">
+                    <SymbolIcon Symbol="{x:Bind TouchWriting}"/>
+                </InkToolbarCustomToggleButton>
+
+                <InkToolbarEraserButton />
+
+                <InkToolbarPencilButton Palette="{StaticResource CalligraphicPenPalette}"/>
+                <InkToolbarBallpointPenButton Palette="{StaticResource CalligraphicPenPalette}"/>
+
+                <!--<InkToolbarCustomToolButton x:Name="inkToolBarLoad" Click="OnLoadAsync"  ToolTipService.ToolTip="Load ink strokes">
+                    <SymbolIcon Symbol="{x:Bind OpenFile}"/>
+                </InkToolbarCustomToolButton>-->
+                
+
+                
+            </InkToolbar>
+            <Button x:Name="inkToolBarSave" Click="OnSaveAsync" Height="48" Width="48" ToolTipService.ToolTip="Save ink strokes">
+                <SymbolIcon Symbol="{x:Bind SaveFile}"/>
+            </Button>
+            <Button x:Name="inkToolBarLoad" Click="OnLoadAsync"  Height="48" Width="48"  ToolTipService.ToolTip="Load ink strokes">
+                    <SymbolIcon Symbol="{x:Bind OpenFile}"/>
+            </Button>
+
+        </StackPanel>
+
+
+        <!--<StackPanel Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -139,7 +176,7 @@
                             >Feedback Text Block</TextBlock>
             </StackPanel>
         </Grid>
-        <!-- Button panel -->
+        --><!-- Button panel --><!--
         <StackPanel Orientation="Horizontal" Margin="0,5">
             <Button Content="Clear" Width="65" Margin="0,0,3,0" Click="OnClear"/>
             <Button Content="Load"  Width="65" Margin="0,0,3,0" Click="OnLoadAsync"/>
@@ -147,7 +184,7 @@
             <CheckBox Content="Enable Touch Inking" Margin="10,0,3,0" Checked="TouchInkingCheckBox_Checked" Unchecked="TouchInkingCheckBox_Unchecked"/>
             <CheckBox Content="Enable Erasing Mode" Margin="10,0,3,0" Checked="ErasingModeCheckBox_Checked" Unchecked="ErasingModeCheckBox_Unchecked"/>
         </StackPanel>
-    </StackPanel>
+    </StackPanel>-->
     <Grid Grid.Row="1" x:Name="outputGrid" Height="Auto" Width="Auto" Background="{ThemeResource SystemControlBackgroundChromeWhiteBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

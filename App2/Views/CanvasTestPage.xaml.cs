@@ -18,35 +18,39 @@ using System.Reflection;
 using Windows.UI.Xaml.Shapes;
 using System.Numerics;
 using System.Linq;
-using Skeleton;
 
 // sources used:
 //https://social.msdn.microsoft.com/Forums/en-US/0b302b80-93ab-41ac-a1d8-8ef7ddbb3e71/uwp-inkcanvas-how-to-consume-pointerpressed-pointerreleased-and-pointermoved-events?forum=wpdevelop
 //https://social.msdn.microsoft.com/Forums/office/en-US/ed11a15e-b38e-4a26-88ac-5cc53d8ccec1/uwpxaml-how-to-convert-ink-renderRects-to-points-inkingmanager?forum=wpdevelop
 //http://stackoverflow.com/questions/24772775/transformtovisual-returns-different-values-for-uielements-with-different-scales
 
+
+
+    
+
 namespace App2.Views
 {
     public sealed partial class CanvasTestPage : Page
     {
-        //private MainPage rootPage;
+        Symbol TouchWriting = (Symbol)0xED5F;
+        Symbol SaveFile = (Symbol)0xE105;
+        Symbol OpenFile = (Symbol)0xE1A5;
+
         const int minPenSize = 2;
         const int penSizeIncrement = 2;
-        int penSize;
 
         public CanvasTestPage()
         {
             this.InitializeComponent();
-            penSize = minPenSize + penSizeIncrement * PenThickness.SelectedIndex;
+            //penSize = minPenSize + penSizeIncrement * PenThickness.SelectedIndex;
             InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
             drawingAttributes.Color = Windows.UI.Colors.Red;
-            drawingAttributes.Size = new Size(penSize, penSize);
+
             drawingAttributes.IgnorePressure = false;
             drawingAttributes.FitToCurve = true;
             inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
             inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse | Windows.UI.Core.CoreInputDeviceTypes.Pen; //
             inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
-            inkCanvas.InkPresenter.StrokesErased += InkPresenter_StrokesErased;
             inkCanvas.InkPresenter.UnprocessedInput.PointerPressed += UnprocessedInput_PointerPressed;
 
             //this.ViewModel = new ProstateSegmentInk();
@@ -55,9 +59,6 @@ namespace App2.Views
 
         //public Skeleton.ProstateSegmentInk ViewModel { get; set; }
 
-        private void InkPresenter_StrokesErased(InkPresenter sender, InkStrokesErasedEventArgs args)
-        {
-        }
 
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs args)
         {
@@ -70,7 +71,7 @@ namespace App2.Views
 
         private void processSingleStroke(InkStroke hitTestStroke)
         {
-            this.txtCount.Text = string.Empty;
+            //this.txtCount.Text = string.Empty;
             Point TransFormedPoint;
             List<Path> allElementStack = new List<Path>();
             foreach (var myPoint in hitTestStroke.GetInkPoints().Reverse())
@@ -118,7 +119,7 @@ namespace App2.Views
                 {
                     //Debug.WriteLine("UIElement: " + element.Name);
                     //Debug.WriteLine("Color: " + Color.ToString());
-                    txtCount.Text = $"UIElement: " + element.Name;//$"Hit {this.hitElements.Count} shapes";
+                    //txtCount.Text = $"UIElement: " + element.Name;//$"Hit {this.hitElements.Count} shapes";
                     TextBlock destTextBlock = lookUpFeedbackBox(element.Name);
                     int txtScore = Convert.ToInt32(destTextBlock.Text);
 
@@ -265,77 +266,39 @@ namespace App2.Views
             inkCanvas.Height = Window.Current.Bounds.Height;
         }
 
-        void OnPenColorChanged(object sender, RoutedEventArgs e)
+        //void OnPenColorChanged(object sender, RoutedEventArgs e)
+        //{
+        //    if (inkCanvas != null)
+        //    {
+        //        InkDrawingAttributes drawingAttributes = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
+
+        //        // Use button's background to set new pen's color
+        //        var btnSender = sender as Button;
+        //        var brush = btnSender.Background as Windows.UI.Xaml.Media.SolidColorBrush;
+
+        //        drawingAttributes.Color = brush.Color;
+        //        inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
+        //    }
+        //}
+
+
+
+        private void CurrentToolChanged(InkToolbar sender, object args)
         {
-            if (inkCanvas != null)
-            {
-                InkDrawingAttributes drawingAttributes = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
-
-                // Use button's background to set new pen's color
-                var btnSender = sender as Button;
-                var brush = btnSender.Background as Windows.UI.Xaml.Media.SolidColorBrush;
-
-                drawingAttributes.Color = brush.Color;
-                inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
-            }
+            //bool enabled = sender.ActiveTool.Equals(toolButtonLasso);
         }
 
-        void OnPenThicknessChanged(object sender, RoutedEventArgs e)
+        private void Toggle_Custom(object sender, RoutedEventArgs e)
         {
-            if (inkCanvas != null)
+            if (toggleButton.IsChecked == true)
             {
-                InkDrawingAttributes drawingAttributes = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
-                penSize = minPenSize + penSizeIncrement * PenThickness.SelectedIndex;
-                string value = ((ComboBoxItem)PenType.SelectedItem).Content.ToString();
-                if (value == "Highlighter" || value == "Calligraphy")
-                {
-                    // Make the pen tip rectangular for highlighter and calligraphy pen
-                    drawingAttributes.Size = new Size(penSize, penSize * 2);
-                }
-                else
-                {
-                    drawingAttributes.Size = new Size(penSize, penSize);
-                }
-                inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
+                inkCanvas.InkPresenter.InputDeviceTypes |= CoreInputDeviceTypes.Touch;
+            }
+            else
+            {
+                inkCanvas.InkPresenter.InputDeviceTypes &= ~CoreInputDeviceTypes.Touch;
             }
         }
-
-        void OnPenTypeChanged(object sender, RoutedEventArgs e)
-        {
-            if (inkCanvas != null)
-            {
-                InkDrawingAttributes drawingAttributes = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
-                string value = ((ComboBoxItem)PenType.SelectedItem).Content.ToString();
-
-                if (value == "Ballpoint")
-                {
-                    drawingAttributes.Size = new Size(penSize, penSize);
-                    drawingAttributes.PenTip = PenTipShape.Circle;
-                    drawingAttributes.DrawAsHighlighter = false;
-                    drawingAttributes.PenTipTransform = System.Numerics.Matrix3x2.Identity;
-                }
-                else if (value == "Highlighter")
-                {
-                    // Make the pen rectangular for highlighter
-                    drawingAttributes.Size = new Size(penSize, penSize * 2);
-                    drawingAttributes.PenTip = PenTipShape.Rectangle;
-                    drawingAttributes.DrawAsHighlighter = true;
-                    drawingAttributes.PenTipTransform = System.Numerics.Matrix3x2.Identity;
-                }
-                if (value == "Calligraphy")
-                {
-                    drawingAttributes.Size = new Size(penSize, penSize * 2);
-                    drawingAttributes.PenTip = PenTipShape.Rectangle;
-                    drawingAttributes.DrawAsHighlighter = false;
-
-                    // Set a 45 degree rotation on the pen tip
-                    double radians = 45.0 * Math.PI / 180;
-                    drawingAttributes.PenTipTransform = System.Numerics.Matrix3x2.CreateRotation((float)radians);
-                }
-                inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
-            }
-        }
-
 
         void OnClear(object sender, RoutedEventArgs e)
         {
@@ -364,6 +327,7 @@ namespace App2.Views
                     }
                     catch (Exception ex)
                     {
+                        Debug.WriteLine(ex.ToString());
                     }
                 }
             }
@@ -406,24 +370,6 @@ namespace App2.Views
             }
         }
 
-        private void TouchInkingCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse | Windows.UI.Core.CoreInputDeviceTypes.Pen | Windows.UI.Core.CoreInputDeviceTypes.Touch;
-        }
 
-        private void TouchInkingCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse | Windows.UI.Core.CoreInputDeviceTypes.Pen;
-        }
-
-        private void ErasingModeCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            inkCanvas.InkPresenter.InputProcessingConfiguration.Mode = InkInputProcessingMode.Erasing;
-        }
-
-        private void ErasingModeCheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            inkCanvas.InkPresenter.InputProcessingConfiguration.Mode = InkInputProcessingMode.Inking;
-        }
     }
 }
