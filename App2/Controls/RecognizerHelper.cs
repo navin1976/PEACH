@@ -12,10 +12,10 @@ namespace App2
             if (Bcp47ToRecognizerNameDictionary == null)
             {
                 Bcp47ToRecognizerNameDictionary = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase);
-                Bcp47ToRecognizerNameDictionary.Add("en-US", "Microsoft English (US) Handwriting Recognizer");
-                Bcp47ToRecognizerNameDictionary.Add("en-GB", "Microsoft English (UK) Handwriting Recognizer");
-                Bcp47ToRecognizerNameDictionary.Add("en-CA", "Microsoft English (Canada) Handwriting Recognizer");
-                Bcp47ToRecognizerNameDictionary.Add("en-AU", "Microsoft English (Australia) Handwriting Recognizer");
+                Bcp47ToRecognizerNameDictionary.Add("en-US", "Microsoft English (US)");
+                Bcp47ToRecognizerNameDictionary.Add("en-GB", "Microsoft English (UK)");
+                Bcp47ToRecognizerNameDictionary.Add("en-CA", "Microsoft English (Canada)");
+                Bcp47ToRecognizerNameDictionary.Add("en-AU", "Microsoft English (Australia)");
             }
         }
 

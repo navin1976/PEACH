@@ -2,7 +2,6 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using App2.Views;
 using Windows.UI.Core;
 using Windows.Media.SpeechRecognition;
 using System;
@@ -12,30 +11,29 @@ using Windows.UI.Xaml.Media;
 using Windows.Globalization;
 using Windows.UI.Xaml.Documents;
 using System.Threading.Tasks;
+using Windows.UI.Input.Inking;
+using Windows.UI.Text.Core;
 
 namespace App2.Views
 {
     public sealed partial class NotesSpeechPage : Page
     {
-        // Reference to the main sample page in order to post status messages.
+        const string InstallRecoText = "You can install handwriting recognition engines for other languages by this: go to Settings -> Time & language -> Region & language, choose a language, and click Options, then click Download under Handwriting";
 
-        // Speech events may come in on a thread other than the UI thread, keep track of the UI thread's
-        // dispatcher, so we can update the UI in a thread-safe manner.
+        /// Pen
+        private MainIndex rootPage;
+        InkRecognizerContainer inkRecognizerContainer = null;
+        private IReadOnlyList<InkRecognizer> recoView = null;
+        private Language previousInputLanguage = null;
+        private CoreTextServicesManager textServiceManager = null;
+        private ToolTip recoTooltip;
+
+        /// Voice Recognition
         private CoreDispatcher dispatcher;
-
-        // The speech recognizer used throughout this sample.
         private SpeechRecognizer speechRecognizer;
-
-        // Keep track of whether the continuous recognizer is currently running, so it can be cleaned up appropriately.
         private bool isListening;
-
-        // Keep track of existing text that we've accepted in ContinuousRecognitionSession_ResultGenerated(), so
-        // that we can combine it and Hypothesized results to show in-progress dictation mid-sentence.
         private StringBuilder dictatedTextBuilder;
 
-        /// This HResult represents the scenario where a user is prompted to allow in-app speech, but 
-        /// declines. This should only happen on a Phone device, where speech is enabled for the entire device,
-        /// not per-app.
         private static uint HResultPrivacyStatementDeclined = 0x80045509;
 
         public NotesSpeechPage()
@@ -43,6 +41,50 @@ namespace App2.Views
             this.InitializeComponent();
             isListening = false;
             dictatedTextBuilder = new StringBuilder();
+
+            /// Inking Initialization
+            // Initialize drawing attributes. These are used in inking mode.
+            InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
+            drawingAttributes.Color = Windows.UI.Colors.Red;
+            double penSize = 4;
+            drawingAttributes.Size = new Windows.Foundation.Size(penSize, penSize);
+            drawingAttributes.IgnorePressure = false;
+            drawingAttributes.FitToCurve = true;
+
+            // Show the available recognizers
+            inkRecognizerContainer = new InkRecognizerContainer();
+            recoView = inkRecognizerContainer.GetRecognizers();
+            if (recoView.Count > 0)
+            {
+                foreach (InkRecognizer recognizer in recoView)
+                {
+                    RecoName.Items.Add(recognizer.Name);
+                }
+            }
+            else
+            {
+                RecoName.IsEnabled = false;
+                RecoName.Items.Add("No Recognizer Available");
+            }
+            RecoName.SelectedIndex = 0;
+
+            // Set the text services so we can query when language changes
+            textServiceManager = CoreTextServicesManager.GetForCurrentView();
+            textServiceManager.InputLanguageChanged += TextServiceManager_InputLanguageChanged;
+
+            SetDefaultRecognizerByCurrentInputMethodLanguageTag();
+
+            // Initialize reco tooltip
+            recoTooltip = new ToolTip();
+            recoTooltip.Content = InstallRecoText;
+            ToolTipService.SetToolTip(InstallReco, recoTooltip);
+
+            // Initialize the InkCanvas
+            inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
+            inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse | Windows.UI.Core.CoreInputDeviceTypes.Pen | Windows.UI.Core.CoreInputDeviceTypes.Touch;
+
+            this.Unloaded += NotesPenPage_Unloaded;
+            this.SizeChanged += NotesPenPage_SizeChanged;
         }
 
 
@@ -75,17 +117,13 @@ namespace App2.Views
             }
             else
             {
-                // StatusBorder.Visibility = Visibility.Collapsed;
+                //StatusBorder.Visibility = Visibility.Collapsed;
                 // StatusPanel.Visibility = Visibility.Collapsed;
             }
         }
 
 
-        /// Upon entering the scenario, ensure that we have permissions to use the Microphone. This may entail popping up
-        /// a dialog to the user on Desktop systems. Only enable functionality once we've gained that permission in order to 
-        /// prevent errors from occurring when using the SpeechRecognizer. If speech is not a primary input mechanism, developers
-        /// should consider disabling appropriate parts of the UI if the user does not have a recording device, or does not allow 
-        /// audio input.
+        /// Upon entering the scenario, ensure that we have permissions to use the Microphone
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             //rootPage = MainPage.Current;
@@ -93,8 +131,6 @@ namespace App2.Views
             // Keep track of the UI thread dispatcher, as speech events will come in on a separate thread.
             dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
 
-            // Prompt the user for permission to access the microphone. This request will only happen
-            // once, it will not re-prompt if the user rejects the permission.
             bool permissionGained = await AudioCapturePermissions.RequestMicrophonePermission();
             if (permissionGained)
             {
@@ -113,7 +149,6 @@ namespace App2.Views
         }
 
         /// Look up the supported languages for this speech recognition scenario, 
-        /// that are installed on this machine, and populate a dropdown with a list.
         private void PopulateLanguageDropdown()
         {
             Language defaultLanguage = SpeechRecognizer.SystemSpeechLanguage;
@@ -422,5 +457,137 @@ namespace App2.Views
         {
             await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-speechtyping"));
         }
+
+
+        /// INKING ITEMS BELOW
+
+
+        private void NotesPenPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            SetCanvasSize();
+        }
+
+        private void NotesPenPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            recoTooltip.IsOpen = false;
+        }
+
+        private void SetCanvasSize()
+        {
+            Output.Width = RootPenGrid.ActualWidth;
+            Output.Height = Window.Current.Bounds.Height / 2;
+            inkCanvas.Width = RootPenGrid.ActualWidth;
+            inkCanvas.Height = Window.Current.Bounds.Height;
+
+        }
+
+        void OnRecognizerChanged(object sender, RoutedEventArgs e)
+        {
+            string selectedValue = (string)RecoName.SelectedValue;
+            SetRecognizerByName(selectedValue);
+        }
+
+        async void OnRecognizeAsync(object sender, RoutedEventArgs e)
+        {
+            IReadOnlyList<InkStroke> currentStrokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
+            if (currentStrokes.Count > 0)
+            {
+                RecognizeBtn.IsEnabled = false;
+                ClearBtn.IsEnabled = false;
+                RecoName.IsEnabled = false;
+
+                var recognitionResults = await inkRecognizerContainer.RecognizeAsync(inkCanvas.InkPresenter.StrokeContainer, InkRecognitionTarget.All);
+
+                if (recognitionResults.Count > 0)
+                {
+                    // Display recognition result
+                    string str = "Recognition result:";
+                    foreach (var r in recognitionResults)
+                    {
+                        str += " " + r.GetTextCandidates()[0];
+                    }
+                    this.NotifyUser(str, NotifyType.StatusMessage);
+                }
+                else
+                {
+                    this.NotifyUser("No text recognized.", NotifyType.StatusMessage);
+                }
+
+                RecognizeBtn.IsEnabled = true;
+                ClearBtn.IsEnabled = true;
+                RecoName.IsEnabled = true;
+            }
+            else
+            {
+                this.NotifyUser("Must first write something.", NotifyType.ErrorMessage);
+            }
+        }
+
+        void OnClear(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
+            this.NotifyUser("Cleared Canvas.", NotifyType.StatusMessage);
+        }
+
+        bool SetRecognizerByName(string recognizerName)
+        {
+            bool recognizerFound = false;
+
+            foreach (InkRecognizer reco in recoView)
+            {
+                if (recognizerName == reco.Name)
+                {
+                    inkRecognizerContainer.SetDefaultRecognizer(reco);
+                    recognizerFound = true;
+                    break;
+                }
+            }
+
+            if (!recognizerFound && rootPage != null)
+            {
+                this.NotifyUser("Could not find target recognizer.", NotifyType.ErrorMessage);
+            }
+
+            return recognizerFound;
+        }
+
+        private void TextServiceManager_InputLanguageChanged(CoreTextServicesManager sender, object args)
+        {
+            SetDefaultRecognizerByCurrentInputMethodLanguageTag();
+        }
+
+        private void SetDefaultRecognizerByCurrentInputMethodLanguageTag()
+        {
+            // Query recognizer name based on current input method language tag (bcp47 tag)
+            Language currentInputLanguage = textServiceManager.InputLanguage;
+
+            if (currentInputLanguage != previousInputLanguage)
+            {
+                // try query with the full BCP47 name
+                string recognizerName = RecognizerHelper.LanguageTagToRecognizerName(currentInputLanguage.LanguageTag);
+
+                if (recognizerName != string.Empty)
+                {
+                    for (int index = 0; index < recoView.Count; index++)
+                    {
+                        if (recoView[index].Name == recognizerName)
+                        {
+                            inkRecognizerContainer.SetDefaultRecognizer(recoView[index]);
+                            RecoName.SelectedIndex = index;
+                            previousInputLanguage = currentInputLanguage;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void RecoButton_Click(object sender, RoutedEventArgs e)
+        {
+            recoTooltip.IsOpen = !recoTooltip.IsOpen;
+        }
+
+
+
     }
 }

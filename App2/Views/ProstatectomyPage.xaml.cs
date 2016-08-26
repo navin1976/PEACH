@@ -24,13 +24,9 @@ using System.Linq;
 //https://social.msdn.microsoft.com/Forums/office/en-US/ed11a15e-b38e-4a26-88ac-5cc53d8ccec1/uwpxaml-how-to-convert-ink-renderRects-to-points-inkingmanager?forum=wpdevelop
 //http://stackoverflow.com/questions/24772775/transformtovisual-returns-different-values-for-uielements-with-different-scales
 
-
-
-    
-
 namespace App2.Views
 {
-    public sealed partial class CanvasTestPage : Page
+    public sealed partial class ProstatectomyPage : Page
     {
         Symbol TouchWriting = (Symbol)0xED5F;
         Symbol SaveFile = (Symbol)0xE105;
@@ -39,26 +35,26 @@ namespace App2.Views
         const int minPenSize = 2;
         const int penSizeIncrement = 2;
 
-        public CanvasTestPage()
+        public ProstatectomyPage()
         {
             this.InitializeComponent();
-            //penSize = minPenSize + penSizeIncrement * PenThickness.SelectedIndex;
             InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
             drawingAttributes.Color = Windows.UI.Colors.Red;
-
-            drawingAttributes.IgnorePressure = false;
             drawingAttributes.FitToCurve = true;
             inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
             inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse | Windows.UI.Core.CoreInputDeviceTypes.Pen; //
             inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
-            inkCanvas.InkPresenter.UnprocessedInput.PointerPressed += UnprocessedInput_PointerPressed;
-
+            inkCanvas.InkPresenter.StrokesErased += InkPresenter_StrokesErased;
             //this.ViewModel = new ProstateSegmentInk();
-
         }
 
         //public Skeleton.ProstateSegmentInk ViewModel { get; set; }
 
+        private void InkPresenter_StrokesErased(InkPresenter sender, InkStrokesErasedEventArgs args)
+        {
+            this.ReScoreAllStrokes();
+
+        }
 
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs args)
         {
@@ -266,23 +262,6 @@ namespace App2.Views
             inkCanvas.Height = Window.Current.Bounds.Height;
         }
 
-        //void OnPenColorChanged(object sender, RoutedEventArgs e)
-        //{
-        //    if (inkCanvas != null)
-        //    {
-        //        InkDrawingAttributes drawingAttributes = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
-
-        //        // Use button's background to set new pen's color
-        //        var btnSender = sender as Button;
-        //        var brush = btnSender.Background as Windows.UI.Xaml.Media.SolidColorBrush;
-
-        //        drawingAttributes.Color = brush.Color;
-        //        inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
-        //    }
-        //}
-
-
-
         private void CurrentToolChanged(InkToolbar sender, object args)
         {
             //bool enabled = sender.ActiveTool.Equals(toolButtonLasso);
@@ -361,6 +340,7 @@ namespace App2.Views
 
         private void ReScoreAllStrokes()
         {
+            this.resetTextBlocks();
             if (inkCanvas.InkPresenter.StrokeContainer.GetStrokes().Count > 0)
             {
                 foreach (var varStroke in inkCanvas.InkPresenter.StrokeContainer.GetStrokes())
@@ -371,5 +351,36 @@ namespace App2.Views
         }
 
 
+
+        private void resetTextBlocks()
+        {
+            this.txtProstate_1A.Text = "0";
+            this.txtProstate_1B.Text = "0";
+            this.txtProstate_2A.Text = "0";
+            this.txtProstate_2B.Text = "0";
+            this.txtProstate_2C.Text = "0";
+            this.txtProstate_2D.Text = "0";
+            this.txtProstate_2E.Text = "0";
+            this.txtProstate_2F.Text = "0";
+            this.txtProstate_2G.Text = "0";
+            this.txtProstate_2H.Text = "0";
+            this.txtProstate_3A.Text = "0";
+            this.txtProstate_3B.Text = "0";
+            this.txtProstate_3C.Text = "0";
+            this.txtProstate_3D.Text = "0";
+            this.txtProstate_3E.Text = "0";
+            this.txtProstate_3F.Text = "0";
+            this.txtProstate_3G.Text = "0";
+            this.txtProstate_3H.Text = "0";
+            this.txtProstate_4A.Text = "0";
+            this.txtProstate_4B.Text = "0";
+            this.txtProstate_4C.Text = "0";
+            this.txtProstate_4D.Text = "0";
+            this.txtProstate_4E.Text = "0";
+            this.txtProstate_4F.Text = "0";
+            this.txtProstate_4G.Text = "0";
+            this.txtProstate_4H.Text = "0";
+            this.txtProstate_BullsEye.Text = "0";
+        }
     }
 }

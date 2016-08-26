@@ -1,13 +1,4 @@
-﻿/* This class contains methods that use segments and polygons to analyze whether there is a way to perform the 
- * 
- * 
- * 
- */
-
-
-
-
-using System;
+﻿using System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
@@ -22,11 +13,12 @@ using Windows.UI.Xaml.Input;
 using System.Diagnostics;
 using Windows.UI.Input.Inking.Core;
 using Windows.UI.Core;
-
 using System.Collections.Generic;
 using System.Reflection;
 using Windows.UI.Xaml.Shapes;
 using System.Numerics;
+using System.Linq;
+using Skeleton;
 
 // sources used:
 //https://social.msdn.microsoft.com/Forums/en-US/0b302b80-93ab-41ac-a1d8-8ef7ddbb3e71/uwp-inkcanvas-how-to-consume-pointerpressed-pointerreleased-and-pointermoved-events?forum=wpdevelop
@@ -56,109 +48,191 @@ namespace App2.Views
             inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
             inkCanvas.InkPresenter.StrokesErased += InkPresenter_StrokesErased;
             inkCanvas.InkPresenter.UnprocessedInput.PointerPressed += UnprocessedInput_PointerPressed;
+
+            //this.ViewModel = new ProstateSegmentInk();
+
         }
+
+        //public Skeleton.ProstateSegmentInk ViewModel { get; set; }
 
         private void InkPresenter_StrokesErased(InkPresenter sender, InkStrokesErasedEventArgs args)
         {
+            this.ReScoreAllStrokes();
         }
 
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs args)
         {
-            int i = 0;
             foreach (var hitTestStroke in args.Strokes)
             {
-                IReadOnlyList<InkStrokeRenderingSegment> segments;
-                PathGeometry pathGeometry = new PathGeometry();
-                PathFigureCollection pathFigureCollection = new PathFigureCollection();
-                PathFigure pathFigure = new PathFigure();
-                PathSegmentCollection pathSegments = new PathSegmentCollection();
-                Path path = new Path();
-                Point TransFormedPoint;
-                Rectangle renderRect = new Rectangle();
-                segments = hitTestStroke.GetRenderingSegments();
-
-                // Process each renderRect segment.
-                bool first = true;
-                foreach (InkStrokeRenderingSegment segment in segments)
-                {
-                    // The first segment is the starting point for the path.
-                    if (first)
-                    {
-                        pathFigure.StartPoint = segment.BezierControlPoint1;
-                        first = false;
-                    }
-
-                    // Copy each ink segment into a bezier segment.
-                    BezierSegment bezSegment = new BezierSegment();
-                    bezSegment.Point1 = segment.BezierControlPoint1;
-                    bezSegment.Point2 = segment.BezierControlPoint2;
-                    bezSegment.Point3 = segment.Position;
-                    pathSegments.Add(bezSegment);
-                }
-
-                // Build the path geometerty object.
-                pathFigure.Segments = pathSegments;
-                pathFigureCollection.Add(pathFigure);
-                pathGeometry.Figures = pathFigureCollection;
-
-
-                // Get boundingrectangle              
-                Rect boundingRect = pathGeometry.Bounds;
-                renderRect.Width = boundingRect.Width;
-                renderRect.Height = boundingRect.Height;
-                renderRect.Stroke = new SolidColorBrush(Colors.Blue);
-                renderRect.StrokeThickness = 4;
-                Canvas.SetLeft(renderRect, boundingRect.X);
-                Canvas.SetTop(renderRect, boundingRect.Y);
-                Canvas.SetZIndex(renderRect, 99);
-                base_black2_1.Children.Add(renderRect);
-
-                Debug.WriteLine("XY_before: " + boundingRect.X + ":" + boundingRect.Y);
-
-                //transform to main page values
-                TransFormedPoint = GetPosition(new Point(boundingRect.X, boundingRect.Y), renderRect);
-                boundingRect.X = TransFormedPoint.X;
-                boundingRect.Y = TransFormedPoint.Y;
-
-                Debug.WriteLine("XY_after: " + boundingRect.X + ":" + boundingRect.Y);
-
-                IEnumerable<UIElement> elementStack = VisualTreeHelper.FindElementsInHostCoordinates(boundingRect, base_black2_1, true);
-                int k = 0;
-                foreach (UIElement element in elementStack)
-                {
-                    k++;
-                    Path feItem = element as Path;
-                    //cast to FrameworkElement, need the Name property
-                    if (feItem != null)
-                        Debug.WriteLine(k + ". UIElement: " + feItem.Name);
-                }
+                this.processSingleStroke(hitTestStroke);
             }
         }
 
 
+        private void processSingleStroke(InkStroke hitTestStroke)
+        {
+            this.txtCount.Text = string.Empty;
+            Point TransFormedPoint;
+            List<Path> allElementStack = new List<Path>();
+            foreach (var myPoint in hitTestStroke.GetInkPoints().Reverse())
+            {
+                TransFormedPoint = GetPosition(myPoint.Position, inkCanvas);
+                IEnumerable<UIElement> elementStack =
+                    VisualTreeHelper.FindElementsInHostCoordinates(TransFormedPoint, canvasDraw, true);
 
-        public Point GetPosition(Point ptrPt, UIElement p)
+                foreach (UIElement element in elementStack)
+                {
+                    Path feItem = new Path();
+                    feItem = element as Path;
+                    if (feItem != null)
+                    {
+                        allElementStack.Add(feItem);
+                    }
+                }
+            }
+            triggerScore(allElementStack.Distinct() as IEnumerable<Path>, hitTestStroke.DrawingAttributes.Color);
+        }
+
+
+        private void triggerScore(IEnumerable<Path> IEnumerableElementStack, Windows.UI.Color Color)
+        {
+            // since dark gray carries no color, run scoring only if color is red, amber or green.
+            if (Color.ToString()!="#FFA9A9A9"){
+
+
+                // first, determine score
+                int score = 0;
+                switch (Color.ToString())
+                {
+                    case "#FFFF0000": // red
+                        score = 5;
+                        break;
+                    case "#FFFFA500": //amber
+                        score = 4;
+                        break;
+                    case "#FF008000": //green
+                        score = 3;
+                        break;
+                }
+
+                foreach (Path element in IEnumerableElementStack)
+                {
+                    //Debug.WriteLine("UIElement: " + element.Name);
+                    //Debug.WriteLine("Color: " + Color.ToString());
+                    txtCount.Text = $"UIElement: " + element.Name;//$"Hit {this.hitElements.Count} shapes";
+                    TextBlock destTextBlock = lookUpFeedbackBox(element.Name);
+                    int txtScore = Convert.ToInt32(destTextBlock.Text);
+
+                    if (txtScore < score)
+                    {
+                        destTextBlock.Text = score.ToString();
+                    }
+                }
+
+            }
+        }
+
+
+        private TextBlock lookUpFeedbackBox(String uiName)
+        {
+            TextBlock returnBox = null;
+            switch (uiName)
+            {
+                case "inkProstate_1A":
+                    returnBox = this.txtProstate_1A;
+                    break;
+                case "inkProstate_1B":
+                    returnBox = this.txtProstate_1B;
+                    break;
+                case "inkProstate_2A":
+                    returnBox = this.txtProstate_2A;
+                    break;
+                case "inkProstate_2B":
+                    returnBox = this.txtProstate_2B;
+                    break;
+                case "inkProstate_2C":
+                    returnBox = this.txtProstate_2C;
+                    break;
+                case "inkProstate_2D":
+                    returnBox = this.txtProstate_2D;
+                    break;
+                case "inkProstate_2E":
+                    returnBox = this.txtProstate_2E;
+                    break;
+                case "inkProstate_2F":
+                    returnBox = this.txtProstate_2F;
+                    break;
+                case "inkProstate_2G":
+                    returnBox = this.txtProstate_2G;
+                    break;
+                case "inkProstate_2H":
+                    returnBox = this.txtProstate_2H;
+                    break;
+                case "inkProstate_3A":
+                    returnBox = this.txtProstate_3A;
+                    break;
+                case "inkProstate_3B":
+                    returnBox = this.txtProstate_3B;
+                    break;
+                case "inkProstate_3C":
+                    returnBox = this.txtProstate_3C;
+                    break;
+                case "inkProstate_3D":
+                    returnBox = this.txtProstate_3D;
+                    break;
+                case "inkProstate_3E":
+                    returnBox = this.txtProstate_3E;
+                    break;
+                case "inkProstate_3F":
+                    returnBox = this.txtProstate_3F;
+                    break;
+                case "inkProstate_3G":
+                    returnBox = this.txtProstate_3G;
+                    break;
+                case "inkProstate_3H":
+                    returnBox = this.txtProstate_3H;
+                    break;
+                case "inkProstate_4A":
+                    returnBox = this.txtProstate_4A;
+                    break;
+                case "inkProstate_4B":
+                    returnBox = this.txtProstate_4B;
+                    break;
+                case "inkProstate_4C":
+                    returnBox = this.txtProstate_4C;
+                    break;
+                case "inkProstate_4D":
+                    returnBox = this.txtProstate_4D;
+                    break;
+                case "inkProstate_4E":
+                    returnBox = this.txtProstate_4E;
+                    break;
+                case "inkProstate_4F":
+                    returnBox = this.txtProstate_4F;
+                    break;
+                case "inkProstate_4G":
+                    returnBox = this.txtProstate_4G;
+                    break;
+                case "inkProstate_4H":
+                    returnBox = this.txtProstate_4H;
+                    break;
+                case "inkProstate_BullsEye":
+                    returnBox = this.txtProstate_BullsEye;
+                    break;
+            }
+
+            return returnBox; 
+        }
+
+
+        private Point GetPosition(Point ptrPt, UIElement p)
         {
             GeneralTransform gt = p.TransformToVisual(null);
             Point screenPoint;
-            screenPoint = gt.TransformPoint(new Point(0, 0));
+            screenPoint = gt.TransformPoint(ptrPt);
             return screenPoint;
         }
 
-        internal static void FindChildren<T>(List<T> results, DependencyObject startNode) where T : DependencyObject
-        {
-            int count = VisualTreeHelper.GetChildrenCount(startNode);
-            for (int i = 0; i < count; i++)
-            {
-                DependencyObject current = VisualTreeHelper.GetChild(startNode, i);
-                if ((current.GetType()).Equals(typeof(T)) || (current.GetType().GetTypeInfo().IsSubclassOf(typeof(T))))
-                {
-                    T asType = (T)current;
-                    results.Add(asType);
-                }
-                FindChildren<T>(results, current);
-            }
-        }
 
         private bool DoesPointContainElement(Point testPoint, string elementName, UIElement referenceFrame)
         {
@@ -182,7 +256,7 @@ namespace App2.Views
 
         private void UnprocessedInput_PointerPressed(InkUnprocessedInput sender, Windows.UI.Core.PointerEventArgs args)
         {
-            basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
+            //basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -317,6 +391,18 @@ namespace App2.Views
                     catch (Exception ex)
                     {
                     }
+                }
+            }
+            this.ReScoreAllStrokes();
+        }
+
+        private void ReScoreAllStrokes()
+        {
+            if (inkCanvas.InkPresenter.StrokeContainer.GetStrokes().Count > 0)
+            {
+                foreach (var varStroke in inkCanvas.InkPresenter.StrokeContainer.GetStrokes())
+                {
+                    processSingleStroke(varStroke);
                 }
             }
         }

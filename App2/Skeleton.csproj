@@ -96,8 +96,8 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ProstateSegmentInk.cs" />
-    <Compile Include="Views\CanvasTestPage.xaml.cs">
-      <DependentUpon>CanvasTestPage.xaml</DependentUpon>
+    <Compile Include="Views\ProstatectomyPage.xaml.cs">
+      <DependentUpon>ProstatectomyPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\AudioCapturePermissions.cs" />
     <Compile Include="Controls\RecognizerHelper.cs" />
@@ -122,12 +122,6 @@
     </Compile>
     <Compile Include="Views\NotesSpeechPage.xaml.cs">
       <DependentUpon>NotesSpeechPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ProsectomyPage.xaml.cs">
-      <DependentUpon>ProsectomyPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\NotesPenPage.xaml.cs">
-      <DependentUpon>NotesPenPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\LandingPage.xaml.cs">
       <DependentUpon>LandingPage.xaml</DependentUpon>
@@ -161,7 +155,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\CanvasTestPage.xaml">
+    <Page Include="Views\ProstatectomyPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -198,14 +192,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ProsectomyPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NotesPenPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\LandingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -222,7 +208,7 @@
   <ItemGroup>
     <Folder Include="archive\" />
     <Folder Include="obj\x64\Debug\" />
-    <Folder Include="TestClasses\" />
+    <Folder Include="RecycleCode\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

@@ -30,57 +30,29 @@ namespace App2
             {
                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Contact,
+                    Symbol = Symbol.Contact2,
                     Label = "Patient Profile",
                     DestPage = typeof(BasicPage)
                 },
                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Contact2,
-                    Label = "Demographics",
-                    DestPage = typeof(CommandBarPage)
-                },
-                new NavMenuItem()
-                {
                     Symbol = Symbol.Paste,
-                    Label = "Medical Reports",
+                    Label = "Retrieve Reports",
                     DestPage = typeof(MedicalReportsPage)
                 },
 
                 new NavMenuItem()
                 {
-                    Symbol = Symbol.Paste,
-                    Label = "Prosectomy Planning",
-                    DestPage = typeof(CanvasTestPage)
+                    Symbol = Symbol.Find,
+                    Label = "Plan Prostatectomy",
+                    DestPage = typeof(ProstatectomyPage)
                 },
 
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Edit,
-                    Label = "Free Notes",
-                    DestPage = typeof(NotesPenPage)
-                },
-
-
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Edit,
-                    Label = "Dictate",
+                    Label = "Take Notes",
                     DestPage = typeof(NotesSpeechPage)
-                },
-
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Save,
-                    Label = "Save",
-                    DestPage = typeof(MedicalReportsPage)
-                },
-
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Setting,
-                    Label = "Settings",
-                    DestPage = typeof(MedicalReportsPage)
                 },
 
                 new NavMenuItem()
@@ -102,7 +74,6 @@ namespace App2
             this.Loaded += (sender, args) =>
             {
                 Current = this;
-
                 this.CheckTogglePaneButtonSizeChanged();
 
                 var titleBar = Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar;
@@ -240,13 +211,13 @@ namespace App2
         public void OpenNavePane()
         {
             TogglePaneButton.IsChecked = true;
-            NavPaneDivider.Visibility = Visibility.Visible;
+            PatientInformationPanel.Visibility = Visibility.Visible;
         }
 
         /// Hides divider when nav pane is closed.
         private void RootSplitView_PaneClosed(SplitView sender, object args)
         {
-            NavPaneDivider.Visibility = Visibility.Collapsed;
+            PatientInformationPanel.Visibility = Visibility.Collapsed;
         }
 
         /// Callback when the SplitView's Pane is toggled closed.  When the Pane is not visible
@@ -260,7 +231,7 @@ namespace App2
         /// Restores divider's visibility and ensures that margins around the floating hamburger are correctly set.
         private void TogglePaneButton_Checked(object sender, RoutedEventArgs e)
         {
-            NavPaneDivider.Visibility = Visibility.Visible;
+            PatientInformationPanel.Visibility = Visibility.Visible;
             this.CheckTogglePaneButtonSizeChanged();
         }
 
