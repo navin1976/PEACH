@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ProstateSegmentInk.cs" />
     <Compile Include="Views\CanvasTestPage.xaml.cs">
       <DependentUpon>CanvasTestPage.xaml</DependentUpon>
     </Compile>
