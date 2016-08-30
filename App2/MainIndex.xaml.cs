@@ -58,8 +58,8 @@ namespace App2
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Permissions,
-                    Label = "Log out",
-                    DestPage = typeof(MedicalReportsPage)
+                    Label = "Sign out",
+                    DestPage = typeof(LogoutPage)
                 },
 
 
