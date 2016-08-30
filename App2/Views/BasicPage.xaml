@@ -12,12 +12,7 @@
           EntranceNavigationTransitionInfo.IsTargetElement="True"
           Padding="24,0">
 
-        <Pivot Title="Patient Profile">
-            <PivotItem Header="UCLH Data">
-                <Grid x:Name="PatientProfile">
-                    <TextBlock Text="Hospital records" />
-                </Grid>
-            </PivotItem>
+        <Pivot>
             <PivotItem Header="Demographics Data">
                 <Grid x:Name="Demographics" Background="White" HorizontalAlignment="Left" Margin="10,10,10,10"> 
                     <Grid.ColumnDefinitions>
