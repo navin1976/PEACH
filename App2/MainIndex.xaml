@@ -10,7 +10,6 @@
       TabNavigation="Cycle"
       mc:Ignorable="d">
 
-
     <Page.Resources>
         <DataTemplate x:Key="NavMenuItemTemplate" x:DataType="local:NavMenuItem">
             <Grid>
@@ -70,9 +69,9 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
-
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -80,8 +79,15 @@
                         <ColumnDefinition Width="48"/>
                     </Grid.ColumnDefinitions>
 
+                    <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Margin="0,10,0,0" >
+                        <StackPanel>
+                        <Image x:Name="PeachLogo" Source="Assets/PeachNav.png" Height="28" VerticalAlignment="Bottom" Margin="0,5,0,0" />
+                        </StackPanel>
+                    </Grid>
+
                     <!-- A custom ListView to display the items in the pane.  The automation Name is set in the ContainerContentChanging event. -->
                     <controls:NavMenuListView x:Name="NavMenuList"
+                                              Grid.Row="1"
                                     Grid.ColumnSpan="3"
                                     TabIndex="3"
                                     Margin="0,40,0,0"
@@ -91,12 +97,12 @@
                                     ItemInvoked="NavMenuList_ItemInvoked"/>
 
                     <Grid x:Name="PatientInformationPanel" 
-                                    Grid.Row="1"
+                                    Grid.Row="2"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="3"
                                     Margin="10,10,10,10"
                                     ToolTipService.ToolTip="Current Patient information"
-                                    Background="LightYellow">
+                                    Background="LightGray">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -111,26 +117,59 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         
-                        <TextBlock Margin="0,10,10,10"  FontSize="13" FontWeight="SemiBold" Grid.Row="0" Grid.ColumnSpan="3">Patient Information:</TextBlock>
-                        <TextBlock FontSize="13" Grid.Column="0" Grid.Row="1">Name</TextBlock>
-                        <TextBlock FontSize="13" Grid.Column="1" Grid.Row="1">Duy Tuan Dao</TextBlock>
-                        <TextBlock FontSize="13" Grid.Column="0" Grid.Row="2">UCLH#</TextBlock>
-                        <TextBlock FontSize="13" Grid.Column="1" Grid.Row="2" >1263910</TextBlock>
-                        <TextBlock FontSize="13" Grid.Column="0" Grid.Row="3">Birth date</TextBlock>
-                        <TextBlock FontSize="13" Grid.Column="1" Grid.Row="3">31 Mar, 1989</TextBlock>
-                        <TextBlock FontSize="13" Grid.Column="0" Grid.Row="4">Sex</TextBlock>
-                        <TextBlock FontSize="13" Grid.Column="1" Grid.Row="4">Male</TextBlock>
-                        <TextBlock FontSize="13" Grid.Column="0" Grid.Row="5">Address</TextBlock>
+                        <TextBlock  Margin="10,10,10,10"  FontSize="13" FontWeight="SemiBold" Grid.Row="0" Grid.ColumnSpan="3">Patient Information:</TextBlock>
+                        <TextBlock  Margin="10,0,0,0" FontSize="13" Grid.Column="0" Grid.Row="1">Name</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="1">Duy Tuan Dao</TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="2">UCLH#</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="2" >1263910</TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="3">Birth date</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="3">31 Mar, 1989</TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="4">Sex</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="4">Male</TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="5">Address</TextBlock>
                         <StackPanel Grid.Column="1" Grid.Row="5">
-                            <TextBlock FontSize="13">22 Seraph Court</TextBlock>
-                            <TextBlock FontSize="13">5 Moreland Street</TextBlock>
-                            <TextBlock FontSize="13">EC1V 8BE</TextBlock>
-                            <TextBlock FontSize="13">London</TextBlock>
-                            <TextBlock FontSize="13">United Kingdom</TextBlock>
+                            <TextBlock  Margin="0,0,0,0"  FontSize="13">22 Seraph Court</TextBlock>
+                            <TextBlock  Margin="0,0,0,0"  FontSize="13">5 Moreland Street</TextBlock>
+                            <TextBlock  Margin="0,0,0,0"  FontSize="13">EC1V 8BE</TextBlock>
+                            <TextBlock  Margin="0,0,0,10"  FontSize="13">London, United Kingdom</TextBlock>
                         </StackPanel>
                         </Grid>
+
+
+
+                    <Grid x:Name="UserInformationPanel" 
+                                    Grid.Row="3"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
+                                    Margin="10,0,10,10"
+                                    ToolTipService.ToolTip="Current Patient information"
+                                    Background="LightGray">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock  Margin="10,10,10,10"  FontSize="13" FontWeight="SemiBold" Grid.Row="0" Grid.ColumnSpan="3">User:</TextBlock>
+                        <TextBlock  Margin="10,0,0,0" FontSize="13" Grid.Column="0" Grid.Row="1">Name</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="1">Navin Ramachandran</TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="2">UCLH#</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="2" >9872619H</TextBlock>
+                        <TextBlock  Margin="10,0,0,10"  FontSize="13" Grid.Column="0" Grid.Row="3">Department</TextBlock>
+                        <TextBlock  Margin="0,0,0,10"  FontSize="13" Grid.Column="1" Grid.Row="3">Radiology</TextBlock>
                     </Grid>
-              
+
+
+                </Grid>
+
+                
+                
+                
             </SplitView.Pane>
             
             <Frame x:Name="frame"
@@ -149,6 +188,9 @@
         </SplitView>
 
         <!-- Declared last to have it rendered above everything else, but it needs to be the first item in the tab sequence. -->
+
+
+
         <ToggleButton x:Name="TogglePaneButton"
                       TabIndex="1"
                       Margin="0,4,0,0"
@@ -158,6 +200,16 @@
                       Checked="TogglePaneButton_Checked"
                       AutomationProperties.Name="Menu"
                       ToolTipService.ToolTip="Menu" />
+
+
+        <!--<StackPanel x:Name="HeaderPanel" Orientation="Horizontal">
+            <Border Background="{ThemeResource SystemControlBackgroundChromeMediumBrush}" Grid.Row="0">
+            </Border>
+            <Image x:Name="PeachLogo" Stretch="None" Source="Assets/PaneLogo.png" Margin="0,15,0,0" />
+        </StackPanel>-->
+   
+
+
     </Grid>
 </Page>
 

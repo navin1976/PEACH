@@ -12,21 +12,33 @@
     <Grid x:Name="LayoutRoot" Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
-
-            <StackPanel Grid.Row="0" Margin="25" HorizontalAlignment="Center" >
-
-                <Image Width="200" Source="/Assets/Logo.png" />
-            <TextBlock Text="SIGN IN" Foreground="Black" FontSize="18" HorizontalAlignment="Center" SelectionChanged="TextBlock_SelectionChanged" Margin="0,40,0,0" VerticalAlignment="Bottom" />
-            <TextBlock Text="UserID" Foreground="Black" FontSize="14"  Margin="5" />
-                <TextBox  BorderBrush="LightGray" Name="UserName"  Margin="5" />
-                <TextBlock  Foreground="Black" Text="Password" FontSize="14" Margin="5" />
-                <PasswordBox BorderBrush="LightGray" Name="PassWord"  Margin="5"  />
-                <Button Content="Login" Background="#FF04385D" Foreground="White" Name="Login" Click="Login_Click" Width="200"  Margin="5" />
-                <Button Content="Registration" Background="#FF04385D" Foreground="White" Name="SignUp" Click="SignUp_Click" Width="200" Margin="5" />
+        <Grid Name="LogoGrid" Background="#142F4E" Height="200">
+            <StackPanel Width="300" VerticalAlignment="Center">
+                <Image Source="/Assets/Logo.png" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <!--<TextBlock FontSize="20" HorizontalAlignment="Center" Foreground="White" FontWeight="Bold">DATA VISUALIZATION APP</TextBlock>-->
             </StackPanel>
+
+        </Grid>
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" Width="250" Margin="50" >
+            <TextBlock FontWeight="SemiBold" Text="Username" Foreground="Black" FontSize="14"  Margin="0,0,0,0"/>
+            <TextBox BorderBrush="LightGray" Name="UserName"  Margin="15,6,0,0" />
+            <TextBlock FontWeight="SemiBold" Foreground="Black" Text="Password" FontSize="14" Margin="0,18,0,0" />
+            <PasswordBox BorderBrush="LightGray" Name="PassWord"  Margin="15,6,0,0"  />
+            <Button Content="Login" Background="#494E6B" HorizontalAlignment="Center" Foreground="White" Name="Login" Click="Login_Click" Width="100"  Margin="20,20,20,0" />
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Height="90" Padding="20,20,20,20" >
+            <Image Source="/Assets/PeachCancerLogoBlack.png" Margin="10,10,10,10" />
+            <Image Source="/Assets/UCL.png" Margin="35,10,10,10"/>
+            <Image Source="/Assets/MicrosoftLogoBlack.png" Margin="35,10,10,10"/>
+        </StackPanel>
+
+
+
     </Grid>
 </Page>

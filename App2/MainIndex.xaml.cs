@@ -17,7 +17,6 @@ using Windows.UI.Xaml.Navigation;
 using App2.Controls;
 using App2.Views;
 
-// ustawienia temporalne testuje tuanu
 
 namespace App2
 {
@@ -149,7 +148,11 @@ namespace App2
 
             if (item != null)
             {
-                if (item.DestPage != null &&
+                if (item.Label == "Log out")
+                {
+                    this.Frame.Navigate(typeof(Auth));
+                }
+                else if (item.DestPage != null &&
                     item.DestPage != this.AppFrame.CurrentSourcePageType)
                 {
                     this.AppFrame.Navigate(item.DestPage, item.Arguments);
@@ -211,12 +214,14 @@ namespace App2
         public void OpenNavePane()
         {
             TogglePaneButton.IsChecked = true;
+            UserInformationPanel.Visibility = Visibility.Visible;
             PatientInformationPanel.Visibility = Visibility.Visible;
         }
 
         /// Hides divider when nav pane is closed.
         private void RootSplitView_PaneClosed(SplitView sender, object args)
         {
+            UserInformationPanel.Visibility = Visibility.Collapsed;
             PatientInformationPanel.Visibility = Visibility.Collapsed;
         }
 
@@ -231,6 +236,7 @@ namespace App2
         /// Restores divider's visibility and ensures that margins around the floating hamburger are correctly set.
         private void TogglePaneButton_Checked(object sender, RoutedEventArgs e)
         {
+            UserInformationPanel.Visibility = Visibility.Visible;
             PatientInformationPanel.Visibility = Visibility.Visible;
             this.CheckTogglePaneButtonSizeChanged();
         }
@@ -272,23 +278,5 @@ namespace App2
                 args.ItemContainer.ClearValue(AutomationProperties.NameProperty);
             }
         }
-
-
-
     }
-
-
-    //public class ScenarioBindingConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, string language)
-    //    {
-    //        Scenario s = value as Scenario;
-    //        return (MainPage.Current.Scenarios.IndexOf(s) + 1) + ") " + s.Title;
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, string language)
-    //    {
-    //        return true;
-    //    }
-    //}
 }

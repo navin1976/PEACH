@@ -95,7 +95,11 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\PageHeader.xaml.cs" />
     <Compile Include="Controls\ProstateSegmentInk.cs" />
+    <Compile Include="Views\LandingPage.xaml.cs">
+      <DependentUpon>LandingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ProstatectomyPage.xaml.cs">
       <DependentUpon>ProstatectomyPage.xaml</DependentUpon>
     </Compile>
@@ -103,7 +107,6 @@
     <Compile Include="Controls\RecognizerHelper.cs" />
     <Compile Include="Controls\NavMenuItem.cs" />
     <Compile Include="Controls\NavMenuListView.cs" />
-    <Compile Include="Controls\PageHeader.xaml.cs" />
     <Compile Include="MainIndex.xaml.cs">
       <DependentUpon>MainIndex.xaml</DependentUpon>
     </Compile>
@@ -123,12 +126,6 @@
     <Compile Include="Views\NotesSpeechPage.xaml.cs">
       <DependentUpon>NotesSpeechPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LandingPage.xaml.cs">
-      <DependentUpon>LandingPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CommandBarPage.xaml.cs">
-      <DependentUpon>CommandBarPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\DrillInPage.xaml.cs">
       <DependentUpon>DrillInPage.xaml</DependentUpon>
     </Compile>
@@ -140,6 +137,14 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\microsoft.png" />
+    <Content Include="Assets\MicrosoftLogoBlack.png" />
+    <Content Include="Assets\nhs.png" />
+    <Content Include="Assets\PaneLogo.png" />
+    <Content Include="Assets\PeachCancerLogo.png" />
+    <Content Include="Assets\PeachCancerLogoBlack.png" />
+    <Content Include="Assets\PeachNav.png" />
+    <Content Include="Assets\UCL.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
@@ -155,11 +160,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Views\ProstatectomyPage.xaml">
+    <Page Include="Controls\PageHeader.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\PageHeader.xaml">
+    <Page Include="Views\LandingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProstatectomyPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -191,14 +200,6 @@
     <Page Include="Views\NotesSpeechPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\LandingPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CommandBarPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DrillInPage.xaml">
       <SubType>Designer</SubType>

@@ -18,6 +18,7 @@ using System.Reflection;
 using Windows.UI.Xaml.Shapes;
 using System.Numerics;
 using System.Linq;
+using Windows.UI.Xaml.Controls.Primitives;
 
 // sources used:
 //https://social.msdn.microsoft.com/Forums/en-US/0b302b80-93ab-41ac-a1d8-8ef7ddbb3e71/uwp-inkcanvas-how-to-consume-pointerpressed-pointerreleased-and-pointermoved-events?forum=wpdevelop
@@ -30,10 +31,12 @@ namespace App2.Views
     {
         Symbol TouchWriting = (Symbol)0xED5F;
         Symbol SaveFile = (Symbol)0xE105;
-        Symbol OpenFile = (Symbol)0xE1A5;
+        Symbol OpenFile = (Symbol)0xE118;
 
         const int minPenSize = 2;
         const int penSizeIncrement = 2;
+
+
 
         public ProstatectomyPage()
         {
@@ -46,9 +49,30 @@ namespace App2.Views
             inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
             inkCanvas.InkPresenter.StrokesErased += InkPresenter_StrokesErased;
             //this.ViewModel = new ProstateSegmentInk();
+
+            var eraser = inkToolBar.GetToolButton(InkToolbarTool.Eraser) as InkToolbarEraserButton;
+
+            var flyout = FlyoutBase.GetAttachedFlyout(eraser) as Flyout;
+
+            if (flyout != null)
+            {
+                var button = flyout.Content as Button;
+
+                if (button != null)
+                {
+                    var newButton = new Button();
+                    newButton.Style = button.Style;
+                    newButton.Content = button.Content;
+
+                    newButton.Click += EraseAllInk;
+                    flyout.Content = newButton;
+                }
+            }
         }
 
         //public Skeleton.ProstateSegmentInk ViewModel { get; set; }
+
+
 
         private void InkPresenter_StrokesErased(InkPresenter sender, InkStrokesErasedEventArgs args)
         {
@@ -352,6 +376,13 @@ namespace App2.Views
 
 
 
+        private void EraseAllInk(object sender, RoutedEventArgs e)
+        {
+            inkCanvas.InkPresenter.StrokeContainer.Clear();
+            this.resetTextBlocks();
+        }
+
+
         private void resetTextBlocks()
         {
             this.txtProstate_1A.Text = "0";
@@ -381,6 +412,11 @@ namespace App2.Views
             this.txtProstate_4G.Text = "0";
             this.txtProstate_4H.Text = "0";
             this.txtProstate_BullsEye.Text = "0";
+        }
+
+        private void inkToolBarLoad_FocusEngaged(Control sender, FocusEngagedEventArgs args)
+        {
+
         }
     }
 }

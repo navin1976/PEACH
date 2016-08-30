@@ -63,11 +63,6 @@ namespace App2.Controls
             }
         }
 
-        /// <summary>
-        /// Mark the <paramref name="item"/> as selected and ensures everything else is not.
-        /// If the <paramref name="item"/> is null then everything is unselected.
-        /// </summary>
-        /// <param name="item"></param>
         public void SetSelectedItem(ListViewItem item)
         {
             int index = -1;
