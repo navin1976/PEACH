@@ -81,7 +81,7 @@
 
                     <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Margin="0,10,0,0" >
                         <StackPanel>
-                        <Image x:Name="PeachLogo" Source="Assets/PeachNav.png" Height="28" VerticalAlignment="Bottom" Margin="0,5,0,0" />
+                            <Image x:Name="PeachLogo" Source="Assets/PeachNav.png" Height="28" VerticalAlignment="Bottom" Margin="0,5,0,0" />
                         </StackPanel>
                     </Grid>
 
@@ -116,7 +116,7 @@
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        
+
                         <TextBlock  Margin="10,10,10,10"  FontSize="13" FontWeight="SemiBold" Grid.Row="0" Grid.ColumnSpan="3">Patient Information:</TextBlock>
                         <TextBlock  Margin="10,0,0,0" FontSize="13" Grid.Column="0" Grid.Row="1">Name</TextBlock>
                         <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="1">Duy Tuan Dao</TextBlock>
@@ -133,7 +133,7 @@
                             <TextBlock  Margin="0,0,0,0"  FontSize="13">EC1V 8BE</TextBlock>
                             <TextBlock  Margin="0,0,0,10"  FontSize="13">London, United Kingdom</TextBlock>
                         </StackPanel>
-                        </Grid>
+                    </Grid>
 
 
 
@@ -167,11 +167,11 @@
 
                 </Grid>
 
-                
-                
-                
+
+
+
             </SplitView.Pane>
-            
+
             <Frame x:Name="frame"
                    Margin="0,4,0,0"
                    Navigating="OnNavigatingToPage">
@@ -207,7 +207,7 @@
             </Border>
             <Image x:Name="PeachLogo" Stretch="None" Source="Assets/PaneLogo.png" Margin="0,15,0,0" />
         </StackPanel>-->
-   
+
 
 
     </Grid>

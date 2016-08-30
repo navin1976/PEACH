@@ -57,8 +57,8 @@ namespace App2
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Permissions,
-                    Label = "Sign out",
-                    DestPage = typeof(LogoutPage)
+                    Label = "Log out",
+                    DestPage = typeof(MedicalReportsPage)
                 },
 
 
@@ -162,7 +162,7 @@ namespace App2
 
         /// Ensures the nav menu reflects reality when navigation is triggered outside of
         /// the nav menu buttons.
-         private void OnNavigatingToPage(object sender, NavigatingCancelEventArgs e)
+        private void OnNavigatingToPage(object sender, NavigatingCancelEventArgs e)
         {
             if (e.NavigationMode == NavigationMode.Back)
             {

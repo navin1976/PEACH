@@ -117,7 +117,8 @@ namespace App2.Views
         private void triggerScore(IEnumerable<Path> IEnumerableElementStack, Windows.UI.Color Color)
         {
             // since dark gray carries no color, run scoring only if color is red, amber or green.
-            if (Color.ToString()!="#FFA9A9A9"){
+            if (Color.ToString() != "#FFA9A9A9")
+            {
 
 
                 // first, determine score
@@ -241,7 +242,7 @@ namespace App2.Views
                     break;
             }
 
-            return returnBox; 
+            return returnBox;
         }
 
 
