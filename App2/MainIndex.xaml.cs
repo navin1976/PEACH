@@ -14,11 +14,11 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using App2.Controls;
-using App2.Views;
+using DataVisualization.Controls;
+using DataVisualization.Views;
 
 
-namespace App2
+namespace DataVisualization
 {
     public sealed partial class MainIndex : Page
     {
@@ -33,35 +33,33 @@ namespace App2
                     Label = "Patient Profile",
                     DestPage = typeof(BasicPage)
                 },
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Paste,
-                    Label = "Retrieve Reports",
-                    DestPage = typeof(MedicalReportsPage)
-                },
+                //new NavMenuItem()
+                //{
+                //    Symbol = Symbol.Paste,
+                //    Label = "Retrieve Reports",
+                //    DestPage = typeof(MedicalReportsPage)
+                //},
 
-                new NavMenuItem()
-                {
-                    Symbol = Symbol.Find,
-                    Label = "Plan Prostatectomy",
-                    DestPage = typeof(ProstatectomyPage)
-                },
+                //new NavMenuItem()
+                //{
+                //    Symbol = Symbol.Find,
+                //    Label = "Plan Prostatectomy",
+                //    DestPage = typeof(ProstatectomyPage)
+                //},
 
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Edit,
                     Label = "Take Notes",
-                    DestPage = typeof(NotesSpeechPage)
+                    DestPage = typeof(FreeNotesPage)
                 },
 
                 new NavMenuItem()
                 {
                     Symbol = Symbol.Permissions,
                     Label = "Log out",
-                    DestPage = typeof(MedicalReportsPage)
-                },
-
-
+                    DestPage = null
+                }
             });
 
         public static MainIndex Current = null;
@@ -141,7 +139,7 @@ namespace App2
 
         #region Navigation
 
-        /// Navigate to the Page for the selected "listViewItem"
+        // Navigate to the Page for the selected "listViewItem"
         private void NavMenuList_ItemInvoked(object sender, ListViewItem listViewItem)
         {
             var item = (NavMenuItem)((NavMenuListView)sender).ItemFromContainer(listViewItem);
@@ -160,8 +158,8 @@ namespace App2
             }
         }
 
-        /// Ensures the nav menu reflects reality when navigation is triggered outside of
-        /// the nav menu buttons.
+        // Ensures the nav menu reflects reality when navigation is triggered outside of
+        // the nav menu buttons.
         private void OnNavigatingToPage(object sender, NavigatingCancelEventArgs e)
         {
             if (e.NavigationMode == NavigationMode.Back)
@@ -205,12 +203,12 @@ namespace App2
             private set;
         }
 
-        /// An event to notify listeners when the hamburger button may occlude other content in the app.
-        /// The custom "PageHeader" user control is using this.
+        // An event to notify listeners when the hamburger button may occlude other content in the app.
+        // The custom "PageHeader" user control is using this.
         public event TypedEventHandler<MainIndex, Rect> TogglePaneButtonRectChanged;
 
-        /// Public method to allow pages to open SplitView's pane.
-        /// Used for custom app shortcuts like navigating left from page's left-most item
+        // Public method to allow pages to open SplitView's pane.
+        // Used for custom app shortcuts like navigating left from page's left-most item
         public void OpenNavePane()
         {
             TogglePaneButton.IsChecked = true;
@@ -218,22 +216,22 @@ namespace App2
             PatientInformationPanel.Visibility = Visibility.Visible;
         }
 
-        /// Hides divider when nav pane is closed.
+        // Hides divider when nav pane is closed.
         private void RootSplitView_PaneClosed(SplitView sender, object args)
         {
             UserInformationPanel.Visibility = Visibility.Collapsed;
             PatientInformationPanel.Visibility = Visibility.Collapsed;
         }
 
-        /// Callback when the SplitView's Pane is toggled closed.  When the Pane is not visible
-        /// then the floating hamburger may be occluding other content in the app unless it is aware.
+        // Callback when the SplitView's Pane is toggled closed.  When the Pane is not visible
+        // then the floating hamburger may be occluding other content in the app unless it is aware.
         private void TogglePaneButton_Unchecked(object sender, RoutedEventArgs e)
         {
             this.CheckTogglePaneButtonSizeChanged();
         }
 
-        /// Callback when the SplitView's Pane is toggled opened.
-        /// Restores divider's visibility and ensures that margins around the floating hamburger are correctly set.
+        // Callback when the SplitView's Pane is toggled opened.
+        // Restores divider's visibility and ensures that margins around the floating hamburger are correctly set.
         private void TogglePaneButton_Checked(object sender, RoutedEventArgs e)
         {
             UserInformationPanel.Visibility = Visibility.Visible;
@@ -241,8 +239,8 @@ namespace App2
             this.CheckTogglePaneButtonSizeChanged();
         }
 
-        /// Check for the conditions where the navigation pane does not occupy the space under the floating
-        /// hamburger button and trigger the event.
+        // Check for the conditions where the navigation pane does not occupy the space under the floating
+        // hamburger button and trigger the event.
         private void CheckTogglePaneButtonSizeChanged()
         {
             if (this.RootSplitView.DisplayMode == SplitViewDisplayMode.Inline ||
@@ -265,8 +263,8 @@ namespace App2
             }
         }
 
-        /// Enable accessibility on each nav menu item by setting the AutomationProperties.Name on each container
-        /// using the associated Label of each item.
+        // Enable accessibility on each nav menu item by setting the AutomationProperties.Name on each container
+        // using the associated Label of each item.
         private void NavMenuItemContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
         {
             if (!args.InRecycleQueue && args.Item != null && args.Item is NavMenuItem)

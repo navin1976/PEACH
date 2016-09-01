@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PEACH - Data Visualization Application")]
 [assembly: AssemblyDescription("Data Visualization For Radiology Use")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("UCL")]
+[assembly: AssemblyCompany("UCLH")]
 [assembly: AssemblyProduct("PEACH - Data Visualization Application")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
@@ -28,5 +28,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: ComVisible(false)]
-[assembly: NeutralResourcesLanguage("")]
+[assembly: NeutralResourcesLanguage("en")]
 

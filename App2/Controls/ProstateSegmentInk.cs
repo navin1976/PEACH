@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 
-namespace App2
+namespace DataVisualization
 {
     public class ProstateSegmentInk
     {

@@ -12,13 +12,13 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using DataVisualization.Views;
+using Windows.UI;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml.Media.Imaging;
 
-namespace App2
+namespace DataVisualization
 {
-
-    using Views;
-    using Windows.UI;
-    using Windows.UI.ViewManagement;
 
 
     public sealed partial class Auth : Page
@@ -33,14 +33,62 @@ namespace App2
             this.Frame.Navigate(typeof(MainIndex));
         }
 
-        public void SignUp_Click(object sender, RoutedEventArgs e)
+
+        //private void UserName_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    if (UserName.Text == "")
+        //    {
+        //        // Create an ImageBrush.
+        //        ImageBrush textImageBrush = new ImageBrush();
+        //        textImageBrush.ImageSource =
+        //            new BitmapImage(
+        //                new Uri(@"LoginUW.gif", UriKind.Relative)
+        //            );
+        //        textImageBrush.AlignmentX = AlignmentX.Left;
+        //        textImageBrush.Stretch = Stretch.None;
+        //        // Use the brush to paint the button's background.
+        //        UserName.Background = textImageBrush;
+
+        //    }
+        //    else
+        //    {
+        //        UserName.Background = null;
+        //    }
+        //}
+
+        private void UserName_GotFocus(object sender, RoutedEventArgs e)
         {
-            //NavigationService.Navigate(new Uri("/Views/SignUpPage.xaml", UriKind.Relative
+            UserName.Text = "";
+            SolidColorBrush Brush1 = new SolidColorBrush();
+            Brush1.Color = Windows.UI.Colors.Black;
+            UserName.Foreground = Brush1;
         }
 
-        private void TextBlock_SelectionChanged(object sender, RoutedEventArgs e)
+        private void UserName_LostFocus(object sender, RoutedEventArgs e)
         {
+            if (UserName.Text == String.Empty)
+            {
+                UserName.Text = "Enter username.. ";
+                SolidColorBrush Brush2 = new SolidColorBrush();
+                Brush2.Color = Windows.UI.Colors.Gray;
+                UserName.Foreground = Brush2;
+            }
+        }
 
+        private void PassWord_GotFocus(object sender, RoutedEventArgs e)
+        {
+            PassWord.Password = "";
+            SolidColorBrush Brush1 = new SolidColorBrush();
+            Brush1.Color = Windows.UI.Colors.Black;
+            PassWord.Foreground = Brush1;
+        }
+
+        private void PassWord_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (PassWord.Password == String.Empty)
+            {
+                PassWord.Password = "Enter Password..";
+            }
         }
     }
 }

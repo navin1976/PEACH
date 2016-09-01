@@ -1,4 +1,7 @@
-﻿
+﻿// source: Universal Windows Samples provided by Microsoft @ https://github.com/Microsoft/Windows-universal-samples
+// modifications have been made to merge with FreeNoteInkController, so that voice recognition does not
+// delete or discard notes taken by keyboard or pen.
+
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -6,127 +9,20 @@ using Windows.UI.Core;
 using Windows.Media.SpeechRecognition;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Windows.UI.Xaml.Media;
 using Windows.Globalization;
 using Windows.UI.Xaml.Documents;
 using System.Threading.Tasks;
-using Windows.UI.Input.Inking;
-using Windows.UI.Text.Core;
 
-namespace App2.Views
+namespace DataVisualization.Views
 {
-    public sealed partial class NotesSpeechPage : Page
+    public sealed partial class FreeNotesPage : Page
     {
-        const string InstallRecoText = "You can install handwriting recognition engines for other languages by this: go to Settings -> Time & language -> Region & language, choose a language, and click Options, then click Download under Handwriting";
-
-        /// Pen
-        private MainIndex rootPage;
-        InkRecognizerContainer inkRecognizerContainer = null;
-        private IReadOnlyList<InkRecognizer> recoView = null;
-        private Language previousInputLanguage = null;
-        private CoreTextServicesManager textServiceManager = null;
-        private ToolTip recoTooltip;
-
-        /// Voice Recognition
-        private CoreDispatcher dispatcher;
-        private SpeechRecognizer speechRecognizer;
-        private bool isListening;
-        private StringBuilder dictatedTextBuilder;
-
-        private static uint HResultPrivacyStatementDeclined = 0x80045509;
-
-        public NotesSpeechPage()
-        {
-            this.InitializeComponent();
-            isListening = false;
-            dictatedTextBuilder = new StringBuilder();
-
-            /// Inking Initialization
-            // Initialize drawing attributes. These are used in inking mode.
-            InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
-            drawingAttributes.Color = Windows.UI.Colors.Red;
-            double penSize = 4;
-            drawingAttributes.Size = new Windows.Foundation.Size(penSize, penSize);
-            drawingAttributes.IgnorePressure = false;
-            drawingAttributes.FitToCurve = true;
-
-            // Show the available recognizers
-            inkRecognizerContainer = new InkRecognizerContainer();
-            recoView = inkRecognizerContainer.GetRecognizers();
-            if (recoView.Count > 0)
-            {
-                foreach (InkRecognizer recognizer in recoView)
-                {
-                    RecoName.Items.Add(recognizer.Name);
-                }
-            }
-            else
-            {
-                RecoName.IsEnabled = false;
-                RecoName.Items.Add("No Recognizer Available");
-            }
-            RecoName.SelectedIndex = 0;
-
-            // Set the text services so we can query when language changes
-            textServiceManager = CoreTextServicesManager.GetForCurrentView();
-            textServiceManager.InputLanguageChanged += TextServiceManager_InputLanguageChanged;
-
-            SetDefaultRecognizerByCurrentInputMethodLanguageTag();
-
-            // Initialize reco tooltip
-            recoTooltip = new ToolTip();
-            recoTooltip.Content = InstallRecoText;
-            ToolTipService.SetToolTip(InstallReco, recoTooltip);
-
-            // Initialize the InkCanvas
-            inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
-            inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse | Windows.UI.Core.CoreInputDeviceTypes.Pen | Windows.UI.Core.CoreInputDeviceTypes.Touch;
-
-            this.Unloaded += NotesPenPage_Unloaded;
-            this.SizeChanged += NotesPenPage_SizeChanged;
-        }
-
-
-        public enum NotifyType
-        {
-            StatusMessage,
-            ErrorMessage
-        };
-
-
-        public void NotifyUser(string strMessage, NotifyType type)
-        {
-            switch (type)
-            {
-                case NotifyType.StatusMessage:
-                    //StatusBorder.Background = new SolidColorBrush(Windows.UI.Colors.Green);
-                    break;
-                case NotifyType.ErrorMessage:
-                    //StatusBorder.Background = new SolidColorBrush(Windows.UI.Colors.Red);
-                    break;
-            }
-            StatusBlock.Text = strMessage;
-
-            // Collapse the StatusBlock if it has no text to conserve real estate.
-            //StatusBorder.Visibility = (StatusBlock.Text != String.Empty) ? Visibility.Visible : Visibility.Collapsed;
-            if (StatusBlock.Text != String.Empty)
-            {
-                //StatusBorder.Visibility = Visibility.Visible;
-                //StatusPanel.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                //StatusBorder.Visibility = Visibility.Collapsed;
-                // StatusPanel.Visibility = Visibility.Collapsed;
-            }
-        }
-
-
-        /// Upon entering the scenario, ensure that we have permissions to use the Microphone
+        // Upon entering the scenario, ensure that we have permissions to use the Microphone
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //rootPage = MainPage.Current;
+            inkCanvas.Width = Window.Current.Bounds.Width;
+            inkCanvas.Height = Window.Current.Bounds.Height;
 
             // Keep track of the UI thread dispatcher, as speech events will come in on a separate thread.
             dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
@@ -135,20 +31,19 @@ namespace App2.Views
             if (permissionGained)
             {
                 btnContinuousRecognize.IsEnabled = true;
-
                 PopulateLanguageDropdown();
                 await InitializeRecognizer(SpeechRecognizer.SystemSpeechLanguage);
             }
             else
             {
-                this.dictationTextBox.Text = "Permission to access capture resources was not given by the user, reset the application setting in Settings->Privacy->Microphone.";
+                this.freeNoteTextBox.Text = "Permission to access microphone denied: Settings->Privacy->Microphone.";
                 btnContinuousRecognize.IsEnabled = false;
                 cbLanguageSelection.IsEnabled = false;
             }
 
         }
 
-        /// Look up the supported languages for this speech recognition scenario, 
+        // Look up the supported languages for this speech recognition scenario, 
         private void PopulateLanguageDropdown()
         {
             Language defaultLanguage = SpeechRecognizer.SystemSpeechLanguage;
@@ -168,8 +63,8 @@ namespace App2.Views
             }
         }
 
-        /// When a user changes the speech recognition language, trigger re-initialization of the 
-        /// speech engine with that language, and change any speech-specific UI assets.
+        // When a user changes the speech recognition language, trigger re-initialization of the 
+        // speech engine with that language, and change any speech-specific UI assets.
         private async void cbLanguageSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (speechRecognizer != null)
@@ -192,7 +87,7 @@ namespace App2.Views
             }
         }
 
-        /// Initialize Speech Recognizer and compile constraints.
+        // Initialize Speech Recognizer and compile constraints.
         private async Task InitializeRecognizer(Language recognizerLanguage)
         {
             if (speechRecognizer != null)
@@ -231,8 +126,8 @@ namespace App2.Views
             speechRecognizer.HypothesisGenerated += SpeechRecognizer_HypothesisGenerated;
         }
 
-        /// Upon leaving, clean up the speech recognizer. Ensure we aren't still listening, and disable the event 
-        /// handlers to prevent leaks.
+        // Upon leaving, clean up the speech recognizer. Ensure we aren't still listening, and disable the event 
+        // handlers to prevent leaks.
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             if (this.speechRecognizer != null)
@@ -245,8 +140,7 @@ namespace App2.Views
                     cbLanguageSelection.IsEnabled = true;
                 }
 
-                dictationTextBox.Text = "";
-
+                //freeNoteTextBox.Text = "";
                 speechRecognizer.ContinuousRecognitionSession.Completed -= ContinuousRecognitionSession_Completed;
                 speechRecognizer.ContinuousRecognitionSession.ResultGenerated -= ContinuousRecognitionSession_ResultGenerated;
                 speechRecognizer.HypothesisGenerated -= SpeechRecognizer_HypothesisGenerated;
@@ -257,8 +151,8 @@ namespace App2.Views
             }
         }
 
-        /// Handle events fired when error conditions occur, such as the microphone becoming unavailable, or if
-        /// some transient issues occur.
+        // Handle events fired when error conditions occur, such as the microphone becoming unavailable, or if
+        // some transient issues occur.
         private async void ContinuousRecognitionSession_Completed(SpeechContinuousRecognitionSession sender, SpeechContinuousRecognitionCompletedEventArgs args)
         {
             if (args.Status != SpeechRecognitionResultStatus.Success)
@@ -274,7 +168,8 @@ namespace App2.Views
                         this.NotifyUser("Automatic Time Out of Dictation", NotifyType.StatusMessage);
                         DictationButtonText.Text = " Dictate";
                         cbLanguageSelection.IsEnabled = true;
-                        dictationTextBox.Text = dictatedTextBuilder.ToString();
+                        freeNoteTextBox.Text = dictatedTextBuilder.ToString();
+                        resetDictatedTextBuilder();
                         isListening = false;
                     });
                 }
@@ -291,7 +186,7 @@ namespace App2.Views
             }
         }
 
-        /// While the user is speaking, update the textbox with the partial sentence of what's being said for user feedback.
+        // While the user is speaking, update the textbox with the partial sentence of what's being said for user feedback.
         private async void SpeechRecognizer_HypothesisGenerated(SpeechRecognizer sender, SpeechRecognitionHypothesisGeneratedEventArgs args)
         {
             string hypothesis = args.Hypothesis.Text;
@@ -300,14 +195,14 @@ namespace App2.Views
             string textboxContent = dictatedTextBuilder.ToString() + " " + hypothesis + " ...";
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
-                dictationTextBox.Text = textboxContent;
-                btnClearText.IsEnabled = true;
+                freeNoteTextBox.Text = textboxContent;
+                //voiceClearBtn.IsEnabled = true;
             });
         }
 
-        /// Handle events fired when a result is generated. Check for high to medium confidence, and then append the
-        /// string to the end of the stringbuffer, and replace the content of the textbox with the string buffer, to
-        /// remove any hypothesis text that may be present.
+        // Handle events fired when a result is generated. Check for high to medium confidence, and then append the
+        // string to the end of the stringbuffer, and replace the content of the textbox with the string buffer, to
+        // remove any hypothesis text that may be present.
         private async void ContinuousRecognitionSession_ResultGenerated(SpeechContinuousRecognitionSession sender, SpeechContinuousRecognitionResultGeneratedEventArgs args)
         {
             // We may choose to discard content that has low confidence, as that could indicate that we're picking up
@@ -321,8 +216,10 @@ namespace App2.Views
                 {
                     discardedTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
-                    dictationTextBox.Text = dictatedTextBuilder.ToString();
-                    btnClearText.IsEnabled = true;
+                    //+=
+                    freeNoteTextBox.Text = dictatedTextBuilder.ToString();
+                    resetDictatedTextBuilder();
+                    //voiceClearBtn.IsEnabled = true;
                 });
             }
             else
@@ -332,7 +229,9 @@ namespace App2.Views
                 // Here, just remove any hypothesis text by resetting it to the last known good.
                 await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    dictationTextBox.Text = dictatedTextBuilder.ToString();
+                    //+=
+                    freeNoteTextBox.Text = dictatedTextBuilder.ToString();
+                    resetDictatedTextBuilder();
                     string discardedText = args.Result.Text;
                     if (!string.IsNullOrEmpty(discardedText))
                     {
@@ -345,7 +244,7 @@ namespace App2.Views
             }
         }
 
-        /// Provide feedback to the user based on whether the recognizer is receiving their voice input.
+        // Provide feedback to the user based on whether the recognizer is receiving their voice input.
         private async void SpeechRecognizer_StateChanged(SpeechRecognizer sender, SpeechRecognizerStateChangedEventArgs args)
         {
             await dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
@@ -353,9 +252,10 @@ namespace App2.Views
             });
         }
 
-        /// Begin recognition, or finish the recognition session. 
+        // Begin recognition, or finish the recognition session. 
         public async void ContinuousRecognize_Click(object sender, RoutedEventArgs e)
         {
+            resetDictatedTextBuilder();
             btnContinuousRecognize.IsEnabled = false;
             if (isListening == false)
             {
@@ -409,7 +309,9 @@ namespace App2.Views
                         await speechRecognizer.ContinuousRecognitionSession.StopAsync();
 
                         // Ensure we don't leave any hypothesis text behind
-                        dictationTextBox.Text = dictatedTextBuilder.ToString();
+                        freeNoteTextBox.Text = dictatedTextBuilder.ToString();
+                        resetDictatedTextBuilder();
+
                     }
                     catch (Exception exception)
                     {
@@ -421,12 +323,13 @@ namespace App2.Views
             btnContinuousRecognize.IsEnabled = true;
         }
 
-        /// Clear the dictation textbox.
-        private void btnClearText_Click(object sender, RoutedEventArgs e)
+        // Clear the dictation textbox.
+        private void voiceClearBtn_Click(object sender, RoutedEventArgs e)
         {
-            btnClearText.IsEnabled = false;
-            dictatedTextBuilder.Clear();
-            dictationTextBox.Text = "";
+            //voiceClearBtn.IsEnabled = false;
+            //dictatedTextBuilder.Clear();
+            resetDictatedTextBuilder();
+            freeNoteTextBox.Text = "";
             discardedTextBlock.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
 
@@ -434,10 +337,10 @@ namespace App2.Views
             btnContinuousRecognize.Focus(FocusState.Programmatic);
         }
 
-        /// Automatically scroll the textbox down to the bottom whenever new dictated text arrives
-        private void dictationTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        // Automatically scroll the textbox down to the bottom whenever new dictated text arrives
+        private void freeNoteTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var grid = (Grid)VisualTreeHelper.GetChild(dictationTextBox, 0);
+            var grid = (Grid)VisualTreeHelper.GetChild(freeNoteTextBox, 0);
             for (var i = 0; i <= VisualTreeHelper.GetChildrenCount(grid) - 1; i++)
             {
                 object obj = VisualTreeHelper.GetChild(grid, i);
@@ -451,143 +354,32 @@ namespace App2.Views
             }
         }
 
-        /// Open the Speech, Inking and Typing page under Settings -> Privacy, enabling a user to accept the 
-        /// Microsoft Privacy Policy, and enable personalization.
+        // Open the Speech, Inking and Typing page under Settings -> Privacy, enabling a user to accept the 
+        // Microsoft Privacy Policy, and enable personalization.
         private async void openPrivacySettings_Click(Hyperlink sender, HyperlinkClickEventArgs args)
         {
             await Windows.System.Launcher.LaunchUriAsync(new Uri("ms-settings:privacy-speechtyping"));
         }
 
-
-        /// INKING ITEMS BELOW
-
-
-        private void NotesPenPage_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void resetDictatedTextBuilder()
         {
-            SetCanvasSize();
-        }
+            dictatedTextBuilder.Clear();
+            
 
-        private void NotesPenPage_Unloaded(object sender, RoutedEventArgs e)
-        {
-            recoTooltip.IsOpen = false;
-        }
-
-        private void SetCanvasSize()
-        {
-            Output.Width = RootPenGrid.ActualWidth;
-            Output.Height = Window.Current.Bounds.Height / 2;
-            inkCanvas.Width = RootPenGrid.ActualWidth;
-            inkCanvas.Height = Window.Current.Bounds.Height;
-
-        }
-
-        void OnRecognizerChanged(object sender, RoutedEventArgs e)
-        {
-            string selectedValue = (string)RecoName.SelectedValue;
-            SetRecognizerByName(selectedValue);
-        }
-
-        async void OnRecognizeAsync(object sender, RoutedEventArgs e)
-        {
-            IReadOnlyList<InkStroke> currentStrokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
-            if (currentStrokes.Count > 0)
+            if (freeNoteTextBox.Text == "")
             {
-                RecognizeBtn.IsEnabled = false;
-                ClearBtn.IsEnabled = false;
-                RecoName.IsEnabled = false;
-
-                var recognitionResults = await inkRecognizerContainer.RecognizeAsync(inkCanvas.InkPresenter.StrokeContainer, InkRecognitionTarget.All);
-
-                if (recognitionResults.Count > 0)
-                {
-                    // Display recognition result
-                    string str = "Recognition result:";
-                    foreach (var r in recognitionResults)
-                    {
-                        str += " " + r.GetTextCandidates()[0];
-                    }
-                    this.NotifyUser(str, NotifyType.StatusMessage);
-                }
-                else
-                {
-                    this.NotifyUser("No text recognized.", NotifyType.StatusMessage);
-                }
-
-                RecognizeBtn.IsEnabled = true;
-                ClearBtn.IsEnabled = true;
-                RecoName.IsEnabled = true;
+                dictatedTextBuilder.Append(freeNoteTextBox.Text);
             }
+            //else if (freeNoteTextBox.Text.PadRight(1) == ".")
+            //{
+            //    dictatedTextBuilder.Append(freeNoteTextBox.Text + " ");
+            //}
             else
-            {
-                this.NotifyUser("Must first write something.", NotifyType.ErrorMessage);
+            { 
+                dictatedTextBuilder.Append(freeNoteTextBox.Text + " ");
             }
         }
-
-        void OnClear(object sender, RoutedEventArgs e)
-        {
-            inkCanvas.InkPresenter.StrokeContainer.Clear();
-            this.NotifyUser("Cleared Canvas.", NotifyType.StatusMessage);
-        }
-
-        bool SetRecognizerByName(string recognizerName)
-        {
-            bool recognizerFound = false;
-
-            foreach (InkRecognizer reco in recoView)
-            {
-                if (recognizerName == reco.Name)
-                {
-                    inkRecognizerContainer.SetDefaultRecognizer(reco);
-                    recognizerFound = true;
-                    break;
-                }
-            }
-
-            if (!recognizerFound && rootPage != null)
-            {
-                this.NotifyUser("Could not find target recognizer.", NotifyType.ErrorMessage);
-            }
-
-            return recognizerFound;
-        }
-
-        private void TextServiceManager_InputLanguageChanged(CoreTextServicesManager sender, object args)
-        {
-            SetDefaultRecognizerByCurrentInputMethodLanguageTag();
-        }
-
-        private void SetDefaultRecognizerByCurrentInputMethodLanguageTag()
-        {
-            // Query recognizer name based on current input method language tag (bcp47 tag)
-            Language currentInputLanguage = textServiceManager.InputLanguage;
-
-            if (currentInputLanguage != previousInputLanguage)
-            {
-                // try query with the full BCP47 name
-                string recognizerName = RecognizerHelper.LanguageTagToRecognizerName(currentInputLanguage.LanguageTag);
-
-                if (recognizerName != string.Empty)
-                {
-                    for (int index = 0; index < recoView.Count; index++)
-                    {
-                        if (recoView[index].Name == recognizerName)
-                        {
-                            inkRecognizerContainer.SetDefaultRecognizer(recoView[index]);
-                            RecoName.SelectedIndex = index;
-                            previousInputLanguage = currentInputLanguage;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void RecoButton_Click(object sender, RoutedEventArgs e)
-        {
-            recoTooltip.IsOpen = !recoTooltip.IsOpen;
-        }
-
-
 
     }
 }
+

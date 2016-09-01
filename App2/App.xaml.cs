@@ -16,8 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 
-
-namespace App2
+namespace DataVisualization
 {
     using Views;
     using Windows.UI;
@@ -41,11 +40,11 @@ namespace App2
                 //this.DebugSettings.EnableFrameRateCounter = true;
             }
             #endif
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(320, 200));
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(640, 400));
 
             ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
-            ApplicationView.GetForCurrentView().Title = "PEACH - Data Visuzlization";
+            ApplicationView.GetForCurrentView().Title = "PEACH";
             
 
 

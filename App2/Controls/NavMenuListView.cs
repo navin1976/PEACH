@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 
-namespace App2.Controls
+namespace DataVisualization.Controls
 {
     public class NavMenuListView : ListView
     {
@@ -85,7 +85,7 @@ namespace App2.Controls
             }
         }
 
-        /// Occurs when an item has been selected
+        // Occurs when an item has been selected
         public event EventHandler<ListViewItem> ItemInvoked;
 
 

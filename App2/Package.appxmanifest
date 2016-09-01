@@ -3,8 +3,8 @@
   <Identity Name="4e11ce54-1323-4c35-9bae-c71495252a8f" Publisher="CN=Tuan" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="4e11ce54-1323-4c35-9bae-c71495252a8f" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>App2</DisplayName>
-    <PublisherDisplayName>Tuan</PublisherDisplayName>
+    <DisplayName>DataVisualization</DisplayName>
+    <PublisherDisplayName>PEACH</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -14,11 +14,15 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="App2.App">
-      <uap:VisualElements DisplayName="Visualization App" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="Visualization App" BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="DataVisualization.App">
+      <uap:VisualElements DisplayName="Data Visualization Application" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="PEACH Data Visualization Application" BackgroundColor="#142F4E">
+        <uap:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\BadgeLogo.png" />
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Peach Data Visualization Application" Square71x71Logo="Assets\Logo.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="wide310x150Logo" />
+          </uap:ShowNameOnTiles>
         </uap:DefaultTile>
-        <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#142F4E" />
         <uap:InitialRotationPreference>
           <uap:Rotation Preference="portrait" />
           <uap:Rotation Preference="landscape" />

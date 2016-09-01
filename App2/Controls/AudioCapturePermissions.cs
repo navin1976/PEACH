@@ -1,26 +1,24 @@
-﻿using System;
+﻿// source: Universal Windows Samples provided by Microsoft @ https://github.com/Microsoft/Windows-universal-samples
+
+using System;
 using System.Threading.Tasks;
 using Windows.Media.Capture;
 
-namespace App2
+namespace DataVisualization
 {
     public class AudioCapturePermissions
     {
-        // If no recording device is attached, attempting to get access to audio capture devices will throw 
-        // a System.Exception object, with this HResult set.
+        // Access to audio capture devices throws an exception with HResult set. (case no audio device)
         private static int NoCaptureDevicesHResult = -1072845856;
 
-        /// <summary>
-        /// On desktop/tablet systems, users are prompted to give permission to use capture devices on a 
-        /// per-app basis. Along with declaring the microphone DeviceCapability in the package manifest,
-        /// this method tests the privacy setting for microphone access for this application.
-        /// Note that this only checks the Settings->Privacy->Microphone setting, it does not handle
-        /// the Cortana/Dictation privacy check, however (Under Settings->Privacy->Speech, Inking and Typing).
-        /// 
-        /// Developers should ideally perform a check like this every time their app gains focus, in order to 
-        /// check if the user has changed the setting while the app was suspended or not in focus.
-        /// </summary>
-        /// <returns>true if the microphone can be accessed without any permissions problems.</returns>
+        // On desktop/tablet systems, users are prompted to give permission to use capture devices on a 
+        // per-app basis. Along with declaring the microphone DeviceCapability in the package manifest,
+        // this method tests the privacy setting for microphone access for this application.
+        // Note that this only checks the Settings->Privacy->Microphone setting, it does not handle
+        // the Cortana/Dictation privacy check, however (Under Settings->Privacy->Speech, Inking and Typing).
+        // 
+        // Developers should ideally perform a check like this every time their app gains focus, in order to 
+        // check if the user has changed the setting while the app was suspended or not in focus.
         public async static Task<bool> RequestMicrophonePermission()
         {
             try

@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace App2.Views
+namespace DataVisualization.Views
 {
     public sealed partial class LandingPage : Page
     {

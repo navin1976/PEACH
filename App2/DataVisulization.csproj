@@ -7,8 +7,8 @@
     <ProjectGuid>{603F6DE4-3EAB-45F8-9062-26061EFA221F}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Skeleton</RootNamespace>
-    <AssemblyName>Skeleton</AssemblyName>
+    <RootNamespace>DataVisualization</RootNamespace>
+    <AssemblyName>DataVisualization</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
@@ -95,16 +95,19 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DateConverter.cs" />
+    <Compile Include="Controls\FreeNoteFormController.cs" />
+    <Compile Include="Controls\FreeNoteProstateController.cs" />
+    <Compile Include="Controls\MyCustomPen.cs" />
+    <Compile Include="Controls\FreeNoteVoiceController.cs" />
+    <Compile Include="Controls\FreeNoteInkController.cs" />
     <Compile Include="Controls\PageHeader.xaml.cs" />
     <Compile Include="Controls\ProstateSegmentInk.cs" />
     <Compile Include="Views\LandingPage.xaml.cs">
       <DependentUpon>LandingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ProstatectomyPage.xaml.cs">
-      <DependentUpon>ProstatectomyPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\AudioCapturePermissions.cs" />
-    <Compile Include="Controls\RecognizerHelper.cs" />
+    <Compile Include="Controls\HandWritingRecognizerHelper.cs" />
     <Compile Include="Controls\NavMenuItem.cs" />
     <Compile Include="Controls\NavMenuListView.cs" />
     <Compile Include="MainIndex.xaml.cs">
@@ -117,17 +120,8 @@
     <Compile Include="Views\BasicPage.xaml.cs">
       <DependentUpon>BasicPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BasicSubPage.xaml.cs">
-      <DependentUpon>BasicSubPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MedicalReportsPage.xaml.cs">
-      <DependentUpon>MedicalReportsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\NotesSpeechPage.xaml.cs">
-      <DependentUpon>NotesSpeechPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\DrillInPage.xaml.cs">
-      <DependentUpon>DrillInPage.xaml</DependentUpon>
+    <Compile Include="Views\FreeNotesPage.xaml.cs">
+      <DependentUpon>FreeNotesPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -136,8 +130,12 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\BadgeLogo.scale-400.png" />
+    <Content Include="Assets\LoginPW.gif" />
+    <Content Include="Assets\LoginUW.gif" />
     <Content Include="Assets\Logo.png" />
-    <Content Include="Assets\microsoft.png" />
+    <Content Include="Assets\Logo.scale-200.png" />
+    <Content Include="Assets\LogoAuth.png" />
     <Content Include="Assets\MicrosoftLogoBlack.png" />
     <Content Include="Assets\nhs.png" />
     <Content Include="Assets\PaneLogo.png" />
@@ -145,14 +143,10 @@
     <Content Include="Assets\PeachCancerLogoBlack.png" />
     <Content Include="Assets\PeachNav.png" />
     <Content Include="Assets\UCL.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.scale-200.png" />
-    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
-    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <None Include="ControlInfoData.json" />
   </ItemGroup>
   <ItemGroup>
@@ -165,10 +159,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\LandingPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ProstatectomyPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -189,21 +179,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\BasicSubPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MedicalReportsPage.xaml">
+    <Page Include="Views\FreeNotesPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\NotesSpeechPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\DrillInPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

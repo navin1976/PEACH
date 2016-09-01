@@ -11,9 +11,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace App3
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
+    // <summary>
+    // An empty page that can be used on its own or navigated to within a Frame.
+    // </summary>
     public sealed partial class MainPage : Page
     {
         public static MainPage Current;
@@ -42,12 +42,12 @@ namespace App3
             }
         }
 
-        /// <summary>
-        /// Called whenever the user changes selection in the scenarios list.  This method will navigate to the respective
-        /// sample scenario page.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        // <summary>
+        // Called whenever the user changes selection in the scenarios list.  This method will navigate to the respective
+        // sample scenario page.
+        // </summary>
+        // <param name="sender"></param>
+        // <param name="e"></param>
         private void ScenarioControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // Clear the status block when navigating scenarios.
@@ -70,11 +70,11 @@ namespace App3
             get { return this.scenarios; }
         }
 
-        /// <summary>
-        /// Used to display messages to the user
-        /// </summary>
-        /// <param name="strMessage"></param>
-        /// <param name="type"></param>
+        // <summary>
+        // Used to display messages to the user
+        // </summary>
+        // <param name="strMessage"></param>
+        // <param name="type"></param>
         public void NotifyUser(string strMessage, NotifyType type)
         {
             switch (type)

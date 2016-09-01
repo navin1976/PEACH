@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace App2
+namespace DataVisualization
 {
-    class RecognizerHelper
+    class HandWritingRecognizerHelper
     {
+        // create a host to hold the recognizers, which will be then loaded into a combobox
+        // with use of data binding
+
         private static Dictionary<string, string> Bcp47ToRecognizerNameDictionary = null;
 
         private static void EnsureDictionary()
@@ -22,7 +25,6 @@ namespace App2
         public static string LanguageTagToRecognizerName(string bcp47tag)
         {
             EnsureDictionary();
-
             string recognizerName = string.Empty;
             try
             {

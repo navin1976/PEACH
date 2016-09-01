@@ -13,14 +13,21 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-namespace App2.Views
+namespace DataVisualization.Views
 {
-    public sealed partial class LogoutPage : Page
+    public sealed partial class DrillInPage : Page
     {
-        public LogoutPage()
+        public DrillInPage()
         {
             this.InitializeComponent();
-            //this.Frame.Navigate(typeof(Auth));
+        }
+
+        private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            this.Frame.Navigate(
+                typeof(BasicSubPage),
+                e.ClickedItem,
+                new Windows.UI.Xaml.Media.Animation.DrillInNavigationTransitionInfo());
         }
     }
 }
