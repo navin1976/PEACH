@@ -1,6 +1,7 @@
 ﻿{
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.1.0",
+    "PDFsharp": "1.32.3057",
     "System.Data.Common": "4.1.0",
     "WindowsAzure.Storage": "7.2.0"
   },
