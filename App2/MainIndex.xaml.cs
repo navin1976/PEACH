@@ -31,7 +31,7 @@ namespace DataVisualization
                 {
                     Symbol = Symbol.Contact2,
                     Label = "Patient Profile",
-                    DestPage = typeof(BasicPage)
+                    DestPage = typeof(PatientPage)
                 },
                 //new NavMenuItem()
                 //{

@@ -15,9 +15,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace DataVisualization.Views
 {
-    public sealed partial class BasicPage : Page
+    public sealed partial class PatientPage : Page
     {
-        public BasicPage()
+        public PatientPage()
         {
             this.InitializeComponent();
         }

@@ -1,0 +1,174 @@
+﻿<Page
+    x:Class="DataVisualization.Views.PatientPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+>
+
+    <Grid x:Name="LayoutRoot"
+          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          EntranceNavigationTransitionInfo.IsTargetElement="True"
+          Padding="24,0">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="Input" Grid.Row="0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="InputTextBlock1" TextWrapping="Wrap" Grid.Row="0" >
+        Convert a JSON string into an object and vice versa.
+            </TextBlock>
+            <TextBox x:Name="JsonInput" Height="150" AcceptsReturn="True" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" TextWrapping="Wrap"/>
+            <StackPanel Orientation="Horizontal" Grid.Row="2">
+                <Button x:Name="Parse" Content="Parse" Click="Parse_Click" Grid.Row="2"/>
+                <Button x:Name="Stringify" Content="Stringify" Click="Stringify_Click" Grid.Row="2"/>
+
+
+
+            </StackPanel>
+            <!-- Add Storyboards to the visual states below as necessary for supporting the various layouts for the input section -->
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup>
+                    <VisualState x:Name="InputDefaultLayout"/>
+                    <VisualState x:Name="InputBelow768Layout"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Grid>
+        <Grid x:Name="Output" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+
+            <TextBlock Text="Id" />
+            <TextBox Text="{Binding Path=Id, Mode=TwoWay}" Grid.Column="1"/>
+            <TextBlock Text="NhsNumber" Grid.Row="1"/>
+            <TextBox Text="{Binding Path=NhsNumber, Mode=TwoWay}" PlaceholderText="null"  Grid.Row="1" Grid.Column="1"/>
+            <TextBlock Text="Name" Grid.Row="2"/>
+            <TextBox Text="{Binding Path=Name, Mode=TwoWay}"  Grid.Row="2" Grid.Column="1"/>
+            <TextBlock Text="Education" VerticalAlignment="Top" Margin="0,10,0,0" Grid.Row="3"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <!--<ListView x:Name="NotesArchive" ItemsSource="{Binding Path=NotesArchive, Mode=TwoWay}" Grid.Row="3" Grid.Column="1" SelectionMode="None" ItemContainerStyle="{StaticResource EducationListViewItemStyle}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding Path=Id, Mode=TwoWay}" />
+                            <TextBox Text="{Binding Path=Name, Mode=TwoWay}"  Grid.Column="1"/>
+                            <TextBox Text="{Binding Path=Type, Mode=TwoWay}"  Grid.Column="2"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>-->
+
+
+
+
+
+
+
+            <Button x:Name="Add" Content="Add School" Click="Add_Click" Grid.Row="4" Grid.Column="1"/>
+            <TextBlock Text="Timezone"  Grid.Row="5"/>
+            <Slider Minimum="-12" Maximum="14" Value="{Binding Path=Timezone, Mode=TwoWay}" Grid.Row="5" Grid.Column="1" StepFrequency="0.5"/>
+            <TextBlock Text="Verified" Grid.Row="6"/>
+            <CheckBox IsChecked="{Binding Path=Verified, Mode=TwoWay}" Grid.Row="6" Grid.Column="1"/>
+
+
+
+
+
+
+            <!-- Add Storyboards to the visual states below as necessary for supporting the various layouts for the output section -->
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup>
+                    <VisualState x:Name="OutputDefaultLayout"/>
+                    <VisualState x:Name="OutputBelow768Layout"/>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+        </Grid>
+
+
+
+
+
+
+
+
+
+        <!--<Pivot>
+            <PivotItem Header="Demographics Data">
+                <Grid x:Name="Demographics" Background="White" HorizontalAlignment="Left" Margin="10,10,10,10"> 
+                    <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Name" Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="Duy Tuan" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="Surname" Grid.Row ="1" Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="Dao" Grid.Row ="1" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="Age" Grid.Row ="2"  Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="18" Grid.Row ="2" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="Sex" Grid.Row ="3"  Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="Male" Grid.Row ="3" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="D.O.B." Grid.Row ="4"  Width="150" Margin="0,0,10,10"/>
+                        <TextBox Text="31/03/1989" Grid.Row ="4" Grid.Column="1" Margin="0,0,10,10"/>
+                        <TextBlock Text="Address" Grid.Row ="5"  Width="150" Margin="0,0,10,10"/>
+                    <TextBox Text="22 Seraph Court, 5 Moreland St, EC1V 8BE, London" 
+                                     TextWrapping="Wrap" 
+                                     Grid.Row ="5" 
+                                     Grid.Column="1" 
+                                     Margin="0,0,10,10"/>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Medical Data">
+                <TextBlock Text="Medical info go here." />
+            </PivotItem>
+            <PivotItem Header="Change Patient">
+                <TextBlock Text="Other stuff go here." />
+            </PivotItem>
+        </Pivot>-->
+    </Grid>
+</Page>
