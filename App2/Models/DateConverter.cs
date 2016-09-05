@@ -1,11 +1,12 @@
-﻿using System;
+﻿// source : http://bretstateham.com/binding-to-the-new-xaml-datepicker-and-timepicker-controls-to-the-same-datetime-value/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 
-//http://bretstateham.com/binding-to-the-new-xaml-datepicker-and-timepicker-controls-to-the-same-datetime-value/
 
 namespace DataVisualization.Controls
 {

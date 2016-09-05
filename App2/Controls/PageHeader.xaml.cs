@@ -1,4 +1,7 @@
-﻿using System;
+﻿// source: Universal Windows Samples provided by Microsoft @ https://github.com/Microsoft/Windows-universal-samples
+// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,8 +16,6 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace DataVisualization.Controls
 {

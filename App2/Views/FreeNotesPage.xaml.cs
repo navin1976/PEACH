@@ -22,10 +22,12 @@ namespace DataVisualization.Views
 {
     public sealed partial class FreeNotesPage : Page
     {
-        Symbol inputSymbol = (Symbol)0xE104;
+        Symbol inputSymbol = (Symbol)0xEC87;
         Symbol SaveFile = (Symbol)0xE105;
-        Symbol OpenFile = (Symbol)0xE118;
+        Symbol OpenFile = (Symbol)0xE8E5;
         Symbol TouchWriting = (Symbol)0xED5F;
+        Symbol HelpLegacy = (Symbol)0xE11B;
+        Symbol RecogSymbol = (Symbol)0xEF16;
 
         DateTime bindingToday = DateTime.Today;
 
@@ -51,12 +53,40 @@ namespace DataVisualization.Views
             this.InitializeComponent(); // initialize XAML
             this.InitializeForm();
             this.initializeProstateInking();
-            inkToolBarPanel.Visibility = Visibility.Collapsed;
+            //inkToolBarPanel.Visibility = Visibility.Collapsed;
             examCalendarDatePicker.Date = bindingToday;
             dobCalendarDatePicker.MinDate = new DateTime(1900, 1, 1);
             dobCalendarDatePicker.MaxDate = DateTime.Today;
 
         }
+
+        // Upon entering the scenario, ensure that we have permissions to use the Microphone
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            // Keep track of the UI thread dispatcher, as speech events will come in on a separate thread.
+            dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
+
+            bool permissionGained = await AudioCapturePermissions.RequestMicrophonePermission();
+            if (permissionGained)
+            {
+                btnContinuousRecognize.IsEnabled = true;
+                PopulateLanguageDropdown();
+                await InitializeRecognizer(SpeechRecognizer.SystemSpeechLanguage);
+            }
+            else
+            {
+                this.freeNoteTextBox.Text = "Permission to access microphone denied: Settings->Privacy->Microphone.";
+                btnContinuousRecognize.IsEnabled = false;
+                cbLanguageSelection.IsEnabled = false;
+            }
+
+            PivotMain.Visibility = Visibility.Visible;
+            inkCanvas.Width = Window.Current.Bounds.Width;
+            inkCanvas.Height = Window.Current.Bounds.Height;
+            hwCanvas.Width = Window.Current.Bounds.Width;
+        }
+
+
 
         public DateTime SomeDateTime
         {
@@ -126,6 +156,11 @@ namespace DataVisualization.Views
                     inkToolBarPanel.Visibility = Visibility.Visible;
                     break;
             }
+        }
+
+        private void InkToolBarInfo_Tapped(object sender, RoutedEventArgs e)
+        {
+            inkToolBarInfo.Flyout.ShowAt(sender as FrameworkElement);
         }
     }
 }

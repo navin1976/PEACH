@@ -89,7 +89,15 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <None Include="patient.json" />
+    <Content Include="Assets\PeachAuthLogo.png" />
+    <Content Include="Assets\PeachVisualReportLogo.png" />
+    <Content Include="Assets\PeachVisualReportWhiteLogo.png" />
+    <Content Include="patient.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="doctor.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="project.json" />
     <None Include="RecycleCode\patient_mockup.json" />
   </ItemGroup>
@@ -106,6 +114,7 @@
     <Compile Include="Controls\FreeNoteVoiceController.cs" />
     <Compile Include="Controls\FreeNoteInkController.cs" />
     <Compile Include="Controls\PageHeader.xaml.cs" />
+    <Compile Include="Models\PatientList.cs" />
     <Compile Include="Models\ProstateSegmentInk.cs" />
     <Compile Include="Views\LandingPage.xaml.cs">
       <DependentUpon>LandingPage.xaml</DependentUpon>

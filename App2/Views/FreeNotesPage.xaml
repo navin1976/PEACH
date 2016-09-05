@@ -18,7 +18,8 @@
 
     <Grid x:Name="RootGrid">
 
-    <Pivot SelectionChanged="Pivot_SelectionChanged">
+    <Pivot x:Name="PivotMain" Visibility="Collapsed"  SelectionChanged="Pivot_SelectionChanged" Margin="10,0,0,0">
+        
         <PivotItem>
                 <PivotItem.Header>
                     <TextBlock Margin="10,0,10,0">Take Notes</TextBlock>
@@ -42,11 +43,11 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,20">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Name" Width="100" Margin="0,5,0,0" />
                                 <TextBox Text=""  Width="250" Grid.Column="1" Margin="0,0,0,0" BorderThickness="0"  Background="LightBlue"/>
@@ -69,38 +70,35 @@
 
                                 </StackPanel>
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Radiologist: " Grid.Row ="3"  Width="100" Margin="0,10,0,0"/>
+                                <TextBlock Text="Radiologist" Grid.Row ="3"  Width="100" Margin="0,10,0,0"/>
                                 <TextBox x:Name="txtRadiologist" Width="250" Grid.Row ="3" Grid.Column="1" Margin="0,5,0,0" BorderThickness="0" Background="LightBlue"/>
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Orientation="Vertical" Grid.Column="1" Margin="0,0,0,0">
-                            <TextBlock FontWeight="Bold">Key to scoring:</TextBlock>
-                            <TextBlock Margin="0,5,0,0">1/5 Significant tumour very unlikely</TextBlock>
-                            <TextBlock>2/5 Significant tumour unlikely</TextBlock>
-                            <TextBlock>3/5 Equivocal</TextBlock>
-                            <TextBlock>4/5 Significant tumour likely</TextBlock>
-                            <TextBlock>5/5 Significant tumour very likely</TextBlock>
-                            <TextBlock Margin="0,0,0,0">
-                        Significant tumour is defined as size > 0.2 ml
-                            </TextBlock>
-                            <TextBlock> and/or Gleason 3+4 or higher</TextBlock>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Grid.Row="1"   Grid.ColumnSpan="2" Margin="0,20,0,20">
-                            <TextBlock Text="Dimensions (cm)"  Margin="0,5,0,0"/>
-                            <TextBlock Text="AP: " Margin="15,5,0,0"/>
-                            <TextBox x:Name="txtAP" Margin="10,0,0,5"   Background="LightBlue" BorderThickness="0" InputScope="Number" 
-                        LostFocus="txtAP_LostFocus"  />
-                            <TextBlock Text="TR: " Margin="15,5,0,0"/>
-                            <TextBox x:Name="txtTR" Margin="10,0,0,5" Background="LightBlue" BorderThickness="0" InputScope="Number" 
-                        LostFocus="txtTR_LostFocus" />
-                            <TextBlock Text="CC: " Margin="15,5,0,0"/>
-                            <TextBox x:Name="txtCC" Margin="10,0,0,5" Background="LightBlue" BorderThickness="0"  InputScope="Number" 
-                        LostFocus="txtCC_LostFocus" />
-                            <TextBlock Text="Volume (ml): " Margin="15,5,0,0"/>
-                            <TextBox x:Name="txtVolume" Margin="10,0,0,5" Background="LightBlue" BorderThickness="0"  IsReadOnly="True" InputScope="Number"/>
-                        </StackPanel>
 
-                    </Grid>
+                            <StackPanel Orientation="Vertical" Grid.Row="0"  Grid.Column="1" Margin="50,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="AP (cm)"  Width="100" Margin="0,5,0,0"/>
+                                    <TextBox x:Name="txtAP" Margin="0,0,0,0"   Background="LightBlue" BorderThickness="0" InputScope="Number" 
+                                LostFocus="txtAP_LostFocus"  />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+
+                                    <TextBlock Text="TR (cm)" Width="100" Margin="0,10,0,0"/>
+                                    <TextBox x:Name="txtTR" Margin="0,5,0,0" Background="LightBlue" BorderThickness="0" InputScope="Number" 
+                                LostFocus="txtTR_LostFocus" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="CC (cm)" Width="100" Margin="0,10,0,0"/>
+                                    <TextBox x:Name="txtCC" Margin="0,5,0,0" Background="LightBlue" BorderThickness="0"  InputScope="Number" 
+                                LostFocus="txtCC_LostFocus" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Volume (ml)" Width="100" Margin="0,10,0,0"/>
+                                    <TextBox x:Name="txtVolume" Margin="0,5,0,0" Background="LightBlue" BorderThickness="0"  IsReadOnly="True" InputScope="Number"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                        </Grid>
 
                     <Grid x:Name="TextBoxGrid" Grid.Row="1">
                         <TextBox x:Name="freeNoteTextBox" 
@@ -163,18 +161,18 @@
 
 
                             <StackPanel Orientation="Horizontal">
-                                <ToggleButton Margin="10,0,0,0" 
+                                    <ToggleButton Margin="10,0,0,0" 
                                       Width="150" 
                                       IsThreeState="False"
                                       x:Name="inkToggle"
                                       Click="Toggle_inputSwitch" 
                                   ToolTipService.ToolTip="Select input method between inking and keyboard">
-                                    <SymbolIcon Symbol="{x:Bind inputSymbol}"/>
-                                </ToggleButton>
-                                <TextBlock Margin="10,5,0,0"  x:Name="ToggleButtonIndicator">
-                            Using Surface Pen
-                                </TextBlock>
-                            </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <SymbolIcon x:Name="InkToggleSymbol" Symbol="{x:Bind inputSymbol, Mode=TwoWay}"/>
+                                            <TextBlock x:Name="InkToggleButtonText" Text=" Using pen" />
+                                        </StackPanel>
+                                    </ToggleButton>
+                                </StackPanel>
 
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -183,7 +181,7 @@
                             Margin="10,0,0,0"
                                 Click="OnRecognizeAsync">
                                     <StackPanel Orientation="Horizontal">
-                                        <SymbolIcon Symbol="Font"/>
+                                        <SymbolIcon Symbol="{x:Bind RecogSymbol}"/>
                                         <TextBlock x:Name="HandRecoButtonText" Text=" Recognize" />
                                     </StackPanel>
                                 </Button>
@@ -358,8 +356,8 @@
                         <ColumnDefinition Width="1*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock x:Name="NumericalScores" Margin="65,10,0,5" Grid.Column="1" FontSize="16" FontWeight="Bold" Text="NumericalScores" HorizontalAlignment="Left" />
-                    <TextBlock x:Name="PictorialRepresentation" Margin="45,10,0,5" Grid.Column="2" FontSize="16" FontWeight="Bold" Text="PictorialRepresentation" HorizontalAlignment="Left"/>
+                    <TextBlock x:Name="NumericalScores" Margin="65,30,0,10" Grid.Column="1" FontSize="16" FontWeight="Bold" Text="NumericalScores" HorizontalAlignment="Left" />
+                    <TextBlock x:Name="PictorialRepresentation" Margin="45,30,0,10" Grid.Column="2" FontSize="16" FontWeight="Bold" Text="PictorialRepresentation" HorizontalAlignment="Left"/>
 
                     <Canvas x:Name="canvasAnotations" Canvas.Left="0" Canvas.Top="0" Grid.Row="1">
                         <TextBlock x:Name="SVs" FontSize="17" FontWeight="SemiBold" Text="SVs" HorizontalAlignment="Center" Canvas.Left="23" Canvas.Top="30"/>
@@ -1069,7 +1067,57 @@
         </PivotItem>
     </Pivot>
 
-        <StackPanel Name="inkToolBarPanel" Canvas.ZIndex="100" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,-5,0,0">
+        
+        <StackPanel Name="inkToolBarPanel" 
+                    Visibility="Collapsed" 
+                    Canvas.ZIndex="100" 
+                    Orientation="Horizontal" 
+                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Right" 
+                    Margin="0,0,10,10">
+            <Button x:Name="inkToolBarInfo"
+                Style="{ThemeResource SplitViewPaneButtonStyle}" 
+                Background="{ThemeResource SystemControlHighlightListLowBrush}" 
+                Click="InkToolBarInfo_Tapped"  
+                Height="48" Width="48" ToolTipService.ToolTip="Information">
+                <SymbolIcon Symbol="{x:Bind HelpLegacy}"/>
+                <Button.Flyout>
+                    <Flyout>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.ColumnSpan="2" FontWeight="Bold">Key to scoring:</TextBlock>
+                            <TextBlock Grid.Row="1" Margin="0,10,0,0">1/5</TextBlock>
+                            <TextBlock Grid.Column="1" Grid.Row="1" Margin="10,10,0,0">Significant tumour very unlikely</TextBlock>
+                            <TextBlock Grid.Row="2">2/5</TextBlock>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Margin="10,0,0,0">Significant tumour unlikely</TextBlock>
+                            <TextBlock Grid.Row="3">3/5</TextBlock>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Margin="10,0,0,0">Equivocal</TextBlock>
+                            <TextBlock Grid.Row="4">4/5</TextBlock>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Margin="10,0,0,0">Significant tumour likely</TextBlock>
+                            <TextBlock Grid.Row="5">5/5</TextBlock>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Margin="10,0,0,0">Significant tumour very likely</TextBlock>
+                            <TextBlock Margin="10,5,0,0" Grid.Row="6" Grid.Column="1" >
+                                Significant tumour is defined as size > 0.2 ml
+                            </TextBlock>
+                            <TextBlock Grid.Row="7" Grid.Column="1" Margin="10,0,0,0"> and/or Gleason 3+4 or higher</TextBlock>
+              
+                        </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
             <InkToolbar Name="inkToolBar" TargetInkCanvas="{x:Bind inkCanvas}" InitialControls="None" Margin="0,0,0,0">
                 <InkToolbar.Resources>
                     <BrushCollection x:Key="MyCustomPenPalette">

@@ -1,4 +1,10 @@
-﻿using System;
+﻿// source: Universal Windows Samples provided by Microsoft @ https://github.com/Microsoft/Windows-universal-samples
+// modified to merge with prostate inking form 
+// by Duy Tuan Dao, UCL MSc CS 2015-2016 
+// contact: ucabdao@ucl.ac.uk
+// PEACH project, Summer 2016
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -65,7 +71,7 @@ namespace DataVisualization.Views
             hwCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Pen;
 
             this.Unloaded += NotesPenPage_Unloaded;
-            this.SizeChanged += NotesPenPage_SizeChanged;
+            //this.SizeChanged += NotesPenPage_SizeChanged;
         }
 
 
@@ -76,18 +82,17 @@ namespace DataVisualization.Views
         {
             if (inkToggle.IsChecked == true)
             {
-                inkToggle.Content = new SymbolIcon(Symbol.Keyboard);
+                InkToggleSymbol.Symbol = Symbol.Keyboard;
                 this.hwCanvas.Visibility = Visibility.Collapsed;
                 freeNoteTextBox.IsReadOnly = false;
-                ToggleButtonIndicator.Text = "Using Touch Keyboard";
+                InkToggleButtonText.Text = " Using keyboard";
             }
             else
             {
-                //inputSymbol = (Symbol)0xE104;
-                inkToggle.Content = new SymbolIcon((Symbol)0xE104);
+                InkToggleSymbol.Symbol = (Symbol)0xEC87;
                 this.hwCanvas.Visibility = Visibility.Visible;
                 freeNoteTextBox.IsReadOnly = true;
-                ToggleButtonIndicator.Text = "Using Surface Pen";
+                InkToggleButtonText.Text = " Using pen";
             }
         }
 

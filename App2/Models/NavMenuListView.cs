@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.System;
-using Windows.UI.Core;
+﻿// source: https://github.com/Microsoft-Build-2016/CodeLabs-UWP/blob/master/Workshop/Module1-AdaptiveUI/Source/End/Microsoft.Labs.SightsToSee/Microsoft.Labs.SightsToSee/Models/NavMenuItem.cs
+// source: https://github.com/MvvmCross/MvvmCross-Samples/blob/master/XPlatformMenus/XPlatformMenus.UWP/NavMenuItem.cs
+
+
+using System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;

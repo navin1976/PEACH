@@ -30,7 +30,19 @@ namespace DataVisualization
 
         public void Login_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MainIndex));
+            if (UserName.Text=="" && PassWord.Password == "")
+            {
+                txtWarning.Text = "Please enter username and password.";
+            } else if(UserName.Text == "") {
+                txtWarning.Text = "Please enter username";
+            } else if (PassWord.Password == "")
+            {
+                txtWarning.Text = "Please enter password.";
+            } else
+            {
+                this.Frame.Navigate(typeof(MainIndex));
+            }
+
         }
 
 

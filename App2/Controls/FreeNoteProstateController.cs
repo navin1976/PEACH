@@ -1,4 +1,10 @@
-﻿using System;
+﻿// Inking capability to draw on prostate glands & receive feedback
+// Only works for A.NET framework anniversary update 10v 1607 and above
+// by Duy Tuan Dao, UCL MSc CS 2015-2016 
+// contact: ucabdao@ucl.ac.uk
+// PEACH project, Summer 2016
+
+using System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
@@ -20,16 +26,49 @@ namespace DataVisualization.Views
     public sealed partial class FreeNotesPage : Page
     {
 
-        //public Skeleton.ProstateSegmentInk ViewModel { get; set; }
+
+        // initialize inking capabilities when loaded
+        // referred to when FreeNotesPage is loaded (not Pivot)
+        private void initializeProstateInking()
+        {
+            InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
+            drawingAttributes.Color = Windows.UI.Colors.Red;
+            drawingAttributes.FitToCurve = true;
+            inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
+            inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse | Windows.UI.Core.CoreInputDeviceTypes.Pen; //
+            inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
+            inkCanvas.InkPresenter.StrokesErased += InkPresenter_StrokesErased;
+
+            var eraser = inkToolBar.GetToolButton(InkToolbarTool.Eraser) as InkToolbarEraserButton;
+
+            var flyout = FlyoutBase.GetAttachedFlyout(eraser) as Flyout;
+
+            if (flyout != null)
+            {
+                var button = flyout.Content as Button;
+                if (button != null)
+                {
+                    var newButton = new Button();
+                    newButton.Style = button.Style;
+                    newButton.Content = button.Content;
+                    newButton.Click += EraseAllInk;
+                    flyout.Content = newButton;
+                }
+            }
+        }
 
 
+        // model code to include ViewModel if segments were to be objectified
+        // public Skeleton.ProstateSegmentInk ViewModel { get; set; }
 
+        // event handler when ink stroke is deleted
         private void InkPresenter_StrokesErased(InkPresenter sender, InkStrokesErasedEventArgs args)
         {
             this.ReScoreAllStrokes();
 
         }
 
+        // event handler for when all strokes are collected (when they are dried)
         private void InkPresenter_StrokesCollected(InkPresenter sender, InkStrokesCollectedEventArgs args)
         {
             foreach (var hitTestStroke in args.Strokes)
@@ -38,32 +77,46 @@ namespace DataVisualization.Views
             }
         }
 
-
+        // algoritm to score single inkstroke
+        /*
+         * Creates a list of paths named allElementStack that will host all the visual layer items l
+         *   returned by the Visual Tree Helper upon hit testing every single point along
+         *   the newly drawn ink stroke (hence process single stroke)
+         *   
+         * Note: returned items are filtered to match Path object before appended to the master stack
+         */
         private void processSingleStroke(InkStroke hitTestStroke)
         {
             //this.txtCount.Text = string.Empty;
             Point TransFormedPoint;
             List<Path> allElementStack = new List<Path>();
+
+            // hittesting in reverse to ensure that the algorithm follows the points as they were drawn
             foreach (var myPoint in hitTestStroke.GetInkPoints().Reverse())
             {
                 TransFormedPoint = GetPosition(myPoint.Position, inkCanvas);
                 IEnumerable<UIElement> elementStack =
                     VisualTreeHelper.FindElementsInHostCoordinates(TransFormedPoint, canvasDraw, true);
 
+                // filter UI elements == Path
                 foreach (UIElement element in elementStack)
                 {
                     Path feItem = new Path();
                     feItem = element as Path;
                     if (feItem != null)
                     {
+                        // add to master Stack
                         allElementStack.Add(feItem);
                     }
                 }
             }
+
+            // filtering all elemenet in the stack as distinct and 
+            // passing along with inkstroke color as IEnumerable stack to triggerScore()
             triggerScore(allElementStack.Distinct() as IEnumerable<Path>, hitTestStroke.DrawingAttributes.Color);
         }
 
-
+        // trigger score in appropriate feedback TextBox
         private void triggerScore(IEnumerable<Path> IEnumerableElementStack, Windows.UI.Color Color)
         {
             // since dark gray carries no color, run scoring only if color is red, amber or green.
@@ -71,7 +124,7 @@ namespace DataVisualization.Views
             {
 
 
-                // first, determine score
+                // evaluate ink color to determine score
                 int score = 0;
                 switch (Color.ToString())
                 {
@@ -86,6 +139,7 @@ namespace DataVisualization.Views
                         break;
                 }
 
+                // score each Path TextBox equivalent
                 foreach (Path element in IEnumerableElementStack)
                 {
                     //Debug.WriteLine("UIElement: " + element.Name);
@@ -104,24 +158,18 @@ namespace DataVisualization.Views
         }
 
 
-
-        private void UnprocessedInput_PointerPressed(InkUnprocessedInput sender, Windows.UI.Core.PointerEventArgs args)
-        {
-            //basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
-        }
-
-        //protected override void OnNavigatedTo(NavigationEventArgs e)
+       
+        //private void UnprocessedInput_PointerPressed(InkUnprocessedInput sender, Windows.UI.Core.PointerEventArgs args)
         //{
-        //    //rootPage = MainPage.Current;
-        //    inkCanvas.Width = Window.Current.Bounds.Width;
-        //    inkCanvas.Height = Window.Current.Bounds.Height;
+        //    //basePathOne.Fill = new SolidColorBrush(Windows.UI.Colors.Blue);
         //}
 
-        private void CurrentToolChanged(InkToolbar sender, object args)
-        {
-            //bool enabled = sender.ActiveTool.Equals(toolButtonLasso);
-        }
+        //private void CurrentToolChanged(InkToolbar sender, object args)
+        //{
+        //    //bool enabled = sender.ActiveTool.Equals(toolButtonLasso);
+        //}
 
+       // event handler for toggleButton check
         private void Toggle_Custom(object sender, RoutedEventArgs e)
         {
             if (toggleButton.IsChecked == true)
@@ -134,17 +182,20 @@ namespace DataVisualization.Views
             }
         }
 
+        // event handler for inkToolBar focus engagement
         private void inkToolBarLoad_FocusEngaged(Control sender, FocusEngagedEventArgs args)
         {
 
         }
 
+        // event handler for erase button
         private void EraseAllInk(object sender, RoutedEventArgs e)
         {
             inkCanvas.InkPresenter.StrokeContainer.Clear();
             this.resetTextBlocks();
         }
 
+        // debug method for development: get current position of point
         private Point GetPosition(Point ptrPt, UIElement p)
         {
             GeneralTransform gt = p.TransformToVisual(null);
@@ -153,7 +204,7 @@ namespace DataVisualization.Views
             return screenPoint;
         }
 
-
+        // debug method for development: testing for element presence
         private bool DoesPointContainElement(Point testPoint, string elementName, UIElement referenceFrame)
         {
             IEnumerable<UIElement> elementStack =
@@ -174,12 +225,13 @@ namespace DataVisualization.Views
             return false;
         }
 
+        // event handler for clearing canvas
         void OnClear(object sender, RoutedEventArgs e)
         {
             inkCanvas.InkPresenter.StrokeContainer.Clear();
         }
 
-
+        // event handler for save ink strokes button
         async void OnSaveAsync(object sender, RoutedEventArgs e)
         {
             // We don't want to save an empty file
@@ -210,6 +262,7 @@ namespace DataVisualization.Views
             }
         }
 
+        // event handler for load ink stroke button
         async void OnLoadAsync(object sender, RoutedEventArgs e)
         {
             var openPicker = new Windows.Storage.Pickers.FileOpenPicker();
@@ -233,6 +286,8 @@ namespace DataVisualization.Views
             this.ReScoreAllStrokes();
         }
 
+        // rescore all the strokes that are present in the inkPresenter -> StrokeContainer
+        // used in event of erasing/loading strokes
         private void ReScoreAllStrokes()
         {
             this.resetTextBlocks();
@@ -245,35 +300,7 @@ namespace DataVisualization.Views
             }
         }
 
-        private void initializeProstateInking()
-        {
-            InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
-            drawingAttributes.Color = Windows.UI.Colors.Red;
-            drawingAttributes.FitToCurve = true;
-            inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
-            inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse | Windows.UI.Core.CoreInputDeviceTypes.Pen; //
-            inkCanvas.InkPresenter.StrokesCollected += InkPresenter_StrokesCollected;
-            inkCanvas.InkPresenter.StrokesErased += InkPresenter_StrokesErased;
-
-            var eraser = inkToolBar.GetToolButton(InkToolbarTool.Eraser) as InkToolbarEraserButton;
-
-            var flyout = FlyoutBase.GetAttachedFlyout(eraser) as Flyout;
-
-            if (flyout != null)
-            {
-                var button = flyout.Content as Button;
-                if (button != null)
-                {
-                    var newButton = new Button();
-                    newButton.Style = button.Style;
-                    newButton.Content = button.Content;
-                    newButton.Click += EraseAllInk;
-                    flyout.Content = newButton;
-                }
-            }
-        }
-
-
+        // Lookup value reference for Path and TextBox Objects
         private TextBlock lookUpFeedbackBox(String uiName)
         {
             TextBlock returnBox = null;
@@ -366,6 +393,7 @@ namespace DataVisualization.Views
         }
 
 
+        // method called when erase all is used
         private void resetTextBlocks()
         {
             this.txtProstate_1A.Text = "0";

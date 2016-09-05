@@ -3,11 +3,7 @@
 // Patient schema (i.e. properties = { id, nhsnumber, namekey, etc }) provided by PEACH MDT team's Alex Fael
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using Windows.Data.Json;
 
 namespace DataVisualization.Models
@@ -92,7 +88,7 @@ namespace DataVisualization.Models
             NextOfKinPhone = ""; 
             notes = new ObservableCollection<MedicalNote>();
         }
-
+            
         public Patient(string jsonString) : this()
         {
             // initialize json controller
@@ -101,13 +97,13 @@ namespace DataVisualization.Models
             Id = jsonObject.GetNamedString(idKey, "");            
             NhsNumber = jsonObject.GetNamedString(nhsNumberKey, "");
             Name = jsonObject.GetNamedString(nameKey, "");
-            Email = jsonObject.GetNamedString(nameKey, "");
+            Email = jsonObject.GetNamedString(emailKey, "");
             Birthdate = jsonObject.GetNamedString(birthdateKey, "");
             Address = jsonObject.GetNamedString(addressKey, "");
             Postcode = jsonObject.GetNamedString(postcodeKey, "");
             PrefContactMethod = jsonObject.GetNamedString(prefContactMethodKey, "");
             Gender = jsonObject.GetNamedString(genderKey, "");
-            Ethnicity = jsonObject.GetNamedString(ethnicity, "");
+            Ethnicity = jsonObject.GetNamedString(ethnicityKey, "");
             MaritalStatus = jsonObject.GetNamedString(maritalStatusKey, "");
             GpName = jsonObject.GetNamedString(gpNameKey, "");
             GpEmail = jsonObject.GetNamedString(gpEmailKey, "");
@@ -152,20 +148,82 @@ namespace DataVisualization.Models
             }
         }
 
+        public Patient(JsonObject jsonObject)
+        {
+            Id = jsonObject.GetNamedString(idKey, "");
+            NhsNumber = jsonObject.GetNamedString(nhsNumberKey, "");
+            Name = jsonObject.GetNamedString(nameKey, "");
+            Email = jsonObject.GetNamedString(emailKey, "");
+            Birthdate = jsonObject.GetNamedString(birthdateKey, "");
+            Address = jsonObject.GetNamedString(addressKey, "");
+            Postcode = jsonObject.GetNamedString(postcodeKey, "");
+            PrefContactMethod = jsonObject.GetNamedString(prefContactMethodKey, "");
+            Gender = jsonObject.GetNamedString(genderKey, "");
+            Ethnicity = jsonObject.GetNamedString(ethnicityKey, "");
+            MaritalStatus = jsonObject.GetNamedString(maritalStatusKey, "");
+            GpName = jsonObject.GetNamedString(gpNameKey, "");
+            GpEmail = jsonObject.GetNamedString(gpEmailKey, "");
+            GpAddress = jsonObject.GetNamedString(gpAddressKey, "");
+            GpPostcode = jsonObject.GetNamedString(gpPostcodeKey, "");
+            GpPhone = jsonObject.GetNamedString(gpPhoneKey, "");
+            NextOfKinName = jsonObject.GetNamedString(nextOfKinNameKey, "");
+            NextOfKinEmail = jsonObject.GetNamedString(nextOfKinEmailKey, "");
+            NextOfKinAddress = jsonObject.GetNamedString(nextOfKinAddressKey, "");
+            NextOfKinPostcode = jsonObject.GetNamedString(nextOfKinPostcodeKey, "");
+            NextOfKinPhone = jsonObject.GetNamedString(nextOfKinPhoneKey, "");
+
+            // HomePhone  
+            IJsonValue homePhoneJsonValue = jsonObject.GetNamedValue(homePhoneKey);
+            if (homePhoneJsonValue.ValueType == JsonValueType.Null)
+            {
+                HomePhone = null;
+            }
+            else
+            {
+                HomePhone = homePhoneJsonValue.GetString();
+            }
+
+            // WorkPhone  
+            IJsonValue workPhoneJsonValue = jsonObject.GetNamedValue(workPhoneKey);
+            if (workPhoneJsonValue.ValueType == JsonValueType.Null)
+            {
+                WorkPhone = null;
+            }
+            else
+            {
+                WorkPhone = workPhoneJsonValue.GetString();
+            }
+
+            // NotesArchive
+            foreach (IJsonValue jsonValue in jsonObject.GetNamedArray(notesKey, new JsonArray()))
+            {
+                if (jsonValue.ValueType == JsonValueType.Object)
+                {
+                    NotesArchive.Add(new MedicalNote(jsonValue.GetObject()));
+                }
+            }
+
+        }
+
         public string Stringify()
+        {
+            return this.ToJsonObject().Stringify();
+        }
+
+        public JsonObject ToJsonObject()
         {
             JsonObject jsonObject = new JsonObject();
 
             jsonObject[idKey] = JsonValue.CreateStringValue(Id);
             jsonObject[nhsNumberKey] = JsonValue.CreateStringValue(NhsNumber);
             jsonObject[nameKey] = JsonValue.CreateStringValue(Name);
-            jsonObject[nameKey] = JsonValue.CreateStringValue(Email);
+            jsonObject[emailKey] = JsonValue.CreateStringValue(Email);
             jsonObject[birthdateKey] = JsonValue.CreateStringValue(Birthdate);
             jsonObject[addressKey] = JsonValue.CreateStringValue(Address);
             jsonObject[postcodeKey] = JsonValue.CreateStringValue(Postcode);
             jsonObject[prefContactMethodKey] = JsonValue.CreateStringValue(PrefContactMethod);
             jsonObject[genderKey] = JsonValue.CreateStringValue(Gender);
-            jsonObject[ethnicity] = JsonValue.CreateStringValue(Ethnicity);
+            jsonObject[ethnicityKey] = JsonValue.CreateStringValue(Ethnicity);
             jsonObject[maritalStatusKey] = JsonValue.CreateStringValue(MaritalStatus);
             jsonObject[gpNameKey] = JsonValue.CreateStringValue(GpName);
             jsonObject[gpEmailKey] = JsonValue.CreateStringValue(GpEmail);
@@ -177,7 +235,7 @@ namespace DataVisualization.Models
             jsonObject[nextOfKinAddressKey] = JsonValue.CreateStringValue(NextOfKinAddress);
             jsonObject[nextOfKinPostcodeKey] = JsonValue.CreateStringValue(NextOfKinPostcode);
             jsonObject[nextOfKinPhoneKey] = JsonValue.CreateStringValue(NextOfKinPhone);
-            
+
             // Notes
             JsonArray jsonArray = new JsonArray();
             foreach (MedicalNote medicalNote in NotesArchive)
@@ -207,11 +265,8 @@ namespace DataVisualization.Models
             jsonObject[nameKey] = JsonValue.CreateStringValue(Name);
             jsonObject[notesKey] = jsonArray;
 
-            return jsonObject.Stringify();
-            //jsonObject[timezoneKey] = JsonValue.CreateNumberValue(Timezone);
-            //jsonObject[verifiedKey] = JsonValue.CreateBooleanValue(Verified);
+            return jsonObject;
         }
-
 
         public string Id
         {

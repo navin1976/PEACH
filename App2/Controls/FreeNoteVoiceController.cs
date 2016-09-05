@@ -18,30 +18,6 @@ namespace DataVisualization.Views
 {
     public sealed partial class FreeNotesPage : Page
     {
-        // Upon entering the scenario, ensure that we have permissions to use the Microphone
-        protected async override void OnNavigatedTo(NavigationEventArgs e)
-        {
-            inkCanvas.Width = Window.Current.Bounds.Width;
-            inkCanvas.Height = Window.Current.Bounds.Height;
-
-            // Keep track of the UI thread dispatcher, as speech events will come in on a separate thread.
-            dispatcher = CoreWindow.GetForCurrentThread().Dispatcher;
-
-            bool permissionGained = await AudioCapturePermissions.RequestMicrophonePermission();
-            if (permissionGained)
-            {
-                btnContinuousRecognize.IsEnabled = true;
-                PopulateLanguageDropdown();
-                await InitializeRecognizer(SpeechRecognizer.SystemSpeechLanguage);
-            }
-            else
-            {
-                this.freeNoteTextBox.Text = "Permission to access microphone denied: Settings->Privacy->Microphone.";
-                btnContinuousRecognize.IsEnabled = false;
-                cbLanguageSelection.IsEnabled = false;
-            }
-
-        }
 
         // Look up the supported languages for this speech recognition scenario, 
         private void PopulateLanguageDropdown()

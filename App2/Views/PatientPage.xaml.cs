@@ -30,15 +30,15 @@ namespace DataVisualization.Views
         {
             this.InitializeComponent();
             loadJson();
+            SViewer.Width =  Window.Current.Bounds.Width;
+            SViewer.Height = Window.Current.Bounds.Height;
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            rootPage.DataContext = new Patient();
-
-
-
+            //rootPage.DataContext = new Patient();
         }
+
 
         private void Parse_Click(object sender, RoutedEventArgs e)
         {
@@ -59,34 +59,21 @@ namespace DataVisualization.Views
         private async void loadJson()
         {
             // Create sample file; replace if exists.
-
+            var localizationDirectory = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            Windows.Storage.StorageFolder storageFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
             try
             {
-                Windows.Storage.StorageFolder storageFolder =
-                    Windows.Storage.ApplicationData.Current.LocalFolder;
-                Windows.Storage.StorageFile sampleFile =
-                    await storageFolder.GetFileAsync("C:/patient.json");
-
-                string inputJson = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
+                Windows.Storage.StorageFile sampleFile = await localizationDirectory.GetFileAsync("patient.json");
+                inputJson = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
                 JsonInput.Text = inputJson;
             }
-
-
-
-
-
             catch (Exception ex)
             {
-                JsonInput.Text = ex.ToString();
+                JsonInput.Text = storageFolder.Path ;
             }
-
-
-            //await Task.Run(() =>
-            //{
-            //    Task.Yield();
-
-            //});
         }
+       
+        
 
         private void Stringify_Click(object sender, RoutedEventArgs e)
         {
@@ -94,7 +81,7 @@ namespace DataVisualization.Views
             Patient patient = rootPage.DataContext as Patient;
             Debug.Assert(patient != null);
             inputJson = patient.Stringify();
-
+            JsonInput.Text = inputJson;
             //rootPage.NotifyUser("JSON object serialized to string successfully.", NotifyType.StatusMessage);
         }
 

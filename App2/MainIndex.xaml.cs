@@ -16,7 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using DataVisualization.Controls;
 using DataVisualization.Views;
-
+using Windows.UI.Popups;
 
 namespace DataVisualization
 {
@@ -140,7 +140,7 @@ namespace DataVisualization
         #region Navigation
 
         // Navigate to the Page for the selected "listViewItem"
-        private void NavMenuList_ItemInvoked(object sender, ListViewItem listViewItem)
+        private async void NavMenuList_ItemInvoked(object sender, ListViewItem listViewItem)
         {
             var item = (NavMenuItem)((NavMenuListView)sender).ItemFromContainer(listViewItem);
 
@@ -148,7 +148,36 @@ namespace DataVisualization
             {
                 if (item.Label == "Log out")
                 {
-                    this.Frame.Navigate(typeof(Auth));
+                    var title = "Logging out";
+                    var content = "You are signing out of this account.\r\nDo you want to proceed?";
+                    var yesCommand = new UICommand("Yes", cmd => { });
+                    var cancelCommand = new UICommand("Cancel", cmd => { });
+
+                    var dialog = new MessageDialog(content, title);
+                    dialog.Options = MessageDialogOptions.None;
+                    dialog.Commands.Add(yesCommand);
+
+                    dialog.DefaultCommandIndex = 0;
+                    dialog.CancelCommandIndex = 0;
+
+                    if (cancelCommand != null)
+                    {
+                        dialog.Commands.Add(cancelCommand);
+                        dialog.CancelCommandIndex = (uint)dialog.Commands.Count - 1;
+                    }
+
+                    var command = await dialog.ShowAsync();
+
+                    if (command == yesCommand)
+                    {
+                        this.Frame.Navigate(typeof(Auth));
+                    }
+                    else
+                    {
+                        // handle cancel command
+                    }
+
+                    
                 }
                 else if (item.DestPage != null &&
                     item.DestPage != this.AppFrame.CurrentSourcePageType)
@@ -262,6 +291,9 @@ namespace DataVisualization
                 handler.DynamicInvoke(this, this.TogglePaneButtonRect);
             }
         }
+
+        // JSON settings
+        public const string FEATURE_NAME = "Json";
 
         // Enable accessibility on each nav menu item by setting the AutomationProperties.Name on each container
         // using the associated Label of each item.

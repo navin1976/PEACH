@@ -1,4 +1,6 @@
-﻿using System;
+﻿// source: Universal Windows Samples provided by Microsoft @ https://github.com/Microsoft/Windows-universal-samples
+
+using System;
 using System.Collections.Generic;
 
 namespace DataVisualization

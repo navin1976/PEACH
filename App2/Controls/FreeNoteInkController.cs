@@ -1,4 +1,7 @@
 ﻿// source: Universal Windows Samples provided by Microsoft @ https://github.com/Microsoft/Windows-universal-samples
+// modified to merge with prostate inking form 
+// by Duy Tuan Dao, UCL MSc CS 2015-2016 
+// contact: ucabdao@ucl.ac.uk
 // extension methods and controls for FreeNotesPage
 
 using System;
@@ -30,7 +33,7 @@ namespace DataVisualization.Views
         {
             freeNoteTextBox.Width = TextBoxGrid.ActualWidth;
             freeNoteTextBox.Height = TextBoxGrid.Height;
-            hwCanvas.Width = TextBoxGrid.ActualWidth;
+            hwCanvas.Width= TextBoxGrid.ActualWidth;
             hwCanvas.Height = TextBoxGrid.Height;
         }
 
@@ -89,6 +92,7 @@ namespace DataVisualization.Views
             }
         }
 
+        // clearing ink strokes from the input textbox
         void OnClearHw(object sender, RoutedEventArgs e)
         {
             hwCanvas.InkPresenter.StrokeContainer.Clear();
@@ -117,11 +121,13 @@ namespace DataVisualization.Views
             return recognizerFound;
         }
 
+        // event handler for input language change
         private void TextServiceManager_InputLanguageChanged(CoreTextServicesManager sender, object args)
         {
             SetDefaultRecognizerByCurrentInputMethodLanguageTag();
         }
 
+        // method to set default recognizer
         private void SetDefaultRecognizerByCurrentInputMethodLanguageTag()
         {
             // Query recognizer name based on current input method language tag (bcp47 tag)
@@ -148,11 +154,13 @@ namespace DataVisualization.Views
             }
         }
 
+        // event handler for recognition butter click
         private void RecoButton_Click(object sender, RoutedEventArgs e)
         {
             recoTooltip.IsOpen = !recoTooltip.IsOpen;
         }
 
+        // append string to the textbox in the form page
         private void AppendHandWritingToBox(string str)
         {
             this.freeNoteTextBox.Text += str;

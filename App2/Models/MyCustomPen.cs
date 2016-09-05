@@ -1,4 +1,7 @@
-﻿using System.Numerics;
+﻿// Custom pen for inkToolBar
+// Written and added to the inkToolBar as the default ball point pen has no transparency when inking
+
+using System.Numerics;
 using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Controls;
