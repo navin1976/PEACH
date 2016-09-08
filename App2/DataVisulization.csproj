@@ -92,6 +92,7 @@
     <Content Include="Assets\PeachAuthLogo.png" />
     <Content Include="Assets\PeachVisualReportLogo.png" />
     <Content Include="Assets\PeachVisualReportWhiteLogo.png" />
+    <Content Include="Assets\screenshotsample.png" />
     <Content Include="patient.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

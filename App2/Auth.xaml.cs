@@ -46,28 +46,6 @@ namespace DataVisualization
         }
 
 
-        //private void UserName_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    if (UserName.Text == "")
-        //    {
-        //        // Create an ImageBrush.
-        //        ImageBrush textImageBrush = new ImageBrush();
-        //        textImageBrush.ImageSource =
-        //            new BitmapImage(
-        //                new Uri(@"LoginUW.gif", UriKind.Relative)
-        //            );
-        //        textImageBrush.AlignmentX = AlignmentX.Left;
-        //        textImageBrush.Stretch = Stretch.None;
-        //        // Use the brush to paint the button's background.
-        //        UserName.Background = textImageBrush;
-
-        //    }
-        //    else
-        //    {
-        //        UserName.Background = null;
-        //    }
-        //}
-
         private void UserName_GotFocus(object sender, RoutedEventArgs e)
         {
             UserName.Text = "";

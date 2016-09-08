@@ -64,6 +64,16 @@ namespace DataVisualization
         {
             this.InitializeComponent();
 
+            // Place our app shell in the current Window
+            //Window.Current.Content = shell;
+
+            if (this.AppFrame.Content == null)
+            {
+                // When the navigation stack isn't restored, navigate to the first page
+                // suppressing the initial entrance animation.
+                this.AppFrame.Navigate(typeof(LandingPage));
+            }
+
             //Current = this;
             this.Loaded += (sender, args) =>
             {
@@ -84,8 +94,10 @@ namespace DataVisualization
             SystemNavigationManager.GetForCurrentView().BackRequested += SystemNavigationManager_BackRequested;
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
 
-
             NavMenuList.ItemsSource = navlist;
+
+
+
         }
 
         public Frame AppFrame { get { return this.frame; } }
