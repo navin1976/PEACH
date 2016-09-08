@@ -6,6 +6,7 @@
 
 ## PEACH Visual Report App
 Visualization App - Copyright ©  2016
+
 Developed in collaboration with UCL, NHS, Microsoft
 
 ## System specifications
