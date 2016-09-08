@@ -35,6 +35,7 @@ namespace DataVisualization.Views
             freeNoteTextBox.Height = TextBoxGrid.Height;
             hwCanvas.Width= TextBoxGrid.ActualWidth;
             hwCanvas.Height = TextBoxGrid.Height;
+            //canvasScrollViewer.Height = Window.ActualHeight;
         }
 
         // Set recognizer upon change of combbobox

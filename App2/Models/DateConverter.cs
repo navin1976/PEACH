@@ -1,14 +1,14 @@
-﻿// source : http://bretstateham.com/binding-to-the-new-xaml-datepicker-and-timepicker-controls-to-the-same-datetime-value/
+﻿/*
+ * This is a converter used in databinding, in order to translate JSON value kept in MainIndex.DataContext
+ * Sources used to learn:
+ *    http://bretstateham.com/binding-to-the-new-xaml-datepicker-and-timepicker-controls-to-the-same-datetime-value/
+ */
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 
 
-namespace DataVisualization.Controls
+namespace DataVisualization.Converters
 {
     public class DateTimeToDateTimeOffsetConverter : IValueConverter
     {
@@ -38,6 +38,9 @@ namespace DataVisualization.Controls
                 return DateTime.MinValue;
             }
         }
+
+
+
     }
 
 }

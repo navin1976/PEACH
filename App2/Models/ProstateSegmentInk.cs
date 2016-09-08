@@ -22,7 +22,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
 
-namespace DataVisualization
+namespace DataVisualization.Models
 {
     public class ProstateSegmentInk
     {

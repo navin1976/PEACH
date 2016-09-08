@@ -46,35 +46,12 @@ namespace DataVisualization
                 titleBar.ButtonBackgroundColor = titleBarColor;
             }
 
-            /*
-            MainIndex shell = Window.Current.Content as MainIndex;
-
-            if (shell == null)
-            {
-                shell = new MainIndex();
-                shell.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
-                shell.AppFrame.NavigationFailed += OnNavigationFailed;
-
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: Load state from previously suspended application
-                }
-            }
-            Window.Current.Content = shell;
-
-            if (shell.AppFrame.Content == null)
-            {
-                //shell.AppFrame.Navigate(typeof(LandingPage), e.Arguments, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
-            }
-
-            Window.Current.Activate();
-            */
-
             Frame rootFrame = Window.Current.Content as Frame;
 
             if (rootFrame == null)
             {
                 rootFrame = new Frame();
+                rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
@@ -87,7 +64,7 @@ namespace DataVisualization
             {
                 if (rootFrame.Content == null)
                 {
-                    rootFrame.Navigate(typeof(Auth), e.Arguments);
+                    rootFrame.Navigate(typeof(Auth), e.Arguments, new Windows.UI.Xaml.Media.Animation.SuppressNavigationTransitionInfo());
                 }
                 // Ensure the current window is active
                 Window.Current.Activate();

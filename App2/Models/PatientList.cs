@@ -56,8 +56,5 @@ namespace DataVisualization.Models
                 return patients;
             }
         }
-
-        public double Timezone { get; set; }
-        public bool Verified { get; set; }
     }
 }

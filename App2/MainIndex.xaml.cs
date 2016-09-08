@@ -17,6 +17,8 @@ using Windows.UI.Xaml.Navigation;
 using DataVisualization.Controls;
 using DataVisualization.Views;
 using Windows.UI.Popups;
+using DataVisualization.Models;
+using Windows.ApplicationModel.Core;
 
 namespace DataVisualization
 {
@@ -33,19 +35,6 @@ namespace DataVisualization
                     Label = "Patient Profile",
                     DestPage = typeof(PatientPage)
                 },
-                //new NavMenuItem()
-                //{
-                //    Symbol = Symbol.Paste,
-                //    Label = "Retrieve Reports",
-                //    DestPage = typeof(MedicalReportsPage)
-                //},
-
-                //new NavMenuItem()
-                //{
-                //    Symbol = Symbol.Find,
-                //    Label = "Plan Prostatectomy",
-                //    DestPage = typeof(ProstatectomyPage)
-                //},
 
                 new NavMenuItem()
                 {
@@ -59,7 +48,15 @@ namespace DataVisualization
                     Symbol = Symbol.Permissions,
                     Label = "Log out",
                     DestPage = null
+                },
+
+                new NavMenuItem()
+                {
+                    Symbol = (Symbol)0xE7E8,
+                    Label = "Exit",
+                    DestPage = null
                 }
+
             });
 
         public static MainIndex Current = null;
@@ -175,9 +172,37 @@ namespace DataVisualization
                     else
                     {
                         // handle cancel command
+                    }                    
+                } else if (item.Label == "Exit")
+                {
+                    var title = "Close Visual Report App";
+                    var content = "You are closing the application.\r\nDo you want to proceed?";
+                    var yesCommand = new UICommand("Yes", cmd => { });
+                    var cancelCommand = new UICommand("Cancel", cmd => { });
+
+                    var dialog = new MessageDialog(content, title);
+                    dialog.Options = MessageDialogOptions.None;
+                    dialog.Commands.Add(yesCommand);
+
+                    dialog.DefaultCommandIndex = 0;
+                    dialog.CancelCommandIndex = 0;
+
+                    if (cancelCommand != null)
+                    {
+                        dialog.Commands.Add(cancelCommand);
+                        dialog.CancelCommandIndex = (uint)dialog.Commands.Count - 1;
                     }
 
-                    
+                    var command = await dialog.ShowAsync();
+
+                    if (command == yesCommand)
+                    {
+                        CoreApplication.Exit();
+                    }
+                    else
+                    {
+                        // handle cancel command
+                    }
                 }
                 else if (item.DestPage != null &&
                     item.DestPage != this.AppFrame.CurrentSourcePageType)
@@ -242,7 +267,7 @@ namespace DataVisualization
         {
             TogglePaneButton.IsChecked = true;
             UserInformationPanel.Visibility = Visibility.Visible;
-            PatientInformationPanel.Visibility = Visibility.Visible;
+            DisplayPatientInformationPanels();
         }
 
         // Hides divider when nav pane is closed.
@@ -250,6 +275,19 @@ namespace DataVisualization
         {
             UserInformationPanel.Visibility = Visibility.Collapsed;
             PatientInformationPanel.Visibility = Visibility.Collapsed;
+        }
+
+        public void DisplayPatientInformationPanels()
+        {
+            Patient patient = this.DataContext as Patient;
+            if (patient != null && RootSplitView.IsPaneOpen)
+            {
+                PatientInformationPanel.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                PatientInformationPanel.Visibility = Visibility.Collapsed;
+            }
         }
 
         // Callback when the SplitView's Pane is toggled closed.  When the Pane is not visible
@@ -264,7 +302,7 @@ namespace DataVisualization
         private void TogglePaneButton_Checked(object sender, RoutedEventArgs e)
         {
             UserInformationPanel.Visibility = Visibility.Visible;
-            PatientInformationPanel.Visibility = Visibility.Visible;
+            DisplayPatientInformationPanels();
             this.CheckTogglePaneButtonSizeChanged();
         }
 

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Windows.UI.Xaml.Media;
+using DataVisualization.Models;
 using Windows.Globalization;
 using Windows.UI.Xaml.Documents;
 using System.Threading.Tasks;

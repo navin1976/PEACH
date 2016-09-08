@@ -81,20 +81,20 @@ namespace DataVisualization.Models
             GpAddress = "";
             GpPostcode = "";
             GpPhone = "";
-            NextOfKinName = ""; 
-            NextOfKinEmail = ""; 
-            NextOfKinAddress = ""; 
-            NextOfKinPostcode = ""; 
-            NextOfKinPhone = ""; 
+            NextOfKinName = "";
+            NextOfKinEmail = "";
+            NextOfKinAddress = "";
+            NextOfKinPostcode = "";
+            NextOfKinPhone = "";
             notes = new ObservableCollection<MedicalNote>();
         }
-            
+
         public Patient(string jsonString) : this()
         {
             // initialize json controller
             JsonObject jsonObject = JsonObject.Parse(jsonString);
 
-            Id = jsonObject.GetNamedString(idKey, "");            
+            Id = jsonObject.GetNamedString(idKey, "");
             NhsNumber = jsonObject.GetNamedString(nhsNumberKey, "");
             Name = jsonObject.GetNamedString(nameKey, "");
             Email = jsonObject.GetNamedString(emailKey, "");
@@ -118,25 +118,25 @@ namespace DataVisualization.Models
 
             // HomePhone  
             IJsonValue homePhoneJsonValue = jsonObject.GetNamedValue(homePhoneKey);
-                if (homePhoneJsonValue.ValueType == JsonValueType.Null)
-                {
-                    HomePhone = null;
-                }
-                else
-                {
-                    HomePhone = homePhoneJsonValue.GetString();
-                }
+            if (homePhoneJsonValue.ValueType == JsonValueType.Null)
+            {
+                HomePhone = null;
+            }
+            else
+            {
+                HomePhone = homePhoneJsonValue.GetString();
+            }
 
             // WorkPhone  
-                IJsonValue workPhoneJsonValue = jsonObject.GetNamedValue(workPhoneKey);
-                if (workPhoneJsonValue.ValueType == JsonValueType.Null)
-                {
-                    WorkPhone = null;
-                }
-                else
-                {
-                    WorkPhone = workPhoneJsonValue.GetString();
-                }
+            IJsonValue workPhoneJsonValue = jsonObject.GetNamedValue(workPhoneKey);
+            if (workPhoneJsonValue.ValueType == JsonValueType.Null)
+            {
+                WorkPhone = null;
+            }
+            else
+            {
+                WorkPhone = workPhoneJsonValue.GetString();
+            }
 
             // NotesArchive
             foreach (IJsonValue jsonValue in jsonObject.GetNamedArray(notesKey, new JsonArray()))
@@ -207,7 +207,62 @@ namespace DataVisualization.Models
 
         public string Stringify()
         {
-            return this.ToJsonObject().Stringify();
+            JsonObject jsonObject = new JsonObject();
+
+            jsonObject[idKey] = JsonValue.CreateStringValue(Id);
+            jsonObject[nhsNumberKey] = JsonValue.CreateStringValue(NhsNumber);
+            jsonObject[nameKey] = JsonValue.CreateStringValue(Name);
+            jsonObject[emailKey] = JsonValue.CreateStringValue(Email);
+            jsonObject[birthdateKey] = JsonValue.CreateStringValue(Birthdate);
+            jsonObject[addressKey] = JsonValue.CreateStringValue(Address);
+            jsonObject[postcodeKey] = JsonValue.CreateStringValue(Postcode);
+            jsonObject[prefContactMethodKey] = JsonValue.CreateStringValue(PrefContactMethod);
+            jsonObject[genderKey] = JsonValue.CreateStringValue(Gender);
+            jsonObject[ethnicityKey] = JsonValue.CreateStringValue(Ethnicity);
+            jsonObject[maritalStatusKey] = JsonValue.CreateStringValue(MaritalStatus);
+            jsonObject[gpNameKey] = JsonValue.CreateStringValue(GpName);
+            jsonObject[gpEmailKey] = JsonValue.CreateStringValue(GpEmail);
+            jsonObject[gpAddressKey] = JsonValue.CreateStringValue(GpAddress);
+            jsonObject[gpPostcodeKey] = JsonValue.CreateStringValue(GpPostcode);
+            jsonObject[gpPhoneKey] = JsonValue.CreateStringValue(GpPhone);
+            jsonObject[nextOfKinNameKey] = JsonValue.CreateStringValue(NextOfKinName);
+            jsonObject[nextOfKinEmailKey] = JsonValue.CreateStringValue(NextOfKinEmail);
+            jsonObject[nextOfKinAddressKey] = JsonValue.CreateStringValue(NextOfKinAddress);
+            jsonObject[nextOfKinPostcodeKey] = JsonValue.CreateStringValue(NextOfKinPostcode);
+            jsonObject[nextOfKinPhoneKey] = JsonValue.CreateStringValue(NextOfKinPhone);
+
+            // Notes
+            JsonArray jsonArray = new JsonArray();
+            if (NotesArchive != null) {
+                foreach (MedicalNote medicalNote in NotesArchive)
+                {
+                    jsonArray.Add(medicalNote.ToJsonObject());
+                }
+            }
+            // Treating a blank string as null for HomePhone
+            if (String.IsNullOrEmpty(HomePhone))
+            {
+                jsonObject[homePhoneKey] = JsonValue.CreateNullValue();
+            }
+            else
+            {
+                jsonObject[homePhoneKey] = JsonValue.CreateStringValue(HomePhone);
+            }
+
+            // Treating a blank string as null for HomePhone
+            if (String.IsNullOrEmpty(WorkPhone))
+            {
+                jsonObject[workPhoneKey] = JsonValue.CreateNullValue();
+            }
+            else
+            {
+                jsonObject[workPhoneKey] = JsonValue.CreateStringValue(WorkPhone);
+            }
+            jsonObject[nameKey] = JsonValue.CreateStringValue(Name);
+            jsonObject[notesKey] = jsonArray;
+
+
+            return jsonObject.Stringify();
         }
 
         public JsonObject ToJsonObject()
@@ -635,8 +690,5 @@ namespace DataVisualization.Models
                 return notes;
             }
         }
-
-        public double Timezone { get; set; }
-        public bool Verified { get; set; }
     }
 }

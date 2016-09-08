@@ -195,7 +195,8 @@ namespace DataVisualization.Views
             this.resetTextBlocks();
         }
 
-        // debug method for development: get current position of point
+        // transform visual methodt: get current position of point in relation
+        // to the entire window, and not in relation to the canvas
         private Point GetPosition(Point ptrPt, UIElement p)
         {
             GeneralTransform gt = p.TransformToVisual(null);

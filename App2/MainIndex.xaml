@@ -4,6 +4,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:local="using:DataVisualization"
       xmlns:controls="using:DataVisualization.Controls"
+      xmlns:conv="using:DataVisualization.Converters"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -11,6 +12,7 @@
       mc:Ignorable="d">
 
     <Page.Resources>
+        <conv:JsonDateConverterString x:Name="DateToStringFormatConverter"/>
         <DataTemplate x:Key="NavMenuItemTemplate" x:DataType="local:NavMenuItem">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -79,9 +81,9 @@
                         <ColumnDefinition Width="48"/>
                     </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" VerticalAlignment="Center" Margin="0,10,0,0" >
+                    <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,10,0,0" >
                         <StackPanel>
-                            <Image x:Name="PeachLogo" Source="Assets/PeachNav.png" Height="28" VerticalAlignment="Bottom" Margin="0,5,0,0" />
+                            <Image x:Name="PeachLogo" Source="Assets/PeachNav.png" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="55,11,0,0" />
                         </StackPanel>
                     </Grid>
 
@@ -100,9 +102,10 @@
                                     Grid.Row="2"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="3"
-                                    Margin="10,10,10,10"
+                                    Margin="20,10,0,10"
                                     ToolTipService.ToolTip="Current Patient information"
-                                    Background="LightGray">
+                                    HorizontalAlignment="Left"
+                                    >
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -114,36 +117,40 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock  Margin="10,10,10,10"  FontSize="13" FontWeight="SemiBold" Grid.Row="0" Grid.ColumnSpan="3">Patient Information:</TextBlock>
-                        <TextBlock  Margin="10,0,0,0" FontSize="13" Grid.Column="0" Grid.Row="1">Name</TextBlock>
-                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="1">Duy Tuan Dao</TextBlock>
-                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="2">UCLH#</TextBlock>
-                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="2" >1263910</TextBlock>
-                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="3">Birth date</TextBlock>
-                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="3">31 Mar, 1989</TextBlock>
-                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="4">Sex</TextBlock>
-                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="4">Male</TextBlock>
-                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="5">Address</TextBlock>
-                        <StackPanel Grid.Column="1" Grid.Row="5">
-                            <TextBlock  Margin="0,0,0,0"  FontSize="13">22 Seraph Court</TextBlock>
-                            <TextBlock  Margin="0,0,0,0"  FontSize="13">5 Moreland Street</TextBlock>
-                            <TextBlock  Margin="0,0,0,0"  FontSize="13">EC1V 8BE</TextBlock>
-                            <TextBlock  Margin="0,0,0,10"  FontSize="13">London, United Kingdom</TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="12" FontWeight="SemiBold" Grid.Row="0" Grid.ColumnSpan="2">Patient Information</TextBlock>
+
+                        <Rectangle Height="1" Grid.Row="1" Grid.ColumnSpan="2"
+                                   HorizontalAlignment="Left"
+                                   Fill="{ThemeResource SystemControlForegroundBaseLowBrush}" 
+                                   Width="220" Margin="10,0,0,0"/>
+
+                        <TextBlock  Margin="10,0,0,0" FontSize="12" Grid.Column="0" Grid.Row="2">Name</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="12" Grid.Column="1" Grid.Row="2" Text="{Binding Path=Name,Mode=TwoWay}"></TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="12" Grid.Column="0" Grid.Row="3">NHS #</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="12" Grid.Column="1" Grid.Row="3" Text="{Binding Path=NhsNumber,Mode=TwoWay}"></TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="12" Grid.Column="0" Grid.Row="4">Birthdate</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="12" Grid.Column="1" Grid.Row="4" Text="{Binding Path=Birthdate,Mode=TwoWay, 
+                            Converter={StaticResource DateToStringFormatConverter}}"></TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="12" Grid.Column="0" Grid.Row="5">Gender</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="12" Grid.Column="1" Grid.Row="5" Text="{Binding Path=Gender,Mode=TwoWay}"></TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="12" Grid.Column="0" Grid.Row="6">Address</TextBlock>
+                        <StackPanel Grid.Column="1" Grid.Row="6">
+                            <TextBlock  Margin="0,0,0,0"  FontSize="12" Text="{Binding Path=Address,Mode=TwoWay}"></TextBlock>
+                            <TextBlock  Margin="0,0,0,0"  FontSize="12" Text="{Binding Path=Postcode,Mode=TwoWay}"></TextBlock>
                         </StackPanel>
                     </Grid>
 
 
-
-                    <Grid x:Name="UserInformationPanel" 
-                                    Grid.Row="3"
+                    
+                    <Grid x:Name="UserInformationPanel" Grid.Row="3"
                                     Grid.Column="0"
                                     Grid.ColumnSpan="3"
-                                    Margin="10,0,10,10"
+                                    Margin="20,10,0,20"
                                     ToolTipService.ToolTip="Current Patient information"
-                                    Background="LightGray">
+                                    >
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
@@ -152,16 +159,20 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock  Margin="10,10,10,10"  FontSize="13" FontWeight="SemiBold" Grid.Row="0" Grid.ColumnSpan="3">User:</TextBlock>
-                        <TextBlock  Margin="10,0,0,0" FontSize="13" Grid.Column="0" Grid.Row="1">Name</TextBlock>
-                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="1">Navin Ramachandran</TextBlock>
-                        <TextBlock  Margin="10,0,0,0"  FontSize="13" Grid.Column="0" Grid.Row="2">UCLH#</TextBlock>
-                        <TextBlock  Margin="0,0,0,0"  FontSize="13" Grid.Column="1" Grid.Row="2" >9872619H</TextBlock>
-                        <TextBlock  Margin="10,0,0,10"  FontSize="13" Grid.Column="0" Grid.Row="3">Department</TextBlock>
-                        <TextBlock  Margin="0,0,0,10"  FontSize="13" Grid.Column="1" Grid.Row="3">Radiology</TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="12" FontWeight="SemiBold" Grid.ColumnSpan="2">User</TextBlock>
+
+                        <Rectangle Height="1" Grid.Row="1" Grid.ColumnSpan="2"
+                                   HorizontalAlignment="Left"
+                                   Fill="{ThemeResource SystemControlForegroundBaseLowBrush}" 
+                                   Width="220" Margin="10,0,0,0"/>
+
+                        <TextBlock  Margin="10,0,0,0" FontSize="12" Grid.Column="0" Grid.Row="2">Name</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="12" Grid.Column="1" Grid.Row="2">Navin Ramachandran</TextBlock>
+                        <TextBlock  Margin="10,0,0,0"  FontSize="12" Grid.Column="0" Grid.Row="3">UCLH id</TextBlock>
+                        <TextBlock  Margin="0,0,0,0"  FontSize="12" Grid.Column="1" Grid.Row="3" >9872619H</TextBlock>
                     </Grid>
 
 

@@ -105,6 +105,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Models\JsonDateConverterString.cs" />
+    <Compile Include="Models\JsonDateConverter.cs" />
     <Compile Include="Models\MedicalNote.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\DateConverter.cs" />

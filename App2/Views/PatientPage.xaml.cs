@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using System.Diagnostics;
 using Windows.Data.Json;
 using DataVisualization.Models;
-using System.Threading.Tasks;
+using Windows.UI.Popups;
 
 namespace DataVisualization.Views
 {
@@ -25,26 +15,42 @@ namespace DataVisualization.Views
         // as NotifyUser()
         MainIndex rootPage = MainIndex.Current;
         string inputJson;//= "test";
+        PatientList patientList;
+        Symbol SaveFile = (Symbol)0xE74E;
+        Symbol OpenFile = (Symbol)0xE896;
 
         public PatientPage()
         {
             this.InitializeComponent();
             loadJson();
-            SViewer.Width =  Window.Current.Bounds.Width;
-            SViewer.Height = Window.Current.Bounds.Height;
+
+            Patient patient = rootPage.DataContext as Patient;
+            if (patient != null)
+            {
+                this.Stringify.IsEnabled = true;
+            } else
+            {
+                this.Stringify.IsEnabled = false;
+            }
+
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //rootPage.DataContext = new Patient();
+
         }
+
 
 
         private void Parse_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                rootPage.DataContext = new Patient(inputJson);
+                var selectedPatient = (Patient)cbPatientList.SelectedItem;
+                rootPage.DataContext = new Patient();
+                rootPage.DataContext = selectedPatient;
+                Stringify.IsEnabled = true;
+                rootPage.DisplayPatientInformationPanels();
                 //rootPage.NotifyUser("JSON string parsed successfully.", NotifyType.StatusMessage);
             }
             catch (Exception ex)
@@ -65,24 +71,90 @@ namespace DataVisualization.Views
             {
                 Windows.Storage.StorageFile sampleFile = await localizationDirectory.GetFileAsync("patient.json");
                 inputJson = await Windows.Storage.FileIO.ReadTextAsync(sampleFile);
-                JsonInput.Text = inputJson;
+                //JsonInput.Text = inputJson;
             }
             catch (Exception ex)
             {
-                JsonInput.Text = storageFolder.Path ;
+                //JsonInput.Text = storageFolder.Path ;
             }
-        }
-       
-        
 
-        private void Stringify_Click(object sender, RoutedEventArgs e)
+            try
+            {
+                patientList = new PatientList(inputJson);
+                cbPatientList.ItemsSource = patientList.PatientsArchive;
+                //rootPage.NotifyUser("JSON string parsed successfully.", NotifyType.StatusMessage);
+            }
+            catch (Exception ex)
+            {
+                if (!IsExceptionHandled(ex))
+                {
+                    throw ex;
+                }
+            }
+
+        }
+
+
+
+        private async void Stringify_Click(object sender, RoutedEventArgs e)
         {
-            inputJson = "";
-            Patient patient = rootPage.DataContext as Patient;
-            Debug.Assert(patient != null);
-            inputJson = patient.Stringify();
-            JsonInput.Text = inputJson;
-            //rootPage.NotifyUser("JSON object serialized to string successfully.", NotifyType.StatusMessage);
+            var yesCommand = new UICommand("Yes", cmd => { });
+            var okCommand = new UICommand("OK", cmd => { });
+            var cancelCommand = new UICommand("Cancel", cmd => { });
+            string title;
+            string content;
+
+            /*
+             * Can add JSON using content dialog box as well: 
+             */
+            //var panel = new StackPanel();
+            //panel.Orientation = Orientation.Vertical;
+            //panel.Children.Add(new TextBlock
+            //{
+            //    Text = "This middleware layer creates JSON patient object to be pushed to SQL.\r\nDo you want to proceed?\r\n\r\n " +
+            //            inputJson,
+            //    TextWrapping = TextWrapping.WrapWholeWords
+            //});
+
+            try
+            {
+                inputJson = "";
+                Patient patient = rootPage.DataContext as Patient;
+                Debug.Assert(patient != null);
+                inputJson = patient.Stringify();
+                title = "Save patient data";
+                content = "This middleware layer creates JSON patient object to be pushed to SQL.\r\nDo you want to proceed?\r\n\r\n";
+                content += inputJson;
+                var saveDialog = new MessageDialog(content, title);
+                
+                saveDialog.Options = MessageDialogOptions.None;
+                saveDialog.Commands.Add(yesCommand);
+
+                saveDialog.DefaultCommandIndex = 0;
+                saveDialog.CancelCommandIndex = 0;
+                if (cancelCommand != null)
+                {
+                    saveDialog.Commands.Add(cancelCommand);
+                    saveDialog.CancelCommandIndex = (uint)saveDialog.Commands.Count - 1;
+                }
+
+                var command = await saveDialog.ShowAsync();
+
+                if (command == yesCommand)
+                {
+                    // push toSQL
+                }
+                else
+                {
+                    // handle cancel command
+                }
+
+            }
+            catch (Exception ex)
+            {
+                // handle if cannot push
+            }
+
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
@@ -103,6 +175,11 @@ namespace DataVisualization.Views
 
             //rootPage.NotifyUser(error + ": " + ex.Message, NotifyType.ErrorMessage);
             return true;
+        }
+
+        private void cbPatientList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Parse.IsEnabled = true;
         }
     }
 }
