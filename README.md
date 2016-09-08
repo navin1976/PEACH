@@ -1,7 +1,8 @@
  ![alt text][logo]
 
 [logo]: https://github.com/tuan0r/PEACH/blob/master/App2/Assets/PeachVisualReportLogo.png "Peach Visual Report Logo"
-Visual Report Logo (hover to see the title text):
+
+
 
 ## PEACH Visual Report App
 Visualization App - Copyright ©  2016
